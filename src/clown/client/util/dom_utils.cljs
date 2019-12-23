@@ -55,6 +55,15 @@
   [kind]
   (.createElement js/document kind))
 
+(defn toggle-classlist
+  "Toggle the setting in the elments classlist."
+  [ele setting]
+  (.toggle (.-classList ele) setting))
+
+;(.toggle (.-classList close-button) "closed")
+;(.toggle (.-classList overlay) "closed"))))
+
+
 (defn get-canvas-context
   [canvas kind]
   (.getContext canvas kind))

@@ -7,8 +7,8 @@
   (let [close-button (du/get-element-by-id ele-id)
         overlay (du/get-element-by-id "modal-overlay")]
     (when (and close-button overlay)
-      (.toggle (.-classList close-button) "closed")
-      (.toggle (.-classList overlay) "closed"))))
+      (du/toggle-classlist close-button "closed")
+      (du/toggle-classlist overlay "closed"))))
 
 (defn toggle-about-to-update-mru-modal
   []
