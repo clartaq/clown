@@ -1,0 +1,773 @@
+/**
+** Add some style.
+*/
+:root {
+    /* Some colors. */
+    --heading-background-color: transparent;
+    --heading-color: #575757;
+    --body-background-color: #fcfcfc;
+    --body-text-color: #111111;
+    --normal-link-color: #2b24ff;
+    /* Color used for Rules, vertical separators, etc. */
+    --rule-color: #ccc;
+    --chevron-color: #575757;
+
+    --active-border-color: #9daca9;
+    --page-header-background-color: #575757;
+    --brand-title-color: #cfe7ed;
+    /*--brand-sub-title-color: #cfe7ed;*/
+    /*--brand-link-color: #a0e0ff;*/
+    /*--brand-link-visited-color: #cfe7ed;*/
+    /*--hmenu-background-color: #575757;*/
+    /*--menu-item-color: #cfe7ed;*/
+    /*--menu-item-subnav-background: #575757;*/
+    /*--search-text-color: #575757;*/
+    /*--search-text-box-shadow-color: #fff;*/
+    /*--search-submit-color: #a0e0ff;*/
+    /*--search-submit-background-color: #fafafa;*/
+    /*--search-submit-box-shadow-color: #fff;*/
+    /*--search-submit-hover-color: #575757;*/
+    /*--search-submit-hover-background-color: #eff1f1;*/
+    /*--search-submit-focus-color: #e5ecf4;*/
+    /*--search-submit-focus-border-color: #0036;*/
+    --search-submit-focus-box-shadow-color: #6fb5f1;
+    /*--search-submit-active-color: #e5ecf4;*/
+    /*--search-submit-active-background-color: #d2d6d6;*/
+    /*--search-submit-disabled-color: #e5ecf4;*/
+    --content-link-color: #a0e0ff;
+    --content-link-visited-color: #5689a9;
+    --content-link-active-color: #a0e0ff;
+    /*--form-title-color: #575757;*/
+    /*--form-label-color: #575757;*/
+    /*--form-label-background: transparent;*/
+    --form-button-background-color: #e5e9e8;
+    --form-button-box-shadow-color: #fff;
+    --form-button-color: #454545;
+    --form-button-text-shadow-color: #fff;
+    --form-button-hover-color: #eff1f1;
+    /*--form-button-focus-border-color: #0036ff;*/
+    --form-button-focus-box-shadow-color: #6fb5f1;
+    --form-button-active-background-color: #d2d6d6;
+    --form-button-active-box-shadow-color: #d2d6d6;
+    /*--required-color: red;*/
+    /*--table-color: #333333;*/
+    /*--table-border-color: #999999;*/
+    /*--table-header-background-color: #cfe7ed;*/
+    /*--table-header-border-color: #a9c6c9;*/
+    /*--table-body-table-row-nth-odd-color: #fafafa;*/
+    /*--table-row-background-color: #f6f8fa;*/
+    /*--table-node-border-color: #a9c6c9;*/
+    /*--table-row-hover-background-color: #f6f8fa;*/
+    /*--footer-color: lightgrey;*/
+    /*--footer-background-color: #575757;*/
+    /*--blockquote-color: #777777;*/
+    /*--menu-item-link-color: #a0e0ff;*/
+    /*!* For in-line code segments of text. *!*/
+    /*--code-background-color: #f0f0f0;*/
+    /*!* Color and transparency for background overlay used during modal*/
+    /*   dialogs. Same color as --code-background-color (but decimal*/
+    /*   rgb values) and slightly transparent.*/
+    /* *!*/
+    --overlay-color-and-transparency: rgba(240, 240, 240, 0.9);
+    /*!* For code blocks and pre-formatted blocks. *!*/
+    /*--code-highlight-color: #f0f0f0;*/
+    /*!* For the border around code. *!*/
+    /*--code-border-color: #575757;*/
+    /*!* For disabled editor button bar icons.*!*/
+    /*--disabled-button-bar-icon-text-color: #acafaf;*/
+
+    --warning-pink-color: #ffb5fb;
+    --ok-green-color: #b5ffb9;
+    --note-title-hover-background-color: #e0ffff;
+
+    /* Fonts families. */
+    --headline-font-family: "Century Gothic", Muli, "Segoe UI", Arial, sans-serif;
+    --body-font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    --fixed-font-family: Consolas, "Ubuntu Mono", Menlo, Monaco, "Lucida Console",
+    "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Courier New", monospace;
+    --form-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    --tag-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    --demo-font-family: "San Francisco", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+
+    /* Some sizes and spacings. */
+    --space: 0.5rem;
+    /*--content-max-width: 70ch;*/
+    /*--tag-field-right-margin: 0.2rem;*/
+    /*--form-component-max-width: calc(0.3 * var(--content-max-width));*/
+    /*--tag-field-width: calc((var(--content-max-width)*/
+    /*- (4 * var(--tag-field-right-margin))) / 5);*/
+}
+
+/*
+** The inter-relationship between the settings for the html and body elements
+** is a bit touchy and I'm not proficient enough with CSS to explain exactly
+** why. The padding values in particular seem sensitive -- much reduction of
+** the setting for html causes an horizontal scroll bar to appear at the bottom
+** of the browser window.
+ */
+
+html {
+    padding: 14px;
+}
+
+html, body {
+    font-size: 16px;
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    color: var(--body-text-color);
+    font-family: var(--demo-font-family);
+    font-weight: normal;
+    height: 100%;
+    line-height: 1.5rem;
+    padding: 0.15rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    background-color: var(--heading-background-color);
+    color: var(--heading-color);
+    font-family: var(--headline-font-family);
+    line-height: 1.3rem;
+    margin-bottom: 0.8rem;
+    margin-top: 1.25rem;
+}
+
+h1 {
+    font-size: 2.2rem;
+    line-height: 2.5rem;
+    padding-bottom: 0.4rem;
+}
+
+h2 {
+    border-bottom: var(--rule-color);
+    font-size: 1.728rem;
+    line-height: 2rem;
+    margin-top: 2.5rem;
+    padding-bottom: 0.3rem;
+    padding-top: 0.3rem;
+}
+
+h3 {
+    font-size: 1.44rem;
+    line-height: 1.6rem;
+    margin-top: 2.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+    margin-top: 2.5rem;
+}
+
+h5 {
+    color: black;
+    font-size: 0.875rem;
+    margin-top: 2.5rem;
+}
+
+h6 {
+    font-size: 0.85rem;
+    margin-top: 2.5rem;
+}
+
+small {
+    font-size: 0.833rem;
+}
+
+/*
+** If ClojureScript is inserting its app here, and the layout has flexbox
+** elements that are expected to occupy remaining height (think header,
+** main, footer where the main div pushes the footer to the bottom of the
+** page, you need to make sure the div maintains the chain of 100% height
+** elements.
+ */
+.app-div {height: 100%;}
+
+.Site {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.Site-header,
+.Site-footer {
+    flex: none;
+}
+
+.Site-header p {
+    margin-top: 0.75rem;
+    margin-left: calc(0.5rem + 16px + 1px);
+
+    color: var(--active-border-color);
+    background-color: var(--body-background-color);
+
+    vertical-align: center;
+
+    transition: color 0.3s ease-in-out;
+}
+
+.Site-content {
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    padding: 0.5rem;
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+}
+
+.Site-footer {
+    background-color: darkblue;
+    color: white;
+    padding: 1rem;
+}
+
+.outline-container {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 500px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.note-container {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 400px;
+    min-width: 0;
+}
+
+.outline-container p,
+.note-container p {
+    margin-left: 17px;
+    color: var(--active-border-color);
+    font-size: 0.875rem;
+    transition: color 0.3s ease-in-out;
+}
+
+.Site-header p:hover,
+.outline-container p:hover,
+.note-container p:hover {
+    color: var(--body-text-color);
+}
+
+.tree-control--info-div,
+.note-tab-control--info-div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.tree-control--info p,
+.note-tab-control--info p {
+    align-self: flex-start;
+    margin-left: 17px;
+
+    color: var(--active-border-color);
+    background-color: var(--body-background-color);
+
+    font-weight: normal;
+    font-size: 0.875rem;
+    vertical-align: center;
+}
+
+.tree-control--info:hover,
+.note-tab-control--info:hover {
+    color: var(--body-text-color);
+}
+
+.note-info-column {
+    margin-left: 17px;
+    font-family: var(--demo-font-family);
+}
+
+.info-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.info-row > div:first-child,
+.info-row > div:only-child {
+    white-space: nowrap;
+    flex-grow: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.last {
+    flex: 0 0 auto;
+    margin-left: auto
+}
+
+.info-row > .last {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+.info-item {
+    color: var(--active-border-color);
+    font-size: 0.875rem;
+    font-weight: normal;
+    background-color: var(--body-background-color);
+    transition: color 0.3s ease-in-out;
+}
+
+.info-item:hover {
+    color: var(--body-text-color);
+}
+
+/*
+** Stuff used in the tree control.
+ */
+
+.tree-control--container-div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    margin-top: 0.25rem;
+    height: 100%;
+}
+
+.tree-control--list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    padding-top: 0.5rem;
+    margin: 1rem;
+    height: 100%;
+}
+
+.tree-control--row-div {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.tree-control--indent-div {
+    /*background-color: cornflowerblue;*/
+}
+
+.tree-control--chevron-div {
+    flex: 0 0 auto;
+    width: 0.6rem;
+    padding: 0.3rem 0.35rem 0.1rem 0.25rem;
+
+    color: var(--chevron-color);
+    opacity: 0.9;
+
+    font-size: 70%;
+
+    cursor: default;
+    transition: opacity 0.3s, font-size 0.3s, color 0.3s ease-in-out;
+}
+
+.tree-control--chevron-div:hover {
+    color: black;
+    opacity: 1;
+
+    font-size: 75%;
+}
+
+.tree-control--note-row-icon-div {
+    flex: 0 0 1.5rem;
+    margin-bottom: 0.5rem;
+
+    background: url("../img/icons8-note-16.png") no-repeat center bottom;
+
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tree-control--note-row-icon-div:hover {
+    opacity: 1;
+}
+
+.tree-control--topic-info-div {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+}
+
+.tree-control--topic-label {
+    flex: 1;
+    padding-left: 0.25rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    line-height: 1.3rem;
+}
+
+.tree-control--topic-editor {
+    flex: 1;
+    padding: 0 0 0 0.25rem;
+    margin: 0.25rem 0;
+    height: 100%;
+    font-family: var(--demo-font-family);
+    font-size: 1rem;
+    line-height: 1.3rem;
+    border: none;
+    outline: none;
+}
+
+/* Stuff used by the note tab panel. */
+
+.note-tab-control--container-div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.note-tab-control--panel {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 0;
+    margin: 1rem;
+}
+
+.note-tab-control--list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+}
+
+.note-tab-control--add-note-button {
+    padding: 5px;
+    /*margin-left: auto;*/
+    margin-right: 1rem;
+
+    color: var(--body-text-color);
+    font-weight: bold;
+    font-size: 1rem;
+
+    border: 1px solid var(--active-border-color);
+    border-radius: 5px;
+    background-color: var(--note-title-hover-background-color);
+}
+
+.note-tab-control--add-note-icon {
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    padding-bottom: 0.1rem;
+
+    font-weight: bold;
+    vertical-align: 0.3rem;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+
+.note-tab-control--add-note-icon:hover {
+    background-color: var(--ok-green-color);
+}
+
+.note-tab-control--delete-note-icon {
+    padding: 0.1rem 0.5rem 0.3rem;
+    margin-top: 0;
+    margin-bottom: 0.7rem;
+    margin-left: 0.2rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: color ease 0.2s, background-color ease 0.2s;
+}
+
+.note-tab-control--delete-note-icon:hover {
+    background-color: var(--warning-pink-color);
+}
+
+.note-tab-control--tab {
+    display: inline-block;
+    height: 1.3rem;
+    padding: 10px;
+    margin-right: 0.2rem;
+
+    vertical-align: middle;
+
+    border-top: 1px;
+    border-right: 1px;
+    border-bottom: 0;
+    border-left: 1px;
+    border-style: solid;
+    border-color: var(--active-border-color);
+    border-radius: 5px 5px 0 0;
+
+    background-color: var(--note-title-hover-background-color);
+}
+
+.note-tab-control--tab-is-selected {
+    background-color: var(--body-background-color);
+}
+
+.note-tab-control--tab-is-not-selected {
+    background-color: var(--form-button-hover-color);
+}
+
+.note-tab-control--notes-div {
+    display: flex;
+    flex-grow: 1;
+}
+
+.note-tab-control--inner-panel {
+    flex-grow: 1;
+    padding: 0.5rem;
+    margin: 0;
+    resize: none;
+
+    border-color: var(--active-border-color);
+    border-radius: 0 10px 10px 10px;
+    background-color: var(--body-background-color);
+
+    font-family: var(--demo-font-family);
+    font-size: 1rem;
+    line-height: 1.5rem;
+
+    outline: none;
+}
+
+.note-tab-control--title-input {
+    flex: 1;
+    margin-bottom: 0.5rem;
+    margin-right: 0;
+
+    color: var(--body-text-color);
+
+    font-family: var(--demo-font-family);
+    font-size: 1rem;
+    font-weight: normal;
+    letter-spacing: 0;
+    line-height: 1.3rem;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    vertical-align: center;
+    text-align: center;
+    border: none;
+
+    cursor: text;
+    pointer-events: auto;
+    transition: color ease 0.3s, background-color ease 0.3s;
+}
+
+.note-tab-control--title-input-is-selected {
+    background-color: var(--body-background-color);
+}
+
+.note-tab-control--title-input-is-not-selected {
+    background-color: var(--form-button-hover-color);
+}
+
+.note-tab-control--title-input:focus {
+    color: black;
+    background-color: white;
+    outline: none;
+}
+
+.note-tab-control--title-input:focus:hover {
+    color: black;
+    background-color: white;
+}
+
+.note-tab-control--title-input:hover {
+    background-color: var(--note-title-hover-background-color);
+}
+
+/* Set up some indicators for dragging the vertical boundaries. */
+
+.vertical-page-divider {
+    border-left: 1px solid var(--rule-color);
+}
+
+.vertical-page-splitter {
+    display: flex;
+    flex-direction: column;
+    width: 10px;
+    max-width: 10px;
+
+    background-color: var(--rule-color);
+
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.vertical-page-splitter:hover {
+    cursor: col-resize;
+    opacity: 1;
+}
+
+.vertical-page-splitter:active {
+    cursor: col-resize;
+}
+
+/* Some button-related styling. */
+.tree-demo--button-area {
+    align-items: center;
+    border-top: 1px var(--rule-color) solid;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.tree-demo--button {
+    background-color: var(--form-button-background-color);
+    border-radius: 4px;
+    border: 1px solid var(--active-border-color);
+    box-shadow: inset 0 1px var(--form-button-box-shadow-color);
+    box-sizing: border-box;
+    color: var(--form-button-color);
+    cursor: default;
+    display: inline-block;
+    font-family: var(--body-font-family);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.688rem;
+    overflow: hidden;
+    padding: 0.2rem 0.875rem 0 0.875rem;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px var(--form-button-text-shadow-color);
+    vertical-align: center;
+    white-space: nowrap;
+}
+
+.tree-demo--button:hover {
+    background-color: var(--form-button-hover-color);
+}
+
+.tree-demo--button:focus {
+    border: 1px solid var(--active-border-color);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
+    outline: 0;
+}
+
+.tree-demo--button:active {
+    background-color: var(--form-button-active-background-color);
+    border: 1px solid var(--active-border-color);
+    box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
+}
+
+.tree-demo--button:disabled {
+    cursor: default;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/*
+** Stuff for the modal dialog box.
+ */
+
+.modal {
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 600px;
+    max-width: 100%;
+    height: 400px;
+    max-height: 100%;
+
+    z-index: 1010;
+    border: 1px solid black;
+    background: var(--body-background-color);
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 20px 7px 20px;
+    font-size: 1.25rem;
+    font-family: var(--headline-font-family);
+    color: var(--brand-title-color);
+    background: var(--page-header-background-color);
+}
+
+.modal-header-left {
+}
+
+.modal-header-right {
+}
+
+.modal-header .tree-demo--button {
+    z-index: 1020;
+    font-family: var(--body-font-family);
+}
+
+.modal.closed, .modal-overlay.closed {
+    display: none;
+}
+
+.modal-guts {
+    flex: 1; /* this essentially means "use all parent's inner height */
+    /* cover the modal */
+    display: block;
+
+    /* spacing as needed */
+    padding: 20px 20px 20px 20px;
+    word-wrap: break-word;
+
+    /* let it scroll */
+    overflow: auto;
+
+}
+
+.modal-footer {
+}
+
+.modal .tree-demo--button-area {
+    justify-content: center;
+    margin: 0;
+    padding: 20px 20px 11px 20px;
+}
+
+.modal-overlay {
+
+    /* recommendation:
+       don't focus on the number "1000" here, but rather,
+       you should have a documented system for z-index and
+       follow that system. This number should be pretty
+       high on the scale in that system.
+    */
+    z-index: 1000;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: var(--overlay-color-and-transparency);
+}
+

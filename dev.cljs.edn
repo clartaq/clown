@@ -1,0 +1,9 @@
+^{:watch-dirs ["test" "src"]
+  :css-dirs ["resources/public/css"]
+  :open-url false
+  :auto-testing true}
+{:main clown.client.core
+ :optimizations :none
+ :output-to     "resources/public/main.js"
+ :output-dir    "resources/public/main.out"}
+

@@ -1,0 +1,142 @@
+{:outline
+ {:version "0.0.1",
+  :author "David D. Clark",
+  :title "My Plan for Global Domination",
+  :created nil,
+  :modified nil,
+  :tree
+  [{:topic "Build Secret Base",
+    :expanded false,
+    :children
+    [{:topic "Secret Island"}
+     {:topic "Orbiting Space Station"}
+     {:topic "Underground Lair"}
+     {:topic "Moon Base",
+      :expanded true,
+      :children
+      [{:topic "Under the regolith"}
+       {:topic
+        "In a deep cavern of some sort, preferably in the ruins of some ancient and lost civilization."}]}
+     {:topic "Under Martian Polar Cap",
+      :expanded true,
+      :children
+      [{:topic "Pros",
+        :expanded true,
+        :children
+        [{:topic "Existing Anti-Evil Missiles Cannot Reach"}
+         {:topic "Very Prestigious"}]}
+       {:topic "Cons",
+        :expanded true,
+        :children
+        [{:topic "Most Expensive Option"}
+         {:topic "Long Commute"}
+         {:topic "Very Little Air"}
+         {:topic "Mars is Freaking Cold"}]}]}],
+    :last-note-viewed 0,
+    :notes
+    [{:note-title "Why It's Important",
+      :note
+      "A secret base is really important. Don't want those \"Goody Two Shoes\" hero types constantly showing up and interfering. Continuous, applied concentration will yield big rewards. Nothing should be allowed to interfere.\n\nMake it big, but keep it secret."}
+     {:note-title "Luxuries",
+      :note
+      "- Bon-bons, of course.\n\n- Well, a hot tub is a requirement.\n\n- Solid gold flatware and toilets.\n\n- A big fur rug made from some nearly extinct animal.\n\n- Slimming leather pants.\n\n- Oh, and I must have a throne! Mini thrones for company? Let them think they're special before I toss them in the dungeon. Remember to provide air."}]}
+   {:topic
+    "Practice Evil by Stealing Extremely Dark Chocolate Candy from Small Children",
+    :expanded false,
+    :children
+    [{:topic
+      "Only Steal Chocolate with a Cacao Percentage of 70% or Higher"}
+     {:topic "The More Upscale, the Better"}
+     {:topic
+      "These are some longer-than-usual headlines. They are intended to demonstrate how the program operates when it must wrap (in the outline) or truncate (in the notes header) the text to keep it within boundaries of the two sections."}
+     {:topic
+      "The long headlines also demonstrate that you really _could_ do almost everything you need from the outliner. But doing long text in notes lets you keep the outline open, showing the structure of your thoughts, while working on an individual item that might force most things out of view in the outline."}]}
+   {:topic "Select and Practice an Evil Laugh",
+    :last-note-viewed 0,
+    :notes
+    [{:note-title "Some Possible Types of Laugh",
+      :note
+      "The traditional choice would be something along the lines of a long drawn-out \"M-m-m Bwahaha\".\n\nBut since I am not a traditional guy, I plan to concentrate on a high-pitched titter."}]}
+   {:topic "Hire Henchmen",
+    :expanded false,
+    :children
+    [{:topic "I Like Minions",
+      :last-note-viewed 0,
+      :notes
+      [{:note-title "Minions",
+        :note
+        "Not only are they obedient, they are very colorful characters too. And they make funny squeaky sounds too."}]}
+     {:topic "Numerous Mad Scientists will be Needed"}
+     {:topic "Also need some big strong \"Tanks\""}
+     {:topic "Assassins (Or Should I Keep that for Myself?)"}]}
+   {:topic "Select a Font",
+    :last-note-viewed 0,
+    :notes
+    [{:note-title "Thoughts on Fonts",
+      :note
+      "Everyone knows that \"Appearance is Everything\". Therefore, in video captions, printed propaganda, and web advertising I must use the font that will most strike fear and despair into all those who read it. Comic Sans should do it."}
+     {:note-title "Unicode",
+      :note
+      "Terrorize my own developers by insisting that it must support Unicode. They will be too busy looking for bugs to support a coup against me."}],
+    :expanded true}
+   {:topic "Build Doomsday Weapon",
+    :expanded true,
+    :children
+    [{:topic "Nuclear",
+      :last-note-viewed 0,
+      :notes
+      [{:note-title "Thoughts on Nuclear Weapons",
+        :note
+        "A nuclear weapon is the traditional choice. But it would be bad for the environment. Who wants to rule a crappy radioactive world.\n\n\"Why Nuclear Weapons are a Bad Idea\"\n\nBy Matthew Barnes -  Jan 30, 2017\n\n(https://techmalak.com/why-nuclear-weapons-are-a-bad-idea/)\n\nIn a time when the world needs strong and reliable leadership, its seems as if we are ever closer to the path of complete and total destruction of the human race. Recently the Bulletin of the Atomic Scientists moved the Doomsday Clock closer to midnight because of the significant threat posed by nuclear weapons and climate change.\n\nThe board’s decision to move the clock less than a full minute—something it has never before done— reflects a simple reality\nWe are making huge strides in technology with amazing inventions from brilliant people and companies all over the world, and now we are being told It’s two and a half minutes to midnight, how did we get this far?\n\nFrom 1947 when the clock began at seven minutes to midnight till 2017 with just mere minutes to spare, we’ve managed to develop our technology to the point to where just a small nuclear exchange from say, between Pakistan, and India could end all life and change the environment for an extremely long time.\n\nThe debate can go on forever as to why we’ve reached this precipice of civilization, but the fact is that we’ve reached it. Nations argue the need for these destructive weapons of war as a deterrent against an attack. North Korean continues to threaten the U.S with a sacred and holy war, the Middle East is a mess, and Europe is frightened of Russia’s military might.\n\nNuclear War\nCredit Dr. Luke Oman\nThe image displayed above which comes from nucleardarkness.org paints the worse case scenario between a war with Russia and the U.S. who currently hold 90 percent of the world’s nukes. It doesn’t take a rocket scientist to figure out that going to war with nukes is just a bad idea for the entire globe. Massive fires would burn with 150 million tons of smoke surrounding the atmosphere, literally blocking out the sunlight from reaching the ground. Billions of people will die, with only a few remaining, this is just a nightmarish reality.\n \nIn 2017, we find the danger to be even greater, the need for action more urgent. It is two and a half minutes to midnight, the Clock is ticking, global danger looms. Wise public officials should act immediately, guiding humanity away from the brink. If they do not, wise citizens must step forward and lead the way\nIt takes real leadership to carry out a peaceful solution to stopping these many wars. Many people struggle with this because we’ve developed a “me first” attitude instead of giving without the expectation of receiving.\n\nIf you can ask yourself, Am I really trying to serve others, or am I just looking out for myself? This is a question not only for the world political leaders, but one we should ask ourselves.\n\nI find it amazing how far we’ve come with technology. From AR/VR to Deep Learning, it’s only a matter of time until we have fully autonomous cars.\n\nSomewhere along the way we’ve totally screwed things up. We should be enjoying life and the company of others instead of facing the possibility of total destruction. Wars are fought, and too often it’s the innocent who suffer.\n\nWe are to the point to where we’ve gone to using the hydrogen bomb. War is just a bad idea, and using thermonuclear weapons is even worse. The world is in need of great leadership to turn things around.\n\nA key is doing the positive things in life and figuring out the source of joy. Hold on to it, and teach others to do the same. There’s a lot of great technology to experience and many of which is a benefit to our lives. What we think and feel leads to our daily experiences. Understanding this would go a long way in helping turn the world state of affairs around for the better.\n"}]}
+     {:topic "Lasers",
+      :last-note-viewed 0,
+      :notes
+      [{:note-title "Thoughts on Laser Weapons",
+        :note
+        "Who can resist lasers? LASERS!!!\n\nSo bright and sparkly!"}]}
+     {:topic "Zombie Apocalypse",
+      :last-note-viewed 0,
+      :notes
+      [{:note-title "Creating A Zombie Apocalypse",
+        :note
+        "Doesn't seem too hard to do. Scientists do it all the time by mistake, so it should be easy, right?\n\nBut then, after taking over the world, it would take a lot of cleanup to get rid of all the zombies. \n\nProbably not worth it."}]}]}
+   {:topic "Extort World Governments",
+    :expanded false,
+    :children
+    [{:topic "Demand $1 Million Dollars in Gold-Pressed Latinum"}
+     {:topic "Refuse to Accept a Check"}]}
+   {:topic "Thwart Superhero(es)",
+    :expanded false,
+    :children
+    [{:topic "Reveal Secret Identity"}
+     {:topic "Kidnap Loved One"}
+     {:topic "Find and Exploit Key Weakness",
+      :last-note-viewed 2,
+      :notes
+      [{:note-title "Superman",
+        :note
+        "Superman is extremely sensitive to Kryptonite and there are many different types. Green Kryptonite can be lethal while red, yellow, and silver varieties can mess him up pretty good. Get some!"}
+       {:note-title "Wonder Woman",
+        :note
+        "Can use Wonder Woman's own lasso to bind and detain her."}
+       {:note-title "Batman",
+        :note
+        "Batman is not bullet proof. Our very accurate, self-guided bullets could hit him in the teeth and shut up his sanctimonious ass. \n\nI mean, this guy isn't really even a super hero. He's a regular guy in a special suit with lots of gizmos."}
+       {:note-title "Martian Manhunter",
+        :note
+        "The Martian Manhunter can be overcome with weak flames. Throw matches at him. It's just weird that possibly the most powerful of the superheroes can be overcome by something as simple as a weak flame."}
+       {:note-title "Daredevil",
+        :note
+        "Daredevil can be overcome by loud noises. Attack him at an airport, construction project, or disco."}
+       {:note-title "Green Lantern", :note "Wear a yellow suit."}
+       {:note-title "The Flash",
+        :note "Just knock him out with sleeping gas."}
+       {:note-title "Aquaman",
+        :note
+        "Keep him out of the water. Make him stand in line at the DMV and he will die."}]}]}
+   {:topic "Enjoy Fruits of Success",
+    :expanded false,
+    :children
+    [{:topic "Find a Bank that Pays High Interest on Checking"}
+     {:topic "Buy a Tropical Island"}
+     {:topic "Make a World Leader My Restroom Attendant"}]}]}}
