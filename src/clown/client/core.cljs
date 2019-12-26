@@ -2,12 +2,15 @@
   (:require [cljs.core.async :refer [chan close! <! >!]]
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
-            [clown.client.util.dom-utils :as du]
-            [clown.client.util.dragging :refer [drag-click-handler]]
-            [clown.client.util.focus-utils :as fu]
             [clown.client.layout :as ay]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
+            [clown.client.util.dom-utils :as du]
+            [clown.client.util.dragging :refer [drag-click-handler]]
+            [clown.client.util.empty-outline :refer [build-empty-outline
+                                                     empty-outline-file-name]]
+            [clown.client.util.focus-utils :as fu]
+            [clown.client.util.mru :refer [push-on-mru]]
             [clown.client.util.undo-redo :as ur]
             [clown.client.util.vector-utils :refer [delete-at remove-first
                                                     remove-last remove-last-two
@@ -69,6 +72,9 @@
         ;; is dependent on items stored in the preferences.
         (debugf "message-data: %s" message-data)
         (go (>! got-prefs-channel message-data)))
+
+      (= message-command "hey-client/accept-user-name")
+      (swap! (state-ratom) assoc :user message-data)
 
       (= message-command "hey-client/accept-this-outline")
       (do
@@ -476,12 +482,22 @@
         (debugf "prefs: %s" prefs)
         (swap! (state-ratom) assoc :preferences prefs)
         (close! got-prefs-channel)
-        (when (:load-last-file prefs)
+
+        ((:send-message-fn @(state-ratom))
+         (pr-str {:message {:command "hey-server/send-user-name"
+                            :data    ""}}))
+
+        (if (:load-last-file prefs)
           (when-let [last-file (first (:mru prefs))]
             (debugf "Asking server to send last file: %s" last-file)
             ((:send-message-fn @(state-ratom))
              (pr-str {:message {:command "hey-server/send-outline"
-                                :data    last-file}}))))
+                                :data    last-file}})))
+
+          (do
+            (swap! (state-ratom) assoc :current-outline (build-empty-outline (state-ratom)))
+            (push-on-mru (state-ratom) (empty-outline-file-name))))
+
         (r/render [ay/layout-outliner (state-ratom)]
                   (du/get-element-by-id "app"))))))
 
