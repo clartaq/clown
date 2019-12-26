@@ -10,22 +10,16 @@
       (du/toggle-classlist close-button "closed")
       (du/toggle-classlist overlay "closed"))))
 
-(defn toggle-about-to-update-mru-modal
-  []
-  (toggle-modal "about-to-update-mru-modal"))
-
 (defn enumerate-message-paragraphs
   "Return a div containing each element in the array of text as paragraphs."
   [ta]
-  (into [:div] (mapv #(into [:p.dialog-message %]) ta)))    ;)
+  (into [:div] (mapv #(into [:p.dialog-message %]) ta)))
 
 (defn one-button-dialog-template
   "Return a piece of hiccup for a one button dialog with the given features."
   [settings]
-  ;(println "one-button-dialog-template")
   [:div {:class "modal closed" :id (str (:id-basis settings) "-modal")
          :role  "dialog"}
-   ;(println "in the hiccup")
    [:header {:class "modal-header"}
     [:section {:class "modal-header-left"} (:header settings)]
     [:section {:class "modal-header-right"}
@@ -42,7 +36,11 @@
               :class    "tree-demo--button button-bar-item"
               :value    (:button-text settings)
               :title    (:button-help settings)
-              :on-click #((:toggle-fn settings))}]]]])      ;)
+              :on-click #((:toggle-fn settings))}]]]])
+
+(defn toggle-about-to-update-mru-modal
+  []
+  (toggle-modal "about-to-update-mru-modal"))
 
 (defn layout-about-to-update-mru-modal
   []
