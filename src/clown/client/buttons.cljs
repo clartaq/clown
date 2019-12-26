@@ -9,7 +9,7 @@
             [clojure.set :as cs]
             [clojure.string :as str]
             [clown.client.util.dialogs :as dlg]
-            [clown.client.util.vector-utils :as vu]
+            [clown.client.util.mru :refer [push-on-mru persist-new-mru]]
             [clown.client.util.undo-redo :as ur]
             [reagent.core :as r]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
@@ -70,37 +70,15 @@
   [file-name]
   (str/lower-case (last (str/split file-name #"\."))))
 
-(defn persist-new-mru
-  "Send the mru portion of the preferences to the server."
-  [aps]
-  (let [mru (get-in @aps [:preferences :mru])]
-    ((:send-message-fn @aps)
-     (pr-str {:message {:command "hey-server/persist-new-preference-value"
-                        :data    {:preference :mru
-                                  :value      mru}}}))))
-
-(defn update-mru
-  "Update the recent file list in preferences with the name of the file
-  just opened.  The new file name will be the first in the mru."
-  [aps file-name]
-  ;(println "update-mru: file-name: " file-name)
-  (let [old-mru (get-in @aps [:preferences :mru])
-        new-mru (vu/prepend-uniquely old-mru file-name)
-        mru-cursor (r/cursor aps [:preferences :mru])]
-    ;(dlg/toggle-about-to-update-mru-modal)
-    (swap! mru-cursor :assoc new-mru)
-    (persist-new-mru aps)))
-
 (defn vet-and-load-edn-outline
   "Assure that the data represents correct EDN and what we expect in an
   outline. When determined to be Ok, load it to be displayed."
   [aps file-name file-data]
-  ;(println "vet-and-load-edn-outline: file-name: " file-name)
   (when-let [outline (edn/read-string file-data)]
     (if-not (get-in outline [:outline :title])
       (dlg/toggle-bad-outline-modal)
       (do
-        (update-mru aps file-name)
+        (push-on-mru aps file-name)
         (swap! aps assoc :current-outline (:outline outline))))))
 
 (defn vet-and-load-outline
