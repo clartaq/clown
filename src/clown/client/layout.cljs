@@ -410,25 +410,48 @@
         um (ur/undo-manager root-ratom)
         focused-headline-ratom (r/cursor aps [:focused-headline])
         outline-container-id "outline-container-id"
-        note-container-id "note-container-id"]
+        title-container-id "title-container-id"
+        note-container-id "note-container-id"
+        file-name-container-id "file-name-container-id"]
     (swap! aps assoc :undo-redo-manager um)
     (debugf "    @aps with undo manager: %s" @aps)
 
     (fn [aps]
       (debug "    layout-outliner interior function")
       (debugf "    @aps: %s" @aps)
+      ;(println "    @aps: " @aps)
       (let [file-name (first (get-in @aps [:preferences :mru]))
+            ; file-name-basis 500
             outline-title (get-in @aps [:current-outline :title])
+            ; title-basis 468
             outliner-width (get-in @aps [:preferences :outline_width])
-            notes-width (get-in @aps [:preferences :note_width])]
+            notes-width (get-in @aps [:preferences :note_width])
+            author-name (get-in @aps [:current-outline :author])
+            created (get-in @aps [:current-outline :created])
+            modified (get-in @aps [:current-outline :modified])]
         (debugf "    outliner-width: %s" outliner-width)
         (debugf "    notes-width: %s" notes-width)
         (debugf "    @root-ratom: %s" @root-ratom)
         [:div.Site
          [:header.Site-header {:role "banner"}
-          [:p (if file-name
-                (str "File: " file-name)
-                "File: Unknown")]]
+          [:div.banner
+           ;(set! (.-flexBasis (.-style @ele)) @new-basis)))
+           [:div.banner--title-container {:id title-container-id}
+            [:p.banner--title-label "Title:"]
+            [:input {:type "text" :class "banner-title-editor" :placeholder "Unknown"}]
+            [:p.banner--title-editor (if outline-title
+                                       outline-title
+                                       "Unknown")]]
+
+           [:div.banner--spacer]
+
+           [:div.banner--file-name-container {:id file-name-container-id}
+            [:p.banner--file-name-label "File:"]
+            [:p.banner--file-name-editor
+             (if file-name
+               file-name
+               "Unknown")]]]]
+
          [:main.Site-content {:id "Site-content"}
           [:div.outline-container {:id    outline-container-id
                                    :style {:flex-basis outliner-width}}
@@ -437,9 +460,19 @@
             [:div.info-column
              [:div.info-row
               [:div.info-item
-               (if outline-title
-                 (str "Title: " outline-title)
-                 "Title: An Outline")]]
+               (if author-name
+                 (str "Author: " author-name)
+                 "Author: Unknown")]]
+             [:div.info-row
+              [:div.info-item
+               (if created
+                 (str "Created: " created)
+                 "Created: Unknown")]]
+             [:div.info-row
+              [:div.info-item
+               (if modified
+                 (str "Modified: " modified)
+                 "Modified: Unknown")]]
              [:div.info-row
               [:div.info-item
                "Headlines: " (tm/count-nodes @root-ratom)]]]]
@@ -453,7 +486,7 @@
           [:div {:class "vertical-page-divider"}]
           [:div {:class       "vertical-page-splitter"
                  :id          "outline-drag-border"
-                 :onMouseDown #(drag-click-handler @aps outline-container-id
+                 :onMouseDown #(drag-click-handler @aps [outline-container-id title-container-id]
                                                    :outline_width)}]
 
           ;; Notes area.
@@ -480,7 +513,7 @@
           [:div {:class "vertical-page-divider"}]
           [:div {:class       "vertical-page-splitter"
                  :id          "note-drag-border"
-                 :onMouseDown #(drag-click-handler @aps note-container-id
+                 :onMouseDown #(drag-click-handler @aps [note-container-id file-name-container-id]
                                                    :note_width)}]]
 
          ;; Footer stuff.

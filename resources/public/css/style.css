@@ -227,6 +227,63 @@ small {
     padding: 1rem;
 }
 
+.banner {
+    display: flex;
+    flex-direction: row;
+    background: lightpink;
+}
+
+.banner--title-container {
+    display: flex;
+    flex-direction: row;
+    background: lavender;
+}
+.banner--title-label {
+}
+
+.banner--title-editor {
+}
+
+.banner--file-name-container {
+    display: flex;
+    flex-direction: row;
+    background: lavenderblush;
+}
+
+.banner--file-name-label {
+}
+
+.banner--file-name-editor {
+}
+
+.banner--title-label,
+.banner--file-name-label {
+    /*flex-grow: 0;*/
+    flex-shrink: 0;
+    flex-basis: 10ch;
+    justify-content: right;
+    vertical-align: center;
+}
+
+.banner--title-editor,
+.banner--file-name-editor {
+    color: var(--active-border-color);
+    background-color: var(--body-background-color);
+    vertical-align: center;
+    transition: color 0.3s ease-in-out;
+}
+
+.banner--title-editor:hover,
+.banner--file-name-editor:hover {
+    color: var(--body-text-color);
+}
+
+.banner--spacer {
+    width: 11px;
+    min-width: 11px;
+    background: lightcyan;
+}
+
 .outline-container {
     display: flex;
     flex-direction: column;
@@ -250,7 +307,7 @@ small {
     transition: color 0.3s ease-in-out;
 }
 
-.Site-header p:hover,
+/*.Site-header p:hover,*/
 .outline-container p:hover,
 .note-container p:hover {
     color: var(--body-text-color);

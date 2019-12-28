@@ -21,6 +21,7 @@
 ;; The resolved elements, just so we don't have to keep recalculating them.
 
 (def ^{:private true} ele (atom nil))
+(def ^{:private true} container-id-atoms (atom nil))
 
 ;; Other dragger-related state.
 
@@ -31,7 +32,7 @@
 (def ^{:private true} preference-key (atom ""))
 (def ^{:private true} prog-state-ratom (atom nil))
 
-(defn persist-new-basis
+(defn- persist-new-basis
   "Send the new basis back to the server to persist it."
   [new-basis]
   (debugf "persist-new-basis: new-basis: %s" new-basis)
@@ -48,7 +49,9 @@
       (reset! new-basis (str (max min-width-basis
                                   (+ @starting-basis movement)) "px"))
       (debugf "    @new-basis: %s" @new-basis)
-      (set! (.-flexBasis (.-style @ele)) @new-basis))))
+      (doseq [id @container-id-atoms]
+        (when-let [ele (.getElementById js/document id)]
+          (set! (.-flexBasis (.-style ele)) @new-basis))))))
 
 (defn- stop-tracking [_]
   (when @dragging
@@ -62,11 +65,12 @@
           evt @starting-mouse-x (.-pageX evt))
   (reset! starting-mouse-x (.-pageX evt)))
 
-(defn ^{:export true} drag-click-handler [prog-state container-id pref-key]
+(defn ^{:export true} drag-click-handler [prog-state container-ids pref-key]
   (debug "drag-click-handler")
   (reset! prog-state-ratom prog-state)
   (reset! preference-key pref-key)
-  (reset! ele (.getElementById js/document container-id))
+  (reset! container-id-atoms container-ids)
+  (reset! ele (.getElementById js/document (first container-ids)))
   (reset! starting-basis (- (.-offsetWidth @ele) twice-padding-width))
   (debugf "@starting-basis: %s" @starting-basis)
   (debugf "(.-offsetWidth @ele): %s" (.-offsetWidth @ele))
