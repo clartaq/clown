@@ -6,7 +6,6 @@
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
             [clown.client.util.dom-utils :as du]
-            [clown.client.util.dragging :refer [drag-click-handler]]
             [clown.client.util.empty-outline :refer [build-empty-outline
                                                      empty-outline-file-name]]
             [clown.client.util.focus-utils :as fu]
@@ -74,7 +73,11 @@
         (go (>! got-prefs-channel message-data)))
 
       (= message-command "hey-client/accept-user-name")
-      (swap! (state-ratom) assoc :user message-data)
+      ;(do (println "got user name: " message-data)
+      ;    (println "@aps: " (state-ratom))
+          (swap! (state-ratom) assoc :user message-data)
+      ;    (println "@aps after swap: " (state-ratom))
+      ;    (println "@after swap: (:user (state-ratom))" (:user @(state-ratom))))
 
       (= message-command "hey-client/accept-this-outline")
       (do
