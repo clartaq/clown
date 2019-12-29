@@ -6,10 +6,9 @@
 
 (ns clown.client.buttons
   (:require [cljs.tools.reader.edn :as edn]
-            [clojure.set :as cs]
             [clojure.string :as str]
             [clown.client.util.dialogs :as dlg]
-            [clown.client.util.mru :refer [push-on-mru persist-new-mru]]
+            [clown.client.util.mru :refer [push-on-mru! persist-new-mru]]
             [clown.client.util.undo-redo :as ur]
             [reagent.core :as r]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
@@ -78,7 +77,7 @@
     (if-not (get-in outline [:outline :title])
       (dlg/toggle-bad-outline-modal)
       (do
-        (push-on-mru aps file-name)
+        (push-on-mru! aps file-name)
         (swap! aps assoc :current-outline (:outline outline))))))
 
 (defn vet-and-load-outline
