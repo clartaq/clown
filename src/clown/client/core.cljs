@@ -9,7 +9,7 @@
             [clown.client.util.empty-outline :refer [build-empty-outline
                                                      empty-outline-file-name]]
             [clown.client.util.focus-utils :as fu]
-            [clown.client.util.mru :refer [push-on-mru]]
+            [clown.client.util.mru :refer [push-on-mru!]]
             [clown.client.util.undo-redo :as ur]
             [clown.client.util.vector-utils :refer [delete-at remove-first
                                                     remove-last remove-last-two
@@ -499,7 +499,7 @@
 
           (do
             (swap! (state-ratom) assoc :current-outline (build-empty-outline (state-ratom)))
-            (push-on-mru (state-ratom) (empty-outline-file-name))))
+            (push-on-mru! (state-ratom) (empty-outline-file-name))))
 
         (r/render [ay/layout-outliner (state-ratom)]
                   (du/get-element-by-id "app"))))))
