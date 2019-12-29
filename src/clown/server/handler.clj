@@ -13,6 +13,11 @@
     [taoensso.timbre :refer [trace debug info warn error
                              tracef debugf infof warnf errorf]]))
 
+(defn user-name
+  "Return the user name."
+  []
+  (System/getProperty "user.name"))
+
 (defn save-outline-as-edn
   "Save the outline as EDN to the first file in the MRU list. THIS IS
   NOT HOW IT SHOULD WORK IN PERPETUITY. IT HAS TO HANDLE NEW, NEVER
@@ -43,6 +48,10 @@
       (= command "hey-server/send-preferences")
       (send! @ws-client (pr-str {:message {:command "hey-client/accept-these-preferences"
                                            :data    (db/get-preference-map)}}))
+
+      (= command "hey-server/send-user-name")
+      (send! @ws-client (pr-str {:message {:command "hey-client/accept-user-name"
+                                           :data    (user-name)}}))
 
       (= command "hey-server/send-outline")
       (when-let [from-file (edn/read-string (slurp data))]
