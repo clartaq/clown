@@ -199,26 +199,23 @@ small {
     flex: none;
 }
 
-.Site-header p {
-    margin-top: 0.75rem;
-    margin-left: calc(0.5rem + 16px + 1px);
-
-    color: var(--active-border-color);
-    background-color: var(--body-background-color);
-
-    vertical-align: center;
-
-    transition: color 0.3s ease-in-out;
-}
+/*.Site-header p {*/
+/*    background-color: var(--body-background-color);*/
+/*    color: var(--active-border-color);*/
+/*    margin-left: calc(0.5rem + 16px + 1px);*/
+/*    margin-top: 0.75rem;*/
+/*    transition: color 0.3s ease-in-out;*/
+/*    vertical-align: center;*/
+/*}*/
 
 .Site-content {
     display: flex;
     flex-direction: row;
     flex: auto;
-    padding: 0.5rem;
-    width: 100%;
     height: 100%;
     overflow:hidden;
+    padding: 0.5rem;
+    width: 100%;
 }
 
 .Site-footer {
@@ -228,60 +225,85 @@ small {
 }
 
 .banner {
+    background-color: var(--body-background-color);
+    color: var(--active-border-color);
     display: flex;
     flex-direction: row;
-    background: lightpink;
+    font-family: var(--demo-font-family);
+    font-size: 1.1rem;
+    margin-left: calc(0.5rem + 16px + 1px);
+    transition: color 0.3s ease-in-out;
 }
 
 .banner--title-container {
     display: flex;
     flex-direction: row;
-    background: lavender;
+    flex-shrink: 0;
 }
 .banner--title-label {
-}
-
-.banner--title-editor {
+    display: flex;
 }
 
 .banner--file-name-container {
     display: flex;
     flex-direction: row;
-    background: lavenderblush;
+    flex-shrink: 0;
 }
 
 .banner--file-name-label {
-}
-
-.banner--file-name-editor {
+    display: flex;
 }
 
 .banner--title-label,
 .banner--file-name-label {
-    /*flex-grow: 0;*/
+    flex-basis: 5ch;
     flex-shrink: 0;
-    flex-basis: 10ch;
-    justify-content: right;
-    vertical-align: center;
+}
+
+.banner--title-label p,
+.banner--file-name-label p {
+    text-align: center;
 }
 
 .banner--title-editor,
 .banner--file-name-editor {
-    color: var(--active-border-color);
-    background-color: var(--body-background-color);
-    vertical-align: center;
-    transition: color 0.3s ease-in-out;
+    display: flex;
+    flex-grow: 1;
+    margin-right: calc(0.5rem + 16px + 1px);
 }
 
-.banner--title-editor:hover,
-.banner--file-name-editor:hover {
+.banner--title-editor input,
+.banner--file-name-editor input {
+    border: none;
+    color: var(--active-border-color);
+    flex-grow: 1;
+    font-family: var(--demo-font-family);
+    font-size: 1.1rem;
+    outline: none;
+    transition: color 0.3s ease-in-out;
+    vertical-align: center;
+    width: 100%;
+}
+
+.banner--title-editor:hover input,
+.banner--file-name-editor:hover input,
+.banner--title-editor input:focus,
+.banner--file-name-editor input:focus {
     color: var(--body-text-color);
 }
 
+.banner--title-editor:hover input::placeholder,
+.banner--file-name-editor input::placeholder,
+.banner--title-editor input:focus::placeholder,
+.banner--file-name-editor input:focus::placeholder {
+    color: var(--body-text-color);
+    transition: color 0.3s ease-in-out;
+}
+
+/* Corresponds to border thickness and width of drag element in outline container. */
 .banner--spacer {
-    width: 11px;
     min-width: 11px;
-    background: lightcyan;
+    width: 11px;
 }
 
 .outline-container {
