@@ -4,6 +4,7 @@
 ;; files and directories. The directory names are relative to the project
 ;; directory.
 (def clean-targets ["target"
+                    "test/data/db"
                     "resources/public/db"
                     "resources/public/main.out"
                     "resources/public/main.js"
