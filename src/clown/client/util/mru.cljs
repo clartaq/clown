@@ -12,9 +12,9 @@
                         :data    {:preference :mru
                                   :value      mru}}}))))
 
-(defn push-on-mru
+(defn push-on-mru!
   "Update the recent file list in preferences with the name of the file
-  just opened.  The new file name will be the first in the mru."
+  and persist the mru.  The new file name will be the first in the mru."
   [aps file-name]
   (let [old-mru (get-in @aps [:preferences :mru])
         new-mru (vu/prepend-uniquely old-mru file-name)
@@ -23,4 +23,13 @@
     (swap! mru-cursor :assoc new-mru)
     (persist-new-mru aps)))
 
-
+(defn replace-first-item!
+  "Replace the first (top) item in the mru with the new item and persist
+  the mru."
+  [aps new-item]
+  (let [old-mru (get-in @aps [:preferences :mru])
+        short-mru (vu/remove-first old-mru)
+        new-mru (vu/prepend short-mru new-item)
+        mru-cursor (r/cursor aps [:preferences :mru])]
+    (swap! mru-cursor :assoc new-mru)
+    (persist-new-mru aps)))
