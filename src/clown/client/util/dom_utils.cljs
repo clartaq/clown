@@ -63,7 +63,6 @@
 ;(.toggle (.-classList close-button) "closed")
 ;(.toggle (.-classList overlay) "closed"))))
 
-
 (defn get-canvas-context
   [canvas kind]
   (.getContext canvas kind))
@@ -101,6 +100,14 @@
   [ele]
   (.focus ele))
 
+(defn pageX-of-event
+  [evt]
+  (.-pageX evt))
+
+(defn offset-width
+  [ele]
+  (.-offsetWidth ele))
+
 (defn value-length
   [ele]
   (.-length (.-value ele)))
@@ -135,6 +142,10 @@
       .-defaultView
       (.getComputedStyle ele "")
       (.getPropertyValue rule)))
+
+(defn set-flex-basis
+  [ele new-basis]
+  (set! (.-flexBasis (.-style ele)) new-basis))
 
 (defn style-property-value
   "Return the value of the property for the element with the given id."
