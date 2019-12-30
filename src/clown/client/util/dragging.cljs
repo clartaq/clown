@@ -5,6 +5,7 @@
 
 (ns clown.client.util.dragging
   (:require [clojure.string :as s]
+            [clown.client.util.dom-utils :as du]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
@@ -43,15 +44,15 @@
                                   :value      num-basis}}}))))
 
 (defn- move [evt]
-  (debugf "move: (.-pageX evt): %s" (.-pageX evt))
+  (debugf "move: (.-pageX evt): %s" (du/pageX-of-event evt))
   (when @dragging
-    (let [movement (- (.-pageX evt) @starting-mouse-x)]
+    (let [movement (- (du/pageX-of-event evt) @starting-mouse-x)]
       (reset! new-basis (str (max min-width-basis
                                   (+ @starting-basis movement)) "px"))
       (debugf "    @new-basis: %s" @new-basis)
       (doseq [id @container-id-atoms]
-        (when-let [ele (.getElementById js/document id)]
-          (set! (.-flexBasis (.-style ele)) @new-basis))))))
+        (when-let [ele (du/get-element-by-id id)]
+          (du/set-flex-basis ele @new-basis))))))
 
 (defn- stop-tracking [_]
   (when @dragging
@@ -62,18 +63,19 @@
 
 (defn- start-tracking [evt]
   (debugf "start-tracking: evt: %s, @starting-mouse-x: %s, (.-pageX evt): %s"
-          evt @starting-mouse-x (.-pageX evt))
-  (reset! starting-mouse-x (.-pageX evt)))
+          evt @starting-mouse-x (du/pageX-of-event evt))
+  (reset! starting-mouse-x (du/pageX-of-event evt)))
 
 (defn ^{:export true} drag-click-handler [prog-state container-ids pref-key]
   (debug "drag-click-handler")
   (reset! prog-state-ratom prog-state)
   (reset! preference-key pref-key)
   (reset! container-id-atoms container-ids)
-  (reset! ele (.getElementById js/document (first container-ids)))
-  (reset! starting-basis (- (.-offsetWidth @ele) twice-padding-width))
+  (reset! ele (du/get-element-by-id (first container-ids)))
+  (reset! starting-basis (- (du/offset-width @ele)
+                            twice-padding-width))
   (debugf "@starting-basis: %s" @starting-basis)
-  (debugf "(.-offsetWidth @ele): %s" (.-offsetWidth @ele))
+  (debugf "(.-offsetWidth @ele): %s" (du/offset-width @ele))
   (reset! dragging true)
   (.addEventListener js/window "mousedown" start-tracking)
   (.addEventListener js/window "mousemove" move)
