@@ -121,6 +121,7 @@ html, body {
 }
 
 body {
+    background-color: var(--body-background-color);
     color: var(--body-text-color);
     font-family: var(--demo-font-family);
     font-weight: normal;
@@ -232,7 +233,7 @@ small {
     font-family: var(--demo-font-family);
     font-size: 1.1rem;
     margin-left: calc(0.5rem + 16px + 1px);
-    transition: color 0.3s ease-in-out;
+    /*transition: color 0.3s ease-in-out;*/
 }
 
 .banner--title-container {
@@ -274,6 +275,7 @@ small {
 
 .banner--title-editor input,
 .banner--file-name-editor input {
+    background-color: var(--body-background-color);
     border: none;
     color: var(--active-border-color);
     flex-grow: 1;
@@ -293,11 +295,16 @@ small {
 }
 
 .banner--title-editor:hover input::placeholder,
-.banner--file-name-editor input::placeholder,
+.banner--file-name-editor:hover input::placeholder,
 .banner--title-editor input:focus::placeholder,
 .banner--file-name-editor input:focus::placeholder {
     color: var(--body-text-color);
     transition: color 0.3s ease-in-out;
+}
+
+.banner--title-editor input:active,
+.banner--file-name-editor input:active {
+    background-color: white;
 }
 
 /* Corresponds to border thickness and width of drag element in outline container. */
@@ -400,12 +407,12 @@ small {
     font-size: 0.875rem;
     font-weight: normal;
     background-color: var(--body-background-color);
-    transition: color 0.3s ease-in-out;
+    /*transition: color 0.3s ease-in-out;*/
 }
 
-.info-item:hover {
-    color: var(--body-text-color);
-}
+/*.info-item:hover {*/
+/*    !*color: var(--body-text-color);*!*/
+/*}*/
 
 /*
 ** Stuff used in the tree control.
@@ -467,12 +474,12 @@ small {
     background: url("../img/icons8-note-16.png") no-repeat center bottom;
 
     opacity: 0.3;
-    transition: opacity 0.3s ease-in-out;
+    /*transition: opacity 0.3s ease-in-out;*/
 }
 
-.tree-control--note-row-icon-div:hover {
-    opacity: 1;
-}
+/*.tree-control--note-row-icon-div:hover {*/
+/*    !*opacity: 1;*!*/
+/*}*/
 
 .tree-control--topic-info-div {
     display: flex;
