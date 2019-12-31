@@ -23,7 +23,7 @@
   NOT HOW IT SHOULD WORK IN PERPETUITY. IT HAS TO HANDLE NEW, NEVER
   BEFORE SAVED FILES TOO."
   [outline]
-  (debug "save-outline-as-edn")
+  (debug "save-outline-as-edn!")
   (debugf "    outline: %s" outline)
   (debugf "    pretty printed:\n %s" (pprint/write outline :stream nil))
   (let [prefs (db/get-preference-map)]
@@ -47,7 +47,8 @@
 
       (= command "hey-server/send-preferences")
       (send! @ws-client (pr-str {:message {:command "hey-client/accept-these-preferences"
-                                           :data    (db/get-preference-map)}}))
+                                           :data    (merge (db/get-preference-map)
+                                                           {:user (user-name)})}}))
 
       (= command "hey-server/send-user-name")
       (send! @ws-client (pr-str {:message {:command "hey-client/accept-user-name"
