@@ -449,7 +449,7 @@
                                               :style {:flex-basis notes-width}}
             [:div.banner--file-name-label [:p "File:"]]
             [:div.banner--file-name-editor
-             [:input {:type      "text" :placeholder "Unknown" :spell=check nil
+             [:input {:type      "text" :placeholder "Unknown" :spell-check "false"
                       :value     (if file-name
                                    file-name
                                    "")
