@@ -304,7 +304,7 @@ small {
 
 .banner--title-editor input:active,
 .banner--file-name-editor input:active {
-    background-color: white;
+    /*background-color: white;*/
 }
 
 /* Corresponds to border thickness and width of drag element in outline container. */
@@ -498,6 +498,7 @@ small {
 }
 
 .tree-control--topic-editor {
+    background-color: var(--body-background-color);
     flex: 1;
     padding: 0 0 0 0.25rem;
     margin: 0.25rem 0;
