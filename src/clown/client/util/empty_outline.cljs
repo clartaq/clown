@@ -16,9 +16,10 @@
 
 (defn build-empty-outline
   [aps]
-  (let [formatted-now (formatted-time-now)]
+  (let [formatted-now (formatted-time-now)
+        author (get-in @aps [:preferences :user])]
     {:version          "0.0.1"
-     :author           (:user @aps)
+     :author           author
      :title            "Unsaved Outline"
      :created          formatted-now
      :modified         formatted-now
