@@ -2,8 +2,8 @@
  {:version "0.0.1",
   :author "David D. Clark",
   :title "My Plan for Global Domination",
-  :created nil,
-  :modified nil,
+  :created "26 Dec 2019, 5:40:17pm",
+  :modified "31 Dec 2019, 12:51:45pm",
   :tree
   [{:topic "Build Secret Base",
     :expanded false,
@@ -80,7 +80,7 @@
       "Terrorize my own developers by insisting that it must support Unicode. They will be too busy looking for bugs to support a coup against me."}],
     :expanded true}
    {:topic "Build Doomsday Weapon",
-    :expanded true,
+    :expanded false,
     :children
     [{:topic "Nuclear",
       :last-note-viewed 0,
