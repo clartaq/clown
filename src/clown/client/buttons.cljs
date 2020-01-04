@@ -1,39 +1,15 @@
-;;;;
-;;;; This namespace contains some functions that were used in the
-;;;; demonstration program for the outliner. They are here for reference
-;;;; use when similar functions are added to the outliner program.
-;;;;
-
 (ns clown.client.buttons
   (:require [cljs.tools.reader.edn :as edn]
             [clojure.string :as str]
+            [clown.client.commands :as cmd]
             [clown.client.util.dialogs :as dlg]
+            [clown.client.util.dom-utils :as du]
+            [clown.client.util.empty-outline :as eo]
             [clown.client.util.mru :refer [push-on-mru! persist-new-mru]]
             [clown.client.util.undo-redo :as ur]
             [reagent.core :as r]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
                                                 trace debug info warn error]]))
-
-;;;-----------------------------------------------------------------------------
-;;; Buttons for the demo.
-
-(defn add-reset-button
-  "Return a function that will create a button that, when clicked, will undo
-  all changes made to the tree since the program was started."
-  [app-state-ratom]
-  (let [button-id "reset-button"
-        reset-fn (fn [_]
-                   (let [um (:undo-redo-manager @app-state-ratom)]
-                     (while (ur/can-undo? um)
-                       (ur/undo! um))))]
-    (fn [app-state-ratom]
-      [:input.tree-demo--button
-       {:type     "button"
-        :id       button-id
-        :disabled "true"
-        :title    "Reset the tree to its original state"
-        :value    "Reset"
-        :on-click #(reset-fn %)}])))
 
 (defn add-new-button
   "Return a function that will produce a button that, when clicked,
@@ -41,28 +17,32 @@
   fresh, empty version."
   [app-state-ratom]
   (let [button-id "new-button"
-        my-cursor (r/cursor app-state-ratom [:tree])
-        ;empty-tree [(new-topic)]
-        ;empty-tree-id (tree-id-parts->tree-id-string (conj (root-parts) "editor"))
         new-fn (fn [_]
-                 ;         (reset! my-cursor empty-tree)
-                 (r/after-render
-                   (fn []
-                     ;             (resize-textarea empty-tree-id)
-                     ;             (highlight-and-scroll-editor-for-id
-                     ;               empty-tree-id 0
-                     (count (:topic (first @my-cursor))))))
-        ;)
-        ]
+                 (println "add-new-button, internal function")
+                 ;; This doesn't really seem to work as expected. It's like
+                 ;; the new undo-manager never gets attached to the ratom.
+                 ;; The stuff from the old ratom is still there. You can load
+                 ;; files, make changes, etc, and then back up through all
+                 ;; the file changes (without resetting outline title and
+                 ;; file name) all the way back to when the app was loaded.
+                 ;(let [;um (:undo-redo-manager @app-state-ratom)]
+                 (println "\n\nadd-new-button: app-state-ratom before: " app-state-ratom)
+                 (swap! app-state-ratom assoc :current-outline
+                        (eo/build-empty-outline app-state-ratom))
+                 (push-on-mru! app-state-ratom (eo/empty-outline-file-name)) ;]
+                 (println "\n\nadd-new-button: app-state-ratom after: " app-state-ratom)
+                 ;(let [new-um (ur/undo-manager
+                 ;               (r/cursor app-state-ratom
+                 ;                         [:current-outline :tree]))]
+                 ;  (swap! app-state-ratom assoc :undo-redo-manager new-um))
+                 )]
     (fn [app-state-ratom]
       [:input.tree-demo--button
-       {:type  "button"
+       {:type     "button"
         :id       button-id
-        :disabled "true"
-        :title "Remove all contents from the tree control and start anew"
-        :value "New"
-        ;:on-click #(new-fn %)
-        }])))
+        :title    "Erase the current outline and start with a new one."
+        :value    "New"
+        :on-click #(new-fn %)}])))
 
 (defn file-ext
   "Return the file extension of the file name, lower-case, no dot."
@@ -100,9 +80,9 @@
   "A selection has been made in the File Open dialog. Grab the file and
   and load it into the program."
   [aps evt]
+  (println "handle-file-open-selection")
   (debug "handle-file-open-selection")
   (let [js-file (aget (.-files (.-target evt)) 0)
-        file-name (.-name js-file)
         js-file-reader (js/FileReader.)
         source-data-atom (atom nil)]
     (set! (.-onload js-file-reader)
@@ -116,9 +96,14 @@
   "Return a function that will display a 'File Open' dialog. If a response
   is received, open that file and load any outline contained."
   [app-state-ratom]
+  ;(println "add-open-buton")
   (let [button-id "open-button"
         file-open-id "file-open-id"
-        open-fn #(.click (.getElementById js/document file-open-id))]
+        sim-click-fn #(do
+                        ;(println "    sim-click-fn")
+                        ;(println "    result of get-element-by-id: " (du/get-element-by-id file-open-id))
+                        ;(println "    about to click file-open-id: " file-open-id)
+                        (.click (du/get-element-by-id file-open-id)))]
     (fn [app-state-ratom]
       [:div
        [:input {:type      "file" :id file-open-id
@@ -133,50 +118,28 @@
          :id       button-id
          :title    "Open a new outline"
          :value    "Open"
-         :on-click open-fn}]])))
+         :on-click sim-click-fn}]])))
 
 (defn add-save-button
   "Return a function that will produce a button that, when clicked,
   will save the current state of the tree in local storage."
   [app-state-ratom]
   (let [button-id "save-button"
-        save-fn (fn [_] (.setItem (.-localStorage js/window) "tree"
-                                  (pr-str (:tree @app-state-ratom))))]
+        save-fn (fn [evt] (cmd/save-outline-as-edn! {:evt evt :root-ratom app-state-ratom}))]
     (fn [app-state-ratom]
       [:input.tree-demo--button
        {:type     "button"
         :id       button-id
-        :disabled "true"
         :title    "Save the current state of the tree"
         :value    "Save"
         :on-click #(save-fn %)}])))
-
-(defn add-read-button
-  "Return a function that will produce a button that, when clicked,
-  will read the saved state of the tree in local storage."
-  [app-state-ratom]
-  (let [button-id "read-button"
-        read-fn (fn [_]
-                  (when-let [data (.getItem (.-localStorage js/window) "tree")]
-                    (let [edn (edn/read-string data)]
-                      (swap! app-state-ratom assoc :tree edn))))]
-    (fn [app-state-ratom]
-      [:input.tree-demo--button
-       {:type     "button"
-        :id       button-id
-        :disabled "true"
-        :title    "Read the saved tree from storage"
-        :value    "Read"
-        :on-click #(read-fn %)}])))
 
 (defn add-buttons
   "Adds buttons to the button bar."
   [app-state-ratom]
   (fn [app-state-ratom]
     [:div.tree-demo--button-area
-     [add-reset-button app-state-ratom]
      [add-new-button app-state-ratom]
      [add-open-button app-state-ratom]
-     [add-save-button app-state-ratom]
-     [add-read-button app-state-ratom]]))
+     [add-save-button app-state-ratom]]))
 
