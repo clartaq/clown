@@ -527,6 +527,7 @@
 
          ;; Footer stuff.
          [bn/add-buttons aps]
+         ;; Would this be a good place to add any "Cornell Summary" type stuff.
          [:footer.Site-footer
           [:div.Footer "clown footer"]]
 
