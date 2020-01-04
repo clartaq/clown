@@ -4,7 +4,7 @@ Clown is an outliner with notes. It is written in Clojure and ClojureScript.
 
 ## Overview
 
-This is pre-alpha software -- very early in development.
+This is pre-alpha software -- very early in development. Most features not implemented.
 
 Clown lets you build an outline and attach any number of long-form notes to any headline. Editing of outlines and notes is done on the same page making it easier to work on both at the same time. I like to keep the "big picture" in mind, as embodied by the outline, even when editing small details in a note.
 
@@ -14,11 +14,35 @@ Right now, it only reads a single outline into the program. You can make changes
 
 ## Usage
 
-The program is surprisingly useful even in this primitive state.
+The program is surprisingly useful even in this primitive state. By default, when the program is opened, it will look for and load a file named `World_Domination_Plan.edn`, included in the repository.
+
+You can make changes to the plan or open any other `.edn` file of the proper format by clicking the `Open` button. You can start a new outline using the `New` button. (Sorry, no keyboard shortcut yet.) You can save at any time by typing `Cmd-S`. 
 
 #### Outliner
 
+The outliner is pretty standard. Just type stuff in. Headlines work like most other text entry areas. Any headline can be as long as you want it to be.
+
+The `Backspace` and `Delete` characters work pretty much as expected. They will also cross headline boundaries. For example, you could put the cursor on the last character in an outliner and erase the entire outline by continuing to press `Backspace`.
+
+Headings with subheadings will display a chevron character (&#9660; or &#9658;) in the left gutter. Headlines without children display a bullet (&#9679;). When a right-pointing chevron (&#9658;) is displayed, the heading has children that are hidden. They can be displayed by clicking the chevron or typing `Cmd-0`. An expanded headline can be collapsed, hiding its children, by clicking the the down-pointing chevron (&#9660;) or typing `Cmd-9`.
+
+To create a new headline below the current one, hit `Return`. To insert a new headline above the current on, press `Shft-Return`.
+
+To indent/undent (demote/promote) a headline use the `Tab` and `Shft-Tab` keys respectively.
+
+You can move headlines up or down by pressing `Alt-Cmd-`&#8593; or `Alt-Cmd-`&#8595;, respectively
+
+There are more keyboard commands. If you are interested, check the source. They are likely to change in the future thought.
+
 #### Notes
+
+Any heading can have an arbitrary number of notes associated with it. (There is a practical limit at the moment. Only one note is displayed at a time. I have not yet devised a clever way to selecte among a very large number of notes to select the one to display.) Each note must have a unique (to the outline heading) title.
+
+Any headline that has associated notes will display a small "note" icon in the left border. Clicking the headline (not the note icon) will display a tabbed page with the titles of all of those notes. Clicking a title will bring that note forward for display.
+
+The note display is just a regular text area at the moment. You can add as much text as you want.
+
+To add a note, click the button with the plus sign above the note display area. To delete a note, click the `x` displayed next to the note title.
 
 #### Size of the Outliner and Notes Panes
 
@@ -35,7 +59,6 @@ As you hover over the rule, it will "fatten" up, giving you a bigger target. Jus
 
 #### Limitations
 
-- Can only load the development outline named `World_Domination_Plan.edn`
 - There is no text formatting yet. No images. No links. No LaTeX. No code-highlighting.
 - The keybindings are horrible. Trying to get a set of keybindings that work the save across browsers without screwing something else up is hard.
 
@@ -104,9 +127,6 @@ To delete all compilation artifacts, use:
 To check for outdated dependencies, run:
 
     clj -A:ancient
-
-## What it Does
-
 
 ## Bugs
 
