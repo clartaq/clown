@@ -2,12 +2,14 @@
   (:require [cljs.core.async :refer [chan close! <! >!]]
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
+            [clown.client.commands :as cmd]
             [clown.client.layout :as ay]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.empty-outline :refer [build-empty-outline
-                                                     empty-outline-file-name]]
+                                                     empty-outline-file-name
+                                                     formatted-time-now]]
             [clown.client.util.focus-utils :as fu]
             [clown.client.util.mru :refer [push-on-mru!]]
             [clown.client.util.undo-redo :as ur]
@@ -24,6 +26,7 @@
 
 (def ^{:private true} my-global-state-ratom-with-a-terribly-long-name-so-i-dont-use-it-anywhere-else
   (r/atom {:program-name      "clown"
+           :user              "unknown"
            :num-outliner-rows 0
            :num-note-chars    0
            :num-note-words    0
@@ -73,11 +76,12 @@
         (go (>! got-prefs-channel message-data)))
 
       (= message-command "hey-client/accept-user-name")
-      ;(do (println "got user name: " message-data)
-      ;    (println "@aps: " (state-ratom))
+      (do ;(println "\n\ngot user name: " message-data)
+          ;(println "@aps: " (state-ratom))
           (swap! (state-ratom) assoc :user message-data)
-      ;    (println "@aps after swap: " (state-ratom))
-      ;    (println "@after swap: (:user (state-ratom))" (:user @(state-ratom))))
+          ;(println "@aps after swap: " (state-ratom))
+          ;(println "@after swap: (:user (state-ratom))" (:user @(state-ratom)))
+          )
 
       (= message-command "hey-client/accept-this-outline")
       (do
@@ -208,6 +212,7 @@
   ; If the topic span has children, add a new child in the zero-position
   ; Else add a new sibling below the current topic
   (du/prevent-default evt)
+  (println "insert-new-outline-below")
   (let [id-of-new-child (if (tm/expanded? root-ratom span-id)
                           (ti/insert-child-index-into-parent-id span-id 0)
                           (ti/increment-leaf-index span-id))
@@ -322,18 +327,6 @@
   (mapv #(collapse-from-parts! root-ratom %) (tm/all-nodes @root-ratom []))
   (du/prevent-default evt))
 
-(defn save-outline-as-edn
-  "Tell the server to save this outline in EDN format."
-  [{:keys [root-ratom evt]}]
-  (debug "save-outline-as-edn")
-  (du/prevent-default evt)
-  (debugf "    pr-str message: %s"
-          (pr-str {:message {:command "hey-server/save-this-outline-as-edn"
-                             :data    (:current-outline @(state-ratom))}}))
-  ((:send-message-fn @(state-ratom))
-   (pr-str {:message {:command "hey-server/save-this-outline-as-edn"
-                      :data    (:current-outline @(state-ratom))}})))
-
 (defn- def-mods
   "Return a map containing the default values for keyboard modifiers."
   []
@@ -446,16 +439,34 @@
   "Capture keyboard shortcuts that apply anywhere in the app, regardless of
   what is, or is not, focused."
   [root-ratom]
-  (du/add-event-listener
-    "keydown"
-    (fn [evt root-ratom]
-      (let [km (du/key-evt->map evt)]
-        (cond
+  (let [real-capture-fn (fn [evt aps]
+                          (let [km (du/key-evt->map evt)]
+                            (cond
 
-          (= km {:key "s" :modifiers (merge-def-mods {:cmd true})})
-          (save-outline-as-edn {:evt evt :root-ratom root-ratom})
+                              ;; Load a minimal, new outline with Cmd-N.
+                              (= km {:key "n" :modifiers (merge-def-mods {:cmd true})})
+                              (do
+                                (du/prevent-default evt)
+                                (du/stop-propagation evt)
+                                (println "Saw command to start new outline.")
+                                (du/prevent-default evt))
 
-          :default nil)))))
+                              ;; Open an existing outline with Cmd-O.
+                              (= km {:key "o" :modifiers (merge-def-mods {:cmd true})})
+                              (do
+                                (du/prevent-default evt)
+                                (du/stop-propagation evt)
+                                (println "Saw command to open outline."))
+
+                              ;; Save the current outline with Cmd-S.
+                              (= km {:key "s" :modifiers (merge-def-mods {:cmd true})})
+                              (cmd/save-outline-as-edn! {:evt evt :root-ratom root-ratom})
+
+                              :default nil)))]
+    (du/add-event-listener
+      "keydown"
+      (fn [evt]
+        (real-capture-fn evt root-ratom)))))
 
 (defn on-ws-open
   "Handle the notification that the WebSocket has been opened."
@@ -485,10 +496,6 @@
         (debugf "prefs: %s" prefs)
         (swap! (state-ratom) assoc :preferences prefs)
         (close! got-prefs-channel)
-
-        ((:send-message-fn @(state-ratom))
-         (pr-str {:message {:command "hey-server/send-user-name"
-                            :data    ""}}))
 
         (if (:load-last-file prefs)
           (when-let [last-file (first (:mru prefs))]
