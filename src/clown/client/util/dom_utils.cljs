@@ -60,9 +60,6 @@
   [ele setting]
   (.toggle (.-classList ele) setting))
 
-;(.toggle (.-classList close-button) "closed")
-;(.toggle (.-classList overlay) "closed"))))
-
 (defn get-canvas-context
   [canvas kind]
   (.getContext canvas kind))
@@ -190,4 +187,46 @@
 (defn add-event-listener
   [event-name f]
   (.addEventListener js/document event-name f))
+
+;document.addEventListener('keydown', function(event) {
+;    var modifier = modifierCode(event);
+;    if (modifier !== 0) {
+;        modifiers = modifiers | modifier; // add to the bitmask "stack"
+;    } else {
+;        // call a handler
+;        exampleCallback(event, modifiers);
+;
+;        // some extra stuff to show the key combo
+;        e.innerHTML = 'Key combo: ';
+;        if (modifiers & CTRL) {
+;            e.innerHTML += "⌃";
+;        }
+;        if (modifiers & ALT) {
+;            e.innerHTML += "⌥";
+;        }
+;        if (modifiers & SHIFT) {
+;            e.innerHTML += "⇧";
+;        }
+;        if (modifiers & CMD) {
+;            e.innerHTML += "⌘";
+;        }
+;        // converting the keyidentifier to a char is pretty ridiculous
+;        e.innerHTML += String.fromCharCode(parseInt(event.keyIdentifier.replace(/^U\+0*/, ''), 16));
+;    }
+;});
+;
+;document.addEventListener('keyup', function(event) {
+;    modifiers = modifiers & ~modifierCode(event); // remove from the stack
+;});
+;
+;function exampleCallback(event, modifiers) {
+;    if (event.keyIdentifier === 'U+003D' && modifiers & CMD) {
+;        document.getElementById('test').innerHTML = "Success!";
+;    } else {
+;        document.getElementById('test').innerHTML = "";
+;    }
+;    // for testing
+;    event.preventDefault();
+;    event.stopPropagation();
+;}
 
