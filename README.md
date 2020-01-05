@@ -14,6 +14,10 @@ The intent is to build this into a personal knowledge management system.
 
 The program is surprisingly useful even in this primitive state. By default, when the program is opened, it will look for and load a file named `World_Domination_Plan.edn`, included in the repository.
 
+Here's a screenshot showing what it looks like at the moment.
+
+![clown](/resources/public/20_01_05_Clown_Screenshot.png "A Snip of a Screenshot of clown")
+
 You can make changes to the plan or open any other `.edn` file of the proper format by clicking the `Open` button. You can start a new outline using the `New` button. (Sorry, no keyboard shortcut yet.) You can save at any time by typing `Cmd-S` or clicking the `Save` button. 
 
 #### Outliner
