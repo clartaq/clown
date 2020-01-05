@@ -528,7 +528,8 @@
          ;; Footer stuff.
          [bn/add-buttons aps]
          ;; Would this be a good place to add any "Cornell Summary" type stuff.
-         [:footer.Site-footer
+         ;; Hide it for now, but keep it around until ideas settle a bit.
+         [:footer.Site-footer {:style {:display "none"}}
           [:div.Footer "clown footer"]]
 
          ;; Dialog stuff. Hidden until used.
