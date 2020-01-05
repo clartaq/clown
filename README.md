@@ -16,7 +16,7 @@ The program is surprisingly useful even in this primitive state. By default, whe
 
 Here's a screenshot showing what it looks like at the moment.
 
-![clown](https://github.com/clartaq/clown/blob/master/resources/20_01_05_Clown_Screenshot.jpg "A Snip of a Screenshot of clown")
+![clown](https://github.com/clartaq/clown/blob/master/resources/2020_01_05_Clown_Screenshot.jpg "A Snip of a Screenshot of clown")
 
 You can make changes to the plan or open any other `.edn` file of the proper format by clicking the `Open` button. You can start a new outline using the `New` button. (Sorry, no keyboard shortcut yet.) You can save at any time by typing `Cmd-S` or clicking the `Save` button. 
 
