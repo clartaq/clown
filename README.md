@@ -10,13 +10,11 @@ Clown lets you build an outline and attach any number of long-form notes to any 
 
 The intent is to build this into a personal knowledge management system.
 
-Right now, it only reads a single outline into the program. You can make changes and save them though. The changes will persist from one run of the program to the next.
-
 ## Usage
 
 The program is surprisingly useful even in this primitive state. By default, when the program is opened, it will look for and load a file named `World_Domination_Plan.edn`, included in the repository.
 
-You can make changes to the plan or open any other `.edn` file of the proper format by clicking the `Open` button. You can start a new outline using the `New` button. (Sorry, no keyboard shortcut yet.) You can save at any time by typing `Cmd-S`. 
+You can make changes to the plan or open any other `.edn` file of the proper format by clicking the `Open` button. You can start a new outline using the `New` button. (Sorry, no keyboard shortcut yet.) You can save at any time by typing `Cmd-S` or clicking the `Save` button. 
 
 #### Outliner
 
@@ -131,6 +129,28 @@ To check for outdated dependencies, run:
 ## Bugs
 
 Probably plenty at this point. If you find one that you need to have fixed, file an issue. I'll see what I can do, but no promises.
+
+## To Do
+
+- As mentioned above, keyboard shortcuts are a mess.
+- The undo/redo architecture is really wrong for this architecture.
+- More complete usage documentation.
+- Printing? How would you even do it?
+- Checkboxes?
+- LaTeX
+- Syntax highlighting
+- Stats: # Headlines, words, characters
+- Open files with Drag 'n Drop
+- Search
+    + Entire document
+    + Outline only
+    + Notes only
+    + Outline branch
+    + All notes associated with a headline
+- Import/export OPML?
+- Version control?
+- Version comparison?
+- Change indication?
 
 ## How to Contribute
 
