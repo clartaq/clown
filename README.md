@@ -155,6 +155,9 @@ Probably plenty at this point. If you find one that you need to have fixed, file
 - Version control?
 - Version comparison?
 - Change indication?
+- Autosave
+- Expandable stats under title and file name
+- Dirty marker
 
 ## How to Contribute
 
