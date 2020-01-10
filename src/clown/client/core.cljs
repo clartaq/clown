@@ -3,6 +3,7 @@
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
             [clown.client.commands :as cmd]
+            [clown.client.util.dialogs :as dlg]
             [clown.client.layout :as ay]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
@@ -65,6 +66,11 @@
     (debugf "message-data: %s" message-data)
 
     (cond
+
+      (= message-command "hey-client/no-such-file")
+      (do
+        (println "hey-client/no-such-file: message-data: " message-data)
+        (dlg/toggle-file-does-not-exist-modal message-data))
 
       (= message-command "hey-client/accept-these-preferences")
       (do

@@ -537,5 +537,6 @@
          [dlg/layout-bad-edn-modal]
          [dlg/layout-bad-outline-modal]
          [dlg/layout-about-to-update-mru-modal]
+         [dlg/layout-file-does-not-exist-dlg]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))
 

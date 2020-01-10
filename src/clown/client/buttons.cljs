@@ -26,11 +26,11 @@
                  ;; the file changes (without resetting outline title and
                  ;; file name) all the way back to when the app was loaded.
                  ;(let [;um (:undo-redo-manager @app-state-ratom)]
-                 (println "\n\nadd-new-button: app-state-ratom before: " app-state-ratom)
+                ; (println "\n\nadd-new-button: app-state-ratom before: " app-state-ratom)
                  (swap! app-state-ratom assoc :current-outline
                         (eo/build-empty-outline app-state-ratom))
                  (push-on-mru! app-state-ratom (eo/empty-outline-file-name)) ;]
-                 (println "\n\nadd-new-button: app-state-ratom after: " app-state-ratom)
+                ; (println "\n\nadd-new-button: app-state-ratom after: " app-state-ratom)
                  ;(let [new-um (ur/undo-manager
                  ;               (r/cursor app-state-ratom
                  ;                         [:current-outline :tree]))]
