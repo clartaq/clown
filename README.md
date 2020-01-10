@@ -28,13 +28,13 @@ The `Backspace` and `Delete` characters work pretty much as expected. They will 
 
 Headings with subheadings will display a chevron character (&#9660; or &#9658;) in the left gutter. Headlines without children display a bullet (&#9679;). When a right-pointing chevron (&#9658;) is displayed, the heading has children that are hidden. They can be displayed by clicking the chevron or typing `Cmd-0`. An expanded headline can be collapsed, hiding its children, by clicking the the down-pointing chevron (&#9660;) or typing `Cmd-9`.
 
-To create a new headline below the current one, hit `Return`. To insert a new headline above the current on, press `Shft-Return`.
+To create a new headline below the current one, hit `Return`. To insert a new headline above the current one, press `Shft-Return`.
 
 To indent/undent (demote/promote) a headline use the `Tab` and `Shft-Tab` keys respectively.
 
 You can move headlines up or down by pressing `Alt-Cmd-`&#8593; or `Alt-Cmd-`&#8595;, respectively
 
-There are more keyboard commands. If you are interested, check the source. They are likely to change in the future thought.
+There are more keyboard commands. If you are interested, check the source. They are likely to change in the future though.
 
 #### Notes
 
@@ -62,7 +62,7 @@ As you hover over the rule, it will "fatten" up, giving you a bigger target. Jus
 #### Limitations
 
 - There is no text formatting yet. No images. No links. No LaTeX. No code-highlighting.
-- The keybindings are horrible. Trying to get a set of keybindings that work the save across browsers without screwing something else up is hard.
+- The keybindings are horrible. Trying to get a set of keybindings that work the same across browsers without screwing something else up is hard.
 
 ## Building
 
@@ -76,7 +76,7 @@ To get an interactive development environment run:
 
     clj -A:fig:repl
 
-This will compile a development build, open a tab in the default browser at [`localhost:1597`](http://localhost:1597), and start a ClojureScript REPL in the terminal. Changes made to the ClojureScript portion of the project will be compile and reloaded in real time. Changes affecting the browser display (Reagent components) will show up in the browser as well.
+This will compile a development build, open a tab in the default browser at [`localhost:1597`](http://localhost:1597), and start a ClojureScript REPL in the terminal. Changes made to the ClojureScript portion of the project will be compiled and reloaded in real time. Changes affecting the browser display (Reagent components) will show up in the browser as well.
 
     clj -A:fig:dev
 
@@ -144,7 +144,12 @@ Probably plenty at this point. If you find one that you need to have fixed, file
 - LaTeX
 - Syntax highlighting
 - Stats: # Headlines, words, characters
-- Open files with Drag 'n Drop
+- Use Drag 'n Drop for
+    + Opening files from the desktop
+    + Reorganizing headlines in the outliner
+    + Reorganizing notes in the note taker
+        + Change order of notes associated with a particular headline
+        + Move notes between headlines
 - Search
     + Entire document
     + Outline only
@@ -158,6 +163,7 @@ Probably plenty at this point. If you find one that you need to have fixed, file
 - Autosave
 - Expandable stats under title and file name
 - Dirty marker
+- Options dialog
 
 ## How to Contribute
 

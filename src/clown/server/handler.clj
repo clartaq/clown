@@ -11,7 +11,8 @@
     [ring.middleware.resource :refer [wrap-resource]]
     [ring.middleware.reload :refer [wrap-reload]]
     [taoensso.timbre :refer [trace debug info warn error
-                             tracef debugf infof warnf errorf]]))
+                             tracef debugf infof warnf errorf]])
+  (:import (java.io File)))
 
 (defn user-name
   "Return the user name."
@@ -55,10 +56,17 @@
                                            :data    (user-name)}}))
 
       (= command "hey-server/send-outline")
-      (when-let [from-file (edn/read-string (slurp data))]
-        ;(infof "from-file: %s" from-file)
-        (send! @ws-client (pr-str {:message {:command "hey-client/accept-this-outline"
-                                             :data    from-file}})))
+      (let [f (File. data)]
+        (if (and (.exists f) (not (.isDirectory f)))
+          (try
+            (when-let [from-file (edn/read-string (slurp data))]
+              ;(infof "from-file: %s" from-file)
+              (send! @ws-client (pr-str {:message {:command "hey-client/accept-this-outline"
+                                                   :data    from-file}})))
+            (catch java.io.FileNotFoundException e
+              (prn "caught: " e)))
+          (send! @ws-client (pr-str {:message {:command "hey-client/no-such-file"
+                                               :data    data}}))))
 
       (= command "hey-server/persist-new-preference-value")
       (db/set-preference-value (:preference data) (:value data))
