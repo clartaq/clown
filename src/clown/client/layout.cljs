@@ -296,7 +296,7 @@
     (r/after-render
       (fn []
         (let [div-ele (du/get-element-by-id note-areas-div-id)
-              div-children (du/children div-ele)
+              div-children (du/children-of-element div-ele)
               ele-seq (html-collection->seq div-children)
               vis-ele (first (filterv #(= "block" (du/get-style % "display")) ele-seq))]
           ;; Some browsers require that you focus the element first.
