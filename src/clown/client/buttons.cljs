@@ -18,24 +18,15 @@
   [app-state-ratom]
   (let [button-id "new-button"
         new-fn (fn [_]
-                 (println "add-new-button, internal function")
-                 ;; This doesn't really seem to work as expected. It's like
-                 ;; the new undo-manager never gets attached to the ratom.
-                 ;; The stuff from the old ratom is still there. You can load
-                 ;; files, make changes, etc, and then back up through all
+                 ;; BUG HERE!!! This doesn't really seem to work as expected.
+                 ;; It's like the new undo-manager never gets attached to the
+                 ;; ratom. The stuff from the old ratom is still there. You can
+                 ;; load files, make changes, etc, and then back up through all
                  ;; the file changes (without resetting outline title and
                  ;; file name) all the way back to when the app was loaded.
-                 ;(let [;um (:undo-redo-manager @app-state-ratom)]
-                ; (println "\n\nadd-new-button: app-state-ratom before: " app-state-ratom)
                  (swap! app-state-ratom assoc :current-outline
                         (eo/build-empty-outline app-state-ratom))
-                 (push-on-mru! app-state-ratom (eo/empty-outline-file-name)) ;]
-                ; (println "\n\nadd-new-button: app-state-ratom after: " app-state-ratom)
-                 ;(let [new-um (ur/undo-manager
-                 ;               (r/cursor app-state-ratom
-                 ;                         [:current-outline :tree]))]
-                 ;  (swap! app-state-ratom assoc :undo-redo-manager new-um))
-                 )]
+                 (push-on-mru! app-state-ratom (eo/empty-outline-file-name)))]
     (fn [app-state-ratom]
       [:input.tree-demo--button
        {:type     "button"
@@ -80,7 +71,6 @@
   "A selection has been made in the File Open dialog. Grab the file and
   and load it into the program."
   [aps evt]
-  (println "handle-file-open-selection")
   (debug "handle-file-open-selection")
   (let [js-file (aget (.-files (.-target evt)) 0)
         js-file-reader (js/FileReader.)
@@ -96,14 +86,9 @@
   "Return a function that will display a 'File Open' dialog. If a response
   is received, open that file and load any outline contained."
   [app-state-ratom]
-  ;(println "add-open-buton")
   (let [button-id "open-button"
         file-open-id "file-open-id"
-        sim-click-fn #(do
-                        ;(println "    sim-click-fn")
-                        ;(println "    result of get-element-by-id: " (du/get-element-by-id file-open-id))
-                        ;(println "    about to click file-open-id: " file-open-id)
-                        (.click (du/get-element-by-id file-open-id)))]
+        sim-click-fn #(.click (du/get-element-by-id file-open-id))]
     (fn [app-state-ratom]
       [:div
        [:input {:type      "file" :id file-open-id
