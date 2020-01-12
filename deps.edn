@@ -6,9 +6,9 @@
            ;; the error does not affect my code and causes a panic attack
            ;; every time I see it, I'm just staying at 1.19.520 until it is fixed.
            org.clojure/clojurescript   {:mvn/version "1.10.520"}
-           org.clojure/core.async      {:mvn/version "0.6.532"}
+           org.clojure/core.async      {:mvn/version "0.7.559"}
            org.clojure/java.classpath  {:mvn/version "0.3.0"}
-           org.clojure/java.jdbc       {:mvn/version "0.7.10"}
+           org.clojure/java.jdbc       {:mvn/version "0.7.11"}
            com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
            com.h2database/h2           {:mvn/version "1.4.200"}
            com.taoensso/timbre         {:mvn/version "4.10.0"}
