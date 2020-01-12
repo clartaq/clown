@@ -238,6 +238,8 @@
                             :none)}
       :onChange #(reset! note-ratom (du/event->target-value %))}]))
 
+(def note-areas-div-id "note-areas-div-id")
+
 (defn note-areas
   "Layout the notes for the note panel."
   [root-ratom subtree-ratom headline-id-ratom]
@@ -245,6 +247,7 @@
   (when (notes? root-ratom @headline-id-ratom)
     (let [headline-id @headline-id-ratom]
       [into [:div.note-tab-control--notes-div
+             {:id note-areas-div-id}
              (for [note-index (range (count-notes root-ratom headline-id))]
                ^{:key (ti/tree-id-and-index->note-id headline-id note-index)}
                [make-note-area subtree-ratom headline-id-ratom note-index])]])))
@@ -274,15 +277,44 @@
     (swap! root-ratom update-in ekwv not)
     (fu/focus-and-scroll-editor-for-id ele-id)))
 
+(defn html-collection->seq
+  "Return a vector of elements taken from the HTMLCollection."
+  [coll]
+  (let [res-atom (atom [])]
+    (doseq [idx (range (du/collection-length coll))]
+        (swap! res-atom conj (du/collection-item coll idx)))
+    @res-atom))
+
+(defn handle-note-icon-click!
+  "Respond to a click on a note icon by making the notes for the headline
+  visible, then placing the caret in the last note viewed."
+  [aps evt]
+  (let [ele-id (du/event->target-id evt)
+        focused-headline-ratom (r/cursor aps [:focused-headline])]
+    ;; Resetting the focused headline will make the associated notes visible.
+    (reset! focused-headline-ratom ele-id)
+    (r/after-render
+      (fn []
+        (let [div-ele (du/get-element-by-id note-areas-div-id)
+              div-children (du/children-of-element div-ele)
+              ele-seq (html-collection->seq div-children)
+              vis-ele (first (filterv #(= "block" (du/get-style % "display")) ele-seq))]
+          ;; Some browsers require that you focus the element first.
+          (du/focus-element vis-ele)
+          (du/set-selection-range vis-ele 0 0))))))
+
 (defn note-row-icon-div
   "Return a div that shows a 'note' icon in the gutter if the headline has
   any notes associated with it."
-  [note-id note-icon-visible]
+  [aps note-id note-icon-visible]
   (let [style (if note-icon-visible
                 {:flex "0 0 1.5rem"}
                 {:flex "0 0 1.5rem" :opacity "0"})]
     ^{:key note-id}
-    [:div.tree-control--note-row-icon-div {:id note-id :style style}]))
+    [:div.tree-control--note-row-icon-div
+     {:id       note-id :style style
+      :title     "Edit the last note viewed for this headline."
+      :on-click #(handle-note-icon-click! aps %)}]))
 
 (defn indent-div
   "Return a div that provides the appropriate indentation for the headline
@@ -387,7 +419,7 @@
         subtree-ratom (r/cursor root-ratom nav-path)]
     ^{:key row-id}
     [:div.tree-control--row-div
-     [note-row-icon-div note-row-icon-div-id note-icon-visible]
+     [note-row-icon-div aps note-row-icon-div-id note-icon-visible]
      [indent-div indent-id]
      [chevron-div root-ratom subtree-ratom chevron-id]
      [topic-info-div aps root-ratom subtree-ratom ids-for-row]]))

@@ -109,6 +109,19 @@
   [ele]
   (.-length (.-value ele)))
 
+(defn collection-length
+  [coll]
+  (.-length coll))
+
+(defn collection-item
+  [coll idx]
+  (.item coll idx))
+
+(defn children-of-element
+  "Return an HTMLCollection of the children of the element."
+  [ele]
+  (.-children ele))
+
 (defn ele-in-visible-area?
   "Return non-nil if the element is within the visible area of the
   scroll port. May not be visible due to CSS settings or if its parent
