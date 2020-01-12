@@ -117,7 +117,7 @@
   [coll idx]
   (.item coll idx))
 
-(defn children
+(defn children-of-element
   "Return an HTMLCollection of the children of the element."
   [ele]
   (.-children ele))
