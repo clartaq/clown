@@ -39,7 +39,7 @@
   (debugf "persist-new-basis: new-basis: %s" new-basis)
   (let [num-basis (js/parseInt (s/replace-first new-basis "px" ""))]
     ((:send-message-fn @prog-state-ratom)
-     (pr-str {:message {:command "hey-server/persist-new-preference-value"
+     (pr-str {:message {:command "hey-server/persist-numeric-preference-value"
                         :data    {:preference @preference-key
                                   :value      num-basis}}}))))
 
