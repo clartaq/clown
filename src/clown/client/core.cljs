@@ -468,6 +468,13 @@
                               (= km {:key "s" :modifiers (merge-def-mods {:cmd true})})
                               (cmd/save-outline-as-edn! {:evt evt :root-ratom root-ratom})
 
+                              ;; Open the preferences with Ctrl-Shft-P.
+                              (= km {:key "P" :modifiers (merge-def-mods {:ctrl true :shift true})})
+                              (do (du/prevent-default evt)
+                                  (du/stop-propagation evt)
+                                  (println "Saw command to open preferences.")
+                                  (dlg/toggle-confirm-cancel-modal evt))
+
                               :default nil)))]
     (du/add-event-listener
       "keydown"
