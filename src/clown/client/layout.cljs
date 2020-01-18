@@ -570,5 +570,6 @@
          [dlg/layout-bad-outline-modal]
          [dlg/layout-about-to-update-mru-modal]
          [dlg/layout-file-does-not-exist-dlg]
+         [dlg/test-confirm-cancel-dialog aps]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))
 
