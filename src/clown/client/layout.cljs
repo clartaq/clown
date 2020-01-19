@@ -1,11 +1,12 @@
 (ns clown.client.layout
   (:require [clown.client.buttons :as bn]
-            [clown.client.util.dialogs :as dlg]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.dragging :refer [drag-click-handler]]
             [clown.client.util.font-detection :as fd]
             [clown.client.util.focus-utils :as fu]
             [clown.client.util.mru :as mru]
+            [clown.client.util.ok-dialogs :as dlg]
+            [clown.client.util.pref-dialog :as pref-dlg]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
             [clown.client.util.undo-redo :as ur]
@@ -570,6 +571,6 @@
          [dlg/layout-bad-outline-modal]
          [dlg/layout-about-to-update-mru-modal]
          [dlg/layout-file-does-not-exist-dlg]
-         [dlg/test-confirm-cancel-dialog aps]
+         [pref-dlg/test-confirm-cancel-dialog aps]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))
 

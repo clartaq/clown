@@ -3,7 +3,8 @@
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
             [clown.client.commands :as cmd]
-            [clown.client.util.dialogs :as dlg]
+            [clown.client.util.ok-dialogs :as dlg]
+            [clown.client.util.pref-dialog :as pref-dlg]
             [clown.client.layout :as ay]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
@@ -22,7 +23,8 @@
             [reagent.core :as r]
             [reagent.dom.server :refer [render-to-string render-to-static-markup]]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
-                                                trace debug info warn error]])
+                                                trace debug info warn error]]
+            [clown.client.util.pref-dialog :as pref-dlg])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (def ^{:private true} my-global-state-ratom-with-a-terribly-long-name-so-i-dont-use-it-anywhere-else
@@ -473,7 +475,7 @@
                               (do (du/prevent-default evt)
                                   (du/stop-propagation evt)
                                   (println "Saw command to open preferences.")
-                                  (dlg/toggle-confirm-cancel-modal evt))
+                                  (pref-dlg/toggle-confirm-cancel-modal evt))
 
                               :default nil)))]
     (du/add-event-listener

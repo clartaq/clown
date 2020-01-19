@@ -11,6 +11,7 @@
     /* Color used for Rules, vertical separators, etc. */
     --rule-color: #ccc;
     --chevron-color: #575757;
+    --help-text-color: #909090;
 
     --active-border-color: #9daca9;
     --page-header-background-color: #575757;
@@ -187,7 +188,9 @@ small {
 ** page, you need to make sure the div maintains the chain of 100% height
 ** elements.
  */
-.app-div {height: 100%;}
+.app-div {
+    height: 100%;
+}
 
 .Site {
     display: flex;
@@ -214,7 +217,7 @@ small {
     flex-direction: row;
     flex: auto;
     height: 100%;
-    overflow:hidden;
+    overflow: hidden;
     padding: 0.5rem;
     width: 100%;
 }
@@ -241,6 +244,7 @@ small {
     flex-direction: row;
     flex-shrink: 0;
 }
+
 .banner--title-label {
     display: flex;
 }
@@ -858,3 +862,102 @@ small {
     background: var(--overlay-color-and-transparency);
 }
 
+/*
+** Stuff related to the preferences dialog.
+*/
+
+.prefs--container {
+    display: flex;
+    flex-direction: column;
+}
+
+.prefs--row {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.prefs--label {
+    color: var(--help-text-color);
+    display: block;
+    flex-basis: 20ch;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 0.25rem;
+    text-align: right;
+}
+
+.prefs--text-editor {
+    background: var(--body-background-color);
+    border: 1px solid var(--rule-color);
+    color: var(--body-text-color);
+    flex-grow: 1;
+    font-family: var(--demo-font-family);
+    font-size: 1rem;
+    font-weight: normal;
+    letter-spacing: 0;
+    line-height: 1.3rem;
+    padding: 0.25rem;
+    text-decoration: none;
+}
+
+.prefs--radio-group {
+    display: flex;
+    flex-direction: row;
+    padding: 0.25rem;
+}
+
+/*
+** This is derived from the extremely helpful answer at:
+** https://stackoverflow.com/questions/4861224/how-to-use-css-to-surround-a-number-with-a-circle
+ */
+
+.prefs--help-char {
+    border-radius: 50%;
+    border: 0.1em solid transparent;
+    color: var(--help-text-color);
+    font-size: 0.8rem;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    transition: color ease 0.3s, background-color ease 0.3s, border ease 0.4s;
+    width: 2em;
+}
+
+.prefs--help-char:hover {
+    border-color: var(--body-text-color);
+    color: var(--body-text-color);
+}
+
+.prefs--help-text {
+    color: var(--help-text-color);
+    font-size: 0.8rem;
+    line-height: 1rem;
+}
+
+.prefs--quarter-rem-spacer {
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 0.25rem;
+    min-width: 0.25rem;
+    width: 0.25rem;
+    max-width: 0.25rem;
+}
+
+.prefs--half-rem-spacer {
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 0.5rem;
+    min-width: 0.5rem;
+    width: 0.5rem;
+    max-width: 0.5rem;
+}
+
+.prefs--one-rem-spacer {
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 1rem;
+    min-width: 1rem;
+    width: 1rem;
+    max-width: 1rem;
+}

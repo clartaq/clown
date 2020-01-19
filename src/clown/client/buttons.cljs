@@ -2,7 +2,7 @@
   (:require [cljs.tools.reader.edn :as edn]
             [clojure.string :as str]
             [clown.client.commands :as cmd]
-            [clown.client.util.dialogs :as dlg]
+            [clown.client.util.ok-dialogs :as dlg]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.empty-outline :as eo]
             [clown.client.util.mru :refer [push-on-mru! persist-new-mru]]
