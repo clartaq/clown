@@ -2,7 +2,7 @@
 ;;;; This namespace contains simple, single button informational dialogs.
 ;;;;
 
-(ns clown.client.util.ok-dialogs
+(ns clown.client.dialogs.ok-dialogs
   (:require [clown.client.util.dom-utils :as du]))
 
 (defn- toggle-modal
@@ -524,7 +524,7 @@
 ;                  :on-click #(save-confirmed-changes! aps original-values working-copy)
 ;                  :disabled (= original-values @working-copy)}]]]])))
 ;
-;(defn test-confirm-cancel-dialog
+;(defn layout-prefs-dialog
 ;  [aps]
 ;  [preferences-dialog-component
 ;   ;confirm-cancel-dialog-template

@@ -1,12 +1,12 @@
 (ns clown.client.layout
   (:require [clown.client.buttons :as bn]
+            [clown.client.dialogs.ok-dialogs :as dlg]
+            [clown.client.dialogs.pref-dialog :as pref-dlg]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.dragging :refer [drag-click-handler]]
             [clown.client.util.font-detection :as fd]
             [clown.client.util.focus-utils :as fu]
             [clown.client.util.mru :as mru]
-            [clown.client.util.ok-dialogs :as dlg]
-            [clown.client.util.pref-dialog :as pref-dlg]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
             [clown.client.util.undo-redo :as ur]
@@ -463,7 +463,7 @@
         (debugf "    outliner-width: %s" outliner-width)
         (debugf "    notes-width: %s" notes-width)
         (debugf "    @root-ratom: %s" @root-ratom)
-        [:div.Site
+        [:div#site-div-id.Site
          [:header.Site-header {:role "banner"}
           [:div.banner
            [:div.banner--title-container {:id    title-container-id
@@ -571,6 +571,6 @@
          [dlg/layout-bad-outline-modal]
          [dlg/layout-about-to-update-mru-modal]
          [dlg/layout-file-does-not-exist-dlg]
-         [pref-dlg/test-confirm-cancel-dialog aps]
+        ; [pref-dlg/layout-prefs-dialog aps]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))
 
