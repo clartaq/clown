@@ -1,27 +1,7 @@
 (ns clown.client.dialogs.pref-dialog
-  (:require [clown.client.util.dom-utils :as du]
-            ;[clown.client.util.ok-dialogs :as okd]
+  (:require [clown.client.dialogs.util :as dlgu]
+            [clown.client.util.dom-utils :as du]
             [reagent.core :as r]))
-
-(defn one-rem-spacer
-  []
-  [:label {:class "prefs--one-rem-spacer"} " "])
-
-(defn half-rem-spacer
-  []
-  [:label {:class "prefs--half-rem-spacer"} " "])
-
-(defn quarter-rem-spacer
-  []
-  [:label {:class "prefs--quarter-rem-spacer"} " "])
-
-(defn id-basis->id
-  [basis]
-  (str basis "-modal"))
-
-(defn id-basis->cancel-id
-  [basis]
-  (str basis "-cancel-button-id"))
 
 (defn- toggle-modal
   "Toggle the display state of the modal dialog with the given id."
@@ -39,10 +19,8 @@
   [evt]
   ;(println "toggle-confirm-cancel-modal: action-fn: " action-fn)
   (when evt
-    (println "need to recalc for showing")
-    ;(reset! aps assoc :showing true)
-    )
-  (toggle-modal (id-basis->id confirm-cancel-basis)))
+    (println "need to recalc for showing"))
+  (toggle-modal (dlgu/id-basis->id confirm-cancel-basis)))
 
 (def confirm-cancel-test-params
   {:id-basis                  confirm-cancel-basis
@@ -91,13 +69,13 @@
         _ (println "   original-values: " original-values)
         working-copy (r/atom @original-values)
         _ (println "   working-copy: " working-copy)
-        load-file-r (r/atom (:load-last-file @working-copy)) ;cursor working-copy [:load-last-file])
+        load-file-r (r/atom (:load-last-file @working-copy))
         _ (println "   load-file-r: " load-file-r)
-        interval-r (r/atom (:autosave_interval @working-copy));  working-copy [:autosave_interval])
+        interval-r (r/atom (:autosave_interval @working-copy))
         _ (println "   interval-r: " interval-r)
-        o-width-r (r/atom (:outline_width working-copy)) ; working-copy [:outline_width])
+        o-width-r (r/atom (:outline_width working-copy))
         _ (println "   o-width-r: " o-width-r)
-        n-width-r (r/atom (:note_width working-copy)) ; working-copy [:note_width])
+        n-width-r (r/atom (:note_width working-copy))
         _ (println "   n-width-r: " n-width-r)
         ]
     (r/create-class
@@ -116,19 +94,19 @@
                        (println "   original-values: " original-values)
                        (reset! working-copy @original-values)
                        (println "   working-copy: " working-copy)
-                       (reset! load-file-r (:load-last-file @working-copy)) ;(r/cursor working-copy [:load-last-file]))
+                       (reset! load-file-r (:load-last-file @working-copy))
                        (println "   load-file-r: " load-file-r)
-                       (reset! interval-r (:autosave_interval @working-copy)) ;(r/cursor working-copy [:autosave_interval]))
+                       (reset! interval-r (:autosave_interval @working-copy))
                        (println "   interval-r: " interval-r)
-                       (reset! o-width-r (:outline_width @working-copy)) ;r/cursor working-copy [:outline_width]))
+                       (reset! o-width-r (:outline_width @working-copy))
                        (println "   o-width-r: " o-width-r)
-                       (reset! n-width-r (:note_width @working-copy)); r/cursor working-copy [:note_width]))
+                       (reset! n-width-r (:note_width @working-copy))
                        (println "   n-width-r: " n-width-r))
 
        :reagent-render
                      (fn [aps settings]
                        [:div {:class "modal closed"
-                              :id    (id-basis->id (:id-basis settings))
+                              :id    (dlgu/id-basis->id (:id-basis settings))
                               :role  "dialog"}
                         [:header {:class "modal-header"}
                          [:section {:class "modal-header-left"} (:header settings)]
@@ -177,14 +155,14 @@
                                                        (do (println "want it now)"))
                                                        (do (println "don't want it"))))
                                      :value     "Yes"}]
-                            (quarter-rem-spacer)
+                            (dlgu/quarter-rem-spacer)
                             [:label {:for "do-load-last-file"} "Yes"]
-                            (one-rem-spacer)
+                            (dlgu/one-rem-spacer)
 
                             [:input {:type      "radio"
                                      :name      "load-last-file"
                                      :id        "do-not-load-last-file"
-                                     :checked   (if @load-file-r ;(get-in @aps [:preferences :load-last-file])
+                                     :checked   (if @load-file-r
                                                   nil
                                                   "checked")
                                      :on-change #(do (println "DONT LOAD changed")
@@ -193,9 +171,9 @@
                                                        (do (println "Want it"))
                                                        (do (println "Don' want it"))))
                                      :value     "No"}]
-                            (quarter-rem-spacer)
+                            (dlgu/quarter-rem-spacer)
                             [:label {:for "do-not-load-last-file"} "No"]]
-                           (half-rem-spacer)
+                           (dlgu/half-rem-spacer)
                            [:label {:class "prefs--help-char"
                                     :title (str "Whether to load the last document viewed the "
                                                 "next time the program is started.")} "?"]]
@@ -208,7 +186,7 @@
                                     :step      1
                                     :value     @interval-r
                                     :on-change #(reset! interval-r (js/parseInt (du/event->target-value %)))}]
-                           (half-rem-spacer)
+                           (dlgu/half-rem-spacer)
                            [:label {:class "prefs--help-char"
                                     :title (str "The number of idle seconds to wait for before "
                                                 "saving the document. A value of 0 means no "
@@ -225,7 +203,7 @@
                                     :step      1
                                     :value     @o-width-r
                                     :on-change #(reset! o-width-r (js/parseInt (du/event->target-value %)))}]
-                           (half-rem-spacer)
+                           (dlgu/half-rem-spacer)
                            [:label {:class "prefs--help-char"
                                     :title (str "The width of the outliner column, in pixels. "
                                                 "This can also be set by dragging the right border "
@@ -239,7 +217,7 @@
                                     :step      1
                                     :value     @n-width-r
                                     :on-change #(reset! n-width-r (js/parseInt (du/event->target-value %)))}]
-                           (half-rem-spacer)
+                           (dlgu/half-rem-spacer)
                            [:label {:class "prefs--help-char"
                                     :title (str "The width of the note column, in pixels. "
                                                 "This can also be set by dragging the right border "
@@ -255,14 +233,13 @@
                                    :on-click #((:cancel-action-fn settings) aps)}]
                           [:input {:type     "button"
                                    :class    "tree-demo--button button-bar-item"
-                                   :id       (id-basis->cancel-id (:id-basis settings))
+                                   :id       (dlgu/id-basis->cancel-id (:id-basis settings))
                                    :value    (:confirm-button-text settings)
                                    :title    (:confirm-button-popup-text settings)
                                    ;;;
                                    :on-click #(save-confirmed-changes! aps @original-values working-copy)
                                    ;;;
-                                   :disabled (= @original-values @working-copy)}]]]])
-       })))
+                                   :disabled (= @original-values @working-copy)}]]]])})))
 
 ;(defn confirm-cancel-dialog-template
 ;  "Return a function to lay out the preferences dialog."
@@ -417,5 +394,4 @@
 (defn layout-prefs-dialog
   [aps]
   [preferences-dialog-component
-   ;confirm-cancel-dialog-template
    aps confirm-cancel-test-params])

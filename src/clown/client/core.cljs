@@ -474,9 +474,7 @@
                               (do (du/prevent-default evt)
                                   (du/stop-propagation evt)
                                   (println "Saw command to open preferences.")
-                                  (pref-dlg/show "site-div-id" root-ratom)
-                                  ;(pref-dlg/toggle-confirm-cancel-modal evt)
-                                  )
+                                  (pref-dlg/toggle-confirm-cancel-modal evt))
 
                               :default nil)))]
     (du/add-event-listener
