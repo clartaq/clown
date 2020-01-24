@@ -1,3 +1,7 @@
+;;;
+;;; Simple utility functions used by the dialogs.
+;;;
+
 (ns clown.client.dialogs.util)
 
 ;;;-----------------------------------------------------------------------------
