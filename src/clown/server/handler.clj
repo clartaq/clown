@@ -71,6 +71,9 @@
       (= command "hey-server/persist-new-preference-value")
       (db/set-preference-value (:preference data) (:value data))
 
+      (= command "hey-server/persist-numeric-preference-value")
+      (db/set-preference-value (:preference data) (:value data))
+
       (= command "hey-server/save-this-outline-as-edn")
       (save-outline-as-edn data))))
 

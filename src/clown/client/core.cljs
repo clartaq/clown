@@ -3,7 +3,8 @@
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
             [clown.client.commands :as cmd]
-            [clown.client.util.dialogs :as dlg]
+            [clown.client.dialogs.ok-dialogs :as dlg]
+            [clown.client.dialogs.pref-dialog :as pref-dlg]
             [clown.client.layout :as ay]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
@@ -82,12 +83,7 @@
         (go (>! got-prefs-channel message-data)))
 
       (= message-command "hey-client/accept-user-name")
-      (do ;(println "\n\ngot user name: " message-data)
-          ;(println "@aps: " (state-ratom))
-          (swap! (state-ratom) assoc :user message-data)
-          ;(println "@aps after swap: " (state-ratom))
-          ;(println "@after swap: (:user (state-ratom))" (:user @(state-ratom)))
-          )
+      (swap! (state-ratom) assoc :user message-data)
 
       (= message-command "hey-client/accept-this-outline")
       (do
@@ -467,6 +463,17 @@
                               ;; Save the current outline with Cmd-S.
                               (= km {:key "s" :modifiers (merge-def-mods {:cmd true})})
                               (cmd/save-outline-as-edn! {:evt evt :root-ratom root-ratom})
+
+                              ;; Open the preferences with Ctrl-Shft-P.
+                              (= km {:key "P" :modifiers (merge-def-mods {:ctrl true :shift true})})
+                              (do (du/prevent-default evt)
+                                  (du/stop-propagation evt)
+                                  (let [working-copy (r/atom (:preferences @root-ratom))
+                                        original-values @working-copy]
+                                    (swap! root-ratom assoc :working-copy working-copy)
+                                    (swap! root-ratom assoc :original-values original-values))
+                                  (swap! root-ratom assoc :show-prefs-dialog true)
+                                  (r/after-render #(du/focus-element (du/get-element-by-id "pref-dialog-cancel-button-id"))))
 
                               :default nil)))]
     (du/add-event-listener

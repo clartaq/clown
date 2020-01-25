@@ -3,7 +3,7 @@
   :author "David D. Clark",
   :title "My Plan for Global Domination",
   :created "26 Dec 2019, 5:40:17pm",
-  :modified "31 Dec 2019, 12:51:45pm",
+  :modified "24 Jan 2020, 4:26:37pm",
   :tree
   [{:topic "Build Secret Base",
     :expanded false,
@@ -103,7 +103,9 @@
    {:topic "Extort World Governments",
     :expanded false,
     :children
-    [{:topic "Demand $1 Million Dollars in Gold-Pressed Latinum"}
+    [{:topic
+      "They are so corrupt, they make me feel greasy after dealing with them. But, being so corrupt, they have the money."}
+     {:topic "Demand $1 Million Dollars in Gold-Pressed Latinum"}
      {:topic "Refuse to Accept a Check"}]}
    {:topic "Thwart Superhero(es)",
     :expanded false,
