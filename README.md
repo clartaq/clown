@@ -163,7 +163,6 @@ Probably plenty at this point. If you find one that you need to have fixed, file
 - Autosave
 - Expandable stats under title and file name
 - Dirty marker
-- Options dialog
 
 ## How to Contribute
 
