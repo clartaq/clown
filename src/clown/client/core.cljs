@@ -83,12 +83,7 @@
         (go (>! got-prefs-channel message-data)))
 
       (= message-command "hey-client/accept-user-name")
-      (do ;(println "\n\ngot user name: " message-data)
-          ;(println "@aps: " (state-ratom))
-          (swap! (state-ratom) assoc :user message-data)
-          ;(println "@aps after swap: " (state-ratom))
-          ;(println "@after swap: (:user (state-ratom))" (:user @(state-ratom)))
-          )
+      (swap! (state-ratom) assoc :user message-data)
 
       (= message-command "hey-client/accept-this-outline")
       (do
@@ -473,8 +468,12 @@
                               (= km {:key "P" :modifiers (merge-def-mods {:ctrl true :shift true})})
                               (do (du/prevent-default evt)
                                   (du/stop-propagation evt)
-                                  (println "Saw command to open preferences.")
-                                  (pref-dlg/toggle-confirm-cancel-modal evt))
+                                  (let [working-copy (r/atom (:preferences @root-ratom))
+                                        original-values @working-copy]
+                                    (swap! root-ratom assoc :working-copy working-copy)
+                                    (swap! root-ratom assoc :original-values original-values))
+                                  (swap! root-ratom assoc :show-prefs-dialog true)
+                                  (r/after-render #(du/focus-element (du/get-element-by-id "pref-dialog-cancel-button-id"))))
 
                               :default nil)))]
     (du/add-event-listener
