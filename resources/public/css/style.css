@@ -478,12 +478,12 @@ small {
     background: url("../img/icons8-note-16.png") no-repeat center bottom;
 
     opacity: 0.3;
-    transition: opacity 0.3s ease-in-out;
+    /*transition: opacity 0.3s ease-in-out;*/
 }
 
-.tree-control--note-row-icon-div:hover {
-    opacity: 1;
-}
+/*.tree-control--note-row-icon-div:hover {*/
+/*    !*opacity: 1;*!*/
+/*}*/
 
 .tree-control--topic-info-div {
     display: flex;
