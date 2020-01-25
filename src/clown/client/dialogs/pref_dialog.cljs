@@ -7,26 +7,6 @@
             [clown.client.util.dom-utils :as du]
             [reagent.core :as r]))
 
-;(declare de-activate-glass-pane)
-
-;(defn escape-key?
-;  "Determine if the key-map represents a press of the unmodified escape key."
-;  [key-map]
-;  (and (= (:key key-map) "Escape")
-;       (not (or (:ctrl (:modifiers key-map))
-;                (:shift (:modifiers key-map))
-;                (:alt (:modifiers key-map))
-;                (:cmd (:modifiers key-map))))))
-
-;(defn keydown-handler
-;  "Capture and examine keydown events for the glass pane. When 'Escape' is
-;  pressed, de-activate the glass pane, allowing interaction with the rest
-;  of the program."
-;  [evt]
-;  (let [key-map (du/key-evt->map evt)]
-;    (when (escape-key? key-map)
-;      (de-activate-glass-pane))))
-
 (defn de-activate-glass-pane
   "De-activate (make invisible) the glass pane."
   []
