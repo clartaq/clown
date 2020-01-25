@@ -27,6 +27,10 @@
   [evt]
   (ele->value (event->target-element evt)))
 
+(defn event->target-checked
+  [evt]
+  (.-checked (event->target-element evt)))
+
 (defn active-element-id
   []
   (.-id (.-activeElement js/document)))
@@ -153,6 +157,11 @@
       (.getComputedStyle ele "")
       (.getPropertyValue rule)))
 
+(defn set-style-property-value
+  [id property value]
+  (when-let [style-declaration (.-style (get-element-by-id id))]
+    (aset style-declaration property value)))
+
 (defn set-flex-basis
   [ele new-basis]
   (set! (.-flexBasis (.-style ele)) new-basis))
@@ -197,49 +206,18 @@
                :alt   (.-altKey evt)
                :cmd   (.-metaKey evt)}})
 
+(defn add-event-listener-to-ele
+  [ele event-name f]
+  (.addEventListener ele event-name f))
+
+(defn remove-event-listener-from-ele
+  [ele event-name f]
+  (.removeEventListener ele event-name f))
+
 (defn add-event-listener
   [event-name f]
   (.addEventListener js/document event-name f))
 
-;document.addEventListener('keydown', function(event) {
-;    var modifier = modifierCode(event);
-;    if (modifier !== 0) {
-;        modifiers = modifiers | modifier; // add to the bitmask "stack"
-;    } else {
-;        // call a handler
-;        exampleCallback(event, modifiers);
-;
-;        // some extra stuff to show the key combo
-;        e.innerHTML = 'Key combo: ';
-;        if (modifiers & CTRL) {
-;            e.innerHTML += "⌃";
-;        }
-;        if (modifiers & ALT) {
-;            e.innerHTML += "⌥";
-;        }
-;        if (modifiers & SHIFT) {
-;            e.innerHTML += "⇧";
-;        }
-;        if (modifiers & CMD) {
-;            e.innerHTML += "⌘";
-;        }
-;        // converting the keyidentifier to a char is pretty ridiculous
-;        e.innerHTML += String.fromCharCode(parseInt(event.keyIdentifier.replace(/^U\+0*/, ''), 16));
-;    }
-;});
-;
-;document.addEventListener('keyup', function(event) {
-;    modifiers = modifiers & ~modifierCode(event); // remove from the stack
-;});
-;
-;function exampleCallback(event, modifiers) {
-;    if (event.keyIdentifier === 'U+003D' && modifiers & CMD) {
-;        document.getElementById('test').innerHTML = "Success!";
-;    } else {
-;        document.getElementById('test').innerHTML = "";
-;    }
-;    // for testing
-;    event.preventDefault();
-;    event.stopPropagation();
-;}
-
+(defn remove-event-listener
+  [event-name f]
+  (.removeEventListener js/document event-name f))
