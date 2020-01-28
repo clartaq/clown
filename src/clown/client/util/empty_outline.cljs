@@ -24,4 +24,5 @@
      :created          formatted-now
      :modified         formatted-now
      :focused-headline (ti/top-tree-id)
+     :dirty?           nil
      :tree             [{:topic "Your outline here"}]}))

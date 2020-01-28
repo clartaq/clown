@@ -1,6 +1,88 @@
 /**
 ** Add some style.
 */
+
+/*
+** This is the icon font. It was created from Font Awesome icons compiled into
+** a custom file by fontello.com. This application does not need all of the
+** font files provided.
+ */
+
+@font-face {
+    font-family: 'cwiki-icons-26px';
+    src: url('/fonts/cwiki-icons-26px.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.cw-icon:before {
+    content: '\e800';
+}
+
+.ccw-icon:before {
+    content: '\e801';
+}
+
+.bold-icon:before {
+    content: '\e802';
+}
+
+.italic-icon:before {
+    content: '\e803';
+}
+
+.link-icon:before {
+    content: '\e804';
+}
+
+.floppy-icon:before {
+    content: '\e805';
+}
+
+.indent-left-icon:before {
+    content: '\e806';
+}
+
+.indent-right-icon:before {
+    content: '\e807';
+}
+
+.clock-icon:before {
+    content: '\e808';
+}
+
+.list-bullet-icon:before {
+    content: '\f0ca';
+}
+
+.list-numbered-icon:before {
+    content: '\f0cb';
+}
+
+.strike-icon:before {
+    content: '\f0cc';
+}
+
+.underline-icon:before {
+    content: '\f0cd';
+}
+
+.quote-left-icon:before {
+    content: '\f10d';
+}
+
+.code-icon:before {
+    content: '\f121';
+}
+
+.header-icon:before {
+    content: '\f1dc';
+}
+
+.question-circle-o-icon:before {
+    content: '\f29c';
+}
+
 :root {
     /* Some colors. */
     --heading-background-color: transparent;
@@ -30,7 +112,7 @@
     /*--search-submit-hover-color: #575757;*/
     /*--search-submit-hover-background-color: #eff1f1;*/
     /*--search-submit-focus-color: #e5ecf4;*/
-    /*--search-submit-focus-border-color: #0036;*/
+    --search-submit-focus-border-color: #0036;
     --search-submit-focus-box-shadow-color: #6fb5f1;
     /*--search-submit-active-color: #e5ecf4;*/
     /*--search-submit-active-background-color: #d2d6d6;*/
@@ -74,8 +156,11 @@
     /*--code-highlight-color: #f0f0f0;*/
     /*!* For the border around code. *!*/
     /*--code-border-color: #575757;*/
+
+    --enabled-button-bar-icon-text-color: #acafaf;
     /*!* For disabled editor button bar icons.*!*/
-    /*--disabled-button-bar-icon-text-color: #acafaf;*/
+    --disabled-button-bar-icon-text-color: #acafaf;
+    --hover-button-bar-icon-text-color: black;
 
     --warning-pink-color: #ffb5fb;
     --ok-green-color: #b5ffb9;
@@ -250,6 +335,7 @@ small {
 }
 
 .banner--file-name-container {
+    align-items: center;
     display: flex;
     flex-direction: row;
     flex-shrink: 0;
@@ -315,6 +401,51 @@ small {
 .banner--spacer {
     min-width: 11px;
     width: 11px;
+}
+
+/* Stuff for the save icon up in the banner next to the file name. */
+.banner-save--button {
+    background-color: var(--body-background-color);
+    border: none;
+    color: var(--warning-pink-color);
+    cursor: pointer;
+    font-size: 1.625rem;
+    line-height: 2rem;
+    pointer-events: auto;
+    transition: all ease 0.2s;
+}
+
+.banner-save--icon {
+    font-family: "cwiki-icons-26px", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1.625rem;
+    /* This is to try to vertically align centers of the floppy icon
+       and the "add note" button. NOT appropriate for building a
+       button bar.
+     */
+    margin-right: 1.7rem;
+    text-align: center;
+
+    /* For safety - reset parent styles, that can break glyph codes*/
+    font-variant: normal;
+    text-transform: none;
+
+    /* fix buttons height, for twitter bootstrap */
+    line-height: 2rem;
+    transition: opacity 0.3s, font-size 0.3s, color 0.3s ease-in-out;
+}
+
+.banner-save--icon:disabled, .banner-save--icon:hover:disabled {
+    color: var(--disabled-button-bar-icon-text-color);
+}
+.banner-save--button:disabled, .banner-save--button:hover:disabled {
+    color: var(--disabled-button-bar-icon-text-color);
+    cursor: inherit;
 }
 
 .outline-container {
