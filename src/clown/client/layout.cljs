@@ -1,14 +1,16 @@
 (ns clown.client.layout
   (:require [clown.client.buttons :as bn]
+            [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
             [clown.client.dialogs.pref-dialog :as pref-dlg]
+            [clown.client.tree-ids :as ti]
+            [clown.client.tree-manip :as tm]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.dragging :refer [drag-click-handler]]
             [clown.client.util.font-detection :as fd]
             [clown.client.util.focus-utils :as fu]
+            [clown.client.util.marker :as mrk]
             [clown.client.util.mru :as mru]
-            [clown.client.tree-ids :as ti]
-            [clown.client.tree-manip :as tm]
             [clown.client.util.undo-redo :as ur]
             [clown.client.util.vector-utils :refer [delete-at remove-first
                                                     remove-last remove-last-two
@@ -44,6 +46,7 @@
   (let [prefs (:preferences @aps)
         def-title (:default_new_note_name prefs)
         def-text (:default_new_note_text prefs)]
+    (mrk/mark-as-dirty! aps)
     (swap! topic-cursor merge {:last-note-viewed 0
                                :notes            [{:note-title def-title
                                                    :note       def-text}]})))
@@ -57,6 +60,7 @@
         def-text (:default_new_note_text prefs) notes-vector (:notes @topic-cursor)
         new-notes (conj notes-vector {:note-title def-title
                                       :note       def-text})]
+    (mrk/mark-as-dirty! aps)
     (swap! topic-cursor assoc :last-note-viewed ntf)
     (swap! topic-cursor assoc :notes new-notes)))
 
@@ -67,6 +71,7 @@
         topic-cursor (r/cursor root-ratom topic-nav)
         ntf (count-notes root-ratom topic-id)
         note-title-id (ti/tree-id-and-index->note-title-id topic-id ntf)]
+    (mrk/mark-as-dirty! aps)
     (if (notes? root-ratom topic-id)
       (add-to-existing-note-section aps topic-cursor ntf)
       (add-completely-new-note-section aps topic-cursor))
@@ -84,12 +89,13 @@
   "Delete the note specified and move the view to the previous note. In the
   event that there are no remaining notes, the :notes and :last-note-viewed
   elements are removed as well."
-  [root-ratom topic-id index]
+  [aps root-ratom topic-id index]
   (debugf "delete-note: topic-id: %s, index: %s" topic-id index)
   (let [topic-nav (ti/tree-id->tree-path-nav-vector topic-id)
         topic-cursor (r/cursor root-ratom topic-nav)
         notes-cursor (r/cursor topic-cursor [:notes])]
     (swap! notes-cursor delete-at index)
+    (mrk/mark-as-dirty! aps)
     (debugf "     (notes? root-ratom topic-id): %s" (notes? root-ratom topic-id))
     (if (zero? (count-notes root-ratom topic-id))
       (do
@@ -114,7 +120,7 @@
        "\u002b"]]]))
 
 (defn layout-note-title
-  [subtree-ratom topic-id index]
+  [aps subtree-ratom topic-id index]
   (debugf "layout-note-title: topic-id: %s, index: " topic-id index)
   (let [canvas (atom nil)
         context (atom nil)
@@ -144,7 +150,7 @@
                                     ;; characters for example.
                                     (r/after-render #(r/force-update this))))))
 
-       :reagent-render      (fn [subtree-ratom]
+       :reagent-render      (fn [aps subtree-ratom]
                               (debugf "    reagent-render: @subtree-ratom: %s" @subtree-ratom)
                               (let [title-r (r/cursor subtree-ratom [:notes index :note-title])
                                     _ (debugf "    title-r: %s" title-r)
@@ -181,15 +187,17 @@
                                          :value        @title-r
                                          :on-focus     #(swap! subtree-ratom
                                                                assoc :last-note-viewed index)
-                                         :on-change    #(reset! title-r
-                                                                (du/event->target-value %))}]))})))
+                                         :on-change    #(do
+                                                          (mrk/mark-as-dirty! aps)
+                                                          (reset! title-r
+                                                                  (du/event->target-value %)))}]))})))
 
 (defn layout-tab-item
   "Layout and return the HTML for a single tab. If it is the selected tab, it
   is assigned a CSS class to give it an appearance distinct from any others others."
-  [root-ratom subtree-ratom topic-id-ratom index]
+  [aps root-ratom subtree-ratom topic-id-ratom index]
   (debugf "layout-tab-item: @subtree-ratom: %s" @subtree-ratom)
-  (fn [root-ratom subtree-ratom topic-id-ratom]
+  (fn [aps root-ratom subtree-ratom topic-id-ratom]
     (let [last-note-viewed (:last-note-viewed @subtree-ratom)
           class-to-use (if (= index last-note-viewed)
                          "note-tab-control--tab note-tab-control--tab-is-selected"
@@ -197,32 +205,34 @@
       [:div.note-tab-control--tab
        {:role    "tab"
         :class   class-to-use
-        :onClick #(swap! subtree-ratom assoc :last-note-viewed index)}
+        :onClick #(do
+                    (mrk/mark-as-dirty! aps)
+                    (swap! subtree-ratom assoc :last-note-viewed index))}
 
-       [layout-note-title subtree-ratom @topic-id-ratom index]
+       [layout-note-title aps subtree-ratom @topic-id-ratom index]
 
        [:span.note-tab-control--delete-note-icon
         {:title   "Delete this note"
          :onClick (fn [evt]
-                    (delete-note root-ratom @topic-id-ratom index)
+                    (delete-note aps root-ratom @topic-id-ratom index)
                     (du/stop-propagation evt))}
         ;; Symbol is a multiplication symbol.
         "\u00d7"]])))
 
 (defn title-tab-list
   "Return an (html) unordered list of note titles for the notes."
-  [root-ratom subtree-ratom headline-id-ratom]
+  [aps root-ratom subtree-ratom headline-id-ratom]
   (debug "title-tab-list")
   (let [notes (notes? root-ratom @headline-id-ratom)]
     (let [user-tabs (into [:div.note-tab-control--list {:role "tab-list"}]
                           (map-indexed (fn [index _]
-                                         [layout-tab-item root-ratom subtree-ratom
+                                         [layout-tab-item aps root-ratom subtree-ratom
                                           headline-id-ratom index]) notes))]
       user-tabs)))
 
 (defn make-note-area
   "Layout an individual note."
-  [subtree-ratom headline-id-ratom note-index]
+  [aps subtree-ratom headline-id-ratom note-index]
   (debugf "make-note-area: @headline-id-ratom: %s, note-index: %s" @headline-id-ratom note-index)
   (let [note-ratom (r/cursor subtree-ratom [:notes note-index :note])
         last-note-viewed (or (:last-note-viewed @subtree-ratom) 0)]
@@ -237,13 +247,15 @@
       :style    {:display (if (= note-index last-note-viewed)
                             :block
                             :none)}
-      :onChange #(reset! note-ratom (du/event->target-value %))}]))
+      :onChange #(do
+                   (mrk/mark-as-dirty! aps)
+                   (reset! note-ratom (du/event->target-value %)))}]))
 
 (def note-areas-div-id "note-areas-div-id")
 
 (defn note-areas
   "Layout the notes for the note panel."
-  [root-ratom subtree-ratom headline-id-ratom]
+  [aps root-ratom subtree-ratom headline-id-ratom]
   (debugf "note-areas: @headline-id-ratom: %s" @headline-id-ratom)
   (when (notes? root-ratom @headline-id-ratom)
     (let [headline-id @headline-id-ratom]
@@ -251,31 +263,32 @@
              {:id note-areas-div-id}
              (for [note-index (range (count-notes root-ratom headline-id))]
                ^{:key (ti/tree-id-and-index->note-id headline-id note-index)}
-               [make-note-area subtree-ratom headline-id-ratom note-index])]])))
+               [make-note-area aps subtree-ratom headline-id-ratom note-index])]])))
 
 (defn layout-note-panel
   "Layout the note panel for the selected headline."
-  [root-ratom headline-id-ratom]
+  [aps root-ratom headline-id-ratom]
   (debugf "layout-note-panel: @headline-id-ratom: %s" @headline-id-ratom)
   (let [nav-path (ti/tree-id->tree-path-nav-vector @headline-id-ratom)
         subtree-ratom (r/cursor root-ratom nav-path)]
     [:div {:class "note-tab-control--panel"
            :role  "note-tab-control--panel"}
-     [title-tab-list root-ratom subtree-ratom headline-id-ratom]
-     [note-areas root-ratom subtree-ratom headline-id-ratom]]))
+     [title-tab-list aps root-ratom subtree-ratom headline-id-ratom]
+     [note-areas aps root-ratom subtree-ratom headline-id-ratom]]))
 
 ;;;-----------------------------------------------------------------------------
-;;; The rest of the interface.
+;;; Functions to layout the outline.
 
 (defn handle-chevron-click!
   "Handle the click on the expansion chevron by toggling the state of
   expansion in the application state atom. This will cause the tree
   to re-render visually."
-  [root-ratom evt]
+  [aps root-ratom evt]
   (let [ele-id (du/event->target-id evt)
         kwv (ti/tree-id->tree-path-nav-vector ele-id)
         ekwv (conj kwv :expanded)]
     (swap! root-ratom update-in ekwv not)
+    (mrk/mark-as-dirty! aps)
     (fu/focus-and-scroll-editor-for-id ele-id)))
 
 (defn html-collection->seq
@@ -283,7 +296,7 @@
   [coll]
   (let [res-atom (atom [])]
     (doseq [idx (range (du/collection-length coll))]
-        (swap! res-atom conj (du/collection-item coll idx)))
+      (swap! res-atom conj (du/collection-item coll idx)))
     @res-atom))
 
 (defn handle-note-icon-click!
@@ -314,7 +327,7 @@
     ^{:key note-id}
     [:div.tree-control--note-row-icon-div
      {:id       note-id :style style
-      :title     "Edit the last note viewed for this headline."
+      :title    "Edit the last note viewed for this headline."
       :on-click #(handle-note-icon-click! aps %)}]))
 
 (defn indent-div
@@ -331,13 +344,13 @@
   "Get the expansion symbol to be used at the front of a topic. Returns
   a result based on whether the tree has children, and if so, whether they
   are expanded or not."
-  [root-ratom subtree-ratom chevron-id]
+  [aps root-ratom subtree-ratom chevron-id]
   (let [want-bullets true
         bullet-opacity (if want-bullets "0.7" "0.0")
         base-attrs {:class "tree-control--chevron-div"
                     :id    chevron-id}
         clickable-chevron-props (merge base-attrs
-                                       {:on-click #(handle-chevron-click! root-ratom %)})
+                                       {:on-click #(handle-chevron-click! aps root-ratom %)})
         invisible-chevron-props (merge base-attrs {:style {:opacity bullet-opacity}})
         es (cond
              (tm/visible-children? @subtree-ratom) [:div clickable-chevron-props
@@ -383,7 +396,7 @@
       {:id           editor-id
        :style        {:display :none :resize :none}
        :autoComplete "off"
-       :onKeyDown    #(key-down-handler root-ratom % topic-ratom topic-id)
+       :onKeyDown    #(key-down-handler aps root-ratom % topic-ratom topic-id)
        :onKeyUp      #(du/resize-textarea editor-id)
        :onFocus      (fn on-focus [_]
                        ; Override default number of rows (2).
@@ -391,7 +404,9 @@
                        (reset! focused-headline-ratom editor-id))
        :onBlur       #(when (= editor-id (du/active-element-id))
                         (du/swap-display-properties label-id editor-id))
-       :on-change    #(reset! topic-ratom (du/event->target-value %))
+       :on-change    #(do
+                        (mrk/mark-as-dirty! aps)
+                        (reset! topic-ratom (du/event->target-value %)))
        :value        @topic-ratom}]]))
 
 (defn dom-ids-for-row
@@ -422,7 +437,7 @@
     [:div.tree-control--row-div
      [note-row-icon-div aps note-row-icon-div-id note-icon-visible]
      [indent-div indent-id]
-     [chevron-div root-ratom subtree-ratom chevron-id]
+     [chevron-div aps root-ratom subtree-ratom chevron-id]
      [topic-info-div aps root-ratom subtree-ratom ids-for-row]]))
 
 (defn tree->hiccup
@@ -435,10 +450,10 @@
       (into [:div.tree-control--list]
             (map #(outliner-row-div aps root-ratom %) nav-vectors)))))
 
-(defn layout-outliner
+(defn layout-app
   "Return a function that lays out the main content of the app."
   [aps]
-  (debug "layout-outliner")
+  (debug "layout-app")
   (debugf "    @aps: %s" @aps)
   (let [root-ratom (r/cursor aps [:current-outline :tree])
         um (ur/undo-manager root-ratom)
@@ -451,7 +466,7 @@
     (debugf "    @aps with undo manager: %s" @aps)
 
     (fn [aps]
-      (debug "    layout-outliner interior function")
+      (debug "    layout-app interior function")
       (debugf "    @aps: %s" @aps)
       (let [file-name (first (get-in @aps [:preferences :mru]))
             outline-title (get-in @aps [:current-outline :title])
@@ -470,11 +485,15 @@
                                           :style {:flex-basis outliner-width}}
             [:div.banner--title-label [:p "Title:"]]
             [:div.banner--title-editor
-             [:input {:type      "text" :placeholder "Unknown" :value (if outline-title
-                                                                        outline-title
-                                                                        "")
-                      :on-change #(swap! aps assoc-in [:current-outline :title]
-                                         (du/event->target-value %))}]]]
+             [:input {:type        "text"
+                      :placeholder "Unknown"
+                      :value       (if outline-title
+                                     outline-title
+                                     "")
+                      :on-change   #(do
+                                      (mrk/mark-as-dirty! aps)
+                                      (swap! aps assoc-in [:current-outline :title]
+                                             (du/event->target-value %)))}]]]
 
            [:div.banner--spacer]
 
@@ -486,9 +505,21 @@
                       :value     (if file-name
                                    file-name
                                    "")
-                      :on-change #(mru/replace-first-item!
-                                    aps
-                                    (du/event->target-value %))}]]]]]
+                      :on-change #(do
+                                    (mrk/mark-as-dirty! aps)
+                                    (mru/replace-first-item!
+                                      aps
+                                      (du/event->target-value %)))}]]
+
+            [:button.banner-save--button
+             {:title    "Save revised content"
+              :tabIndex 0
+              :id       "save-button-id"
+              :on-click #(when (mrk/dirty? aps)
+                           (cmd/save-outline-as-edn! {:aps aps
+                                                      :evt %}))
+              :disabled (not (mrk/dirty? aps))}
+             [:i.banner-save--icon.floppy-icon {:id "floppy-icon"}]]]]]
 
          [:main.Site-content {:id "Site-content"}
           [:div.outline-container {:id    outline-container-id
@@ -517,7 +548,7 @@
 
            [:div.tree-control--container-div
             {:onKeyDown #((:outline-container-key-down-handler @aps)
-                          % root-ratom um)}
+                          aps % root-ratom um)}
             [tree->hiccup aps root-ratom]]]
 
           ;; Draggable border for changing the width of the outliner area.
@@ -547,7 +578,7 @@
                   :id    "note-tab-control--container-div"}
             (when-not @focused-headline-ratom
               (reset! focused-headline-ratom (ti/top-tree-id)))
-            [layout-note-panel root-ratom focused-headline-ratom]]]
+            [layout-note-panel aps root-ratom focused-headline-ratom]]]
 
           ;; Draggable border for changing the width of the notes area.
           [:div {:class "vertical-page-divider"}]
@@ -573,4 +604,3 @@
          [dlg/layout-file-does-not-exist-dlg]
          [pref-dlg/layout-prefs-dialog aps]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))
-
