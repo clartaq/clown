@@ -33,7 +33,6 @@
 (defn save-confirmed-changes!
   "Save preferences changes both in the local program state and on the server."
   [aps original-values working-copy-ratom]
-  (println "save-confirmed-changes!")
   (let [pc (r/cursor aps [:preferences])
         pref-keys (keys original-values)]
     (doseq [k pref-keys]
