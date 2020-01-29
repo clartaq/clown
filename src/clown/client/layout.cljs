@@ -555,7 +555,7 @@
           [:div {:class "vertical-page-divider"}]
           [:div {:class       "vertical-page-splitter"
                  :id          "outline-drag-border"
-                 :onMouseDown #(drag-click-handler @aps
+                 :onMouseDown #(drag-click-handler aps
                                                    [outline-container-id
                                                     title-container-id]
                                                    :outline_width)}]
@@ -584,7 +584,7 @@
           [:div {:class "vertical-page-divider"}]
           [:div {:class       "vertical-page-splitter"
                  :id          "note-drag-border"
-                 :onMouseDown #(drag-click-handler @aps
+                 :onMouseDown #(drag-click-handler aps
                                                    [note-container-id
                                                     file-name-container-id]
                                                    :note_width)}]]
