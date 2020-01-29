@@ -31,14 +31,14 @@
 (def ^{:private true} starting-basis (atom 0))
 (def ^{:private true} new-basis (atom "0px"))
 (def ^{:private true} preference-key (atom ""))
-(def ^{:private true} prog-state-ratom (atom nil))
 
 (defn- persist-new-basis
   "Send the new basis back to the server to persist it."
-  [new-basis]
+  [aps new-basis]
   (debugf "persist-new-basis: new-basis: %s" new-basis)
   (let [num-basis (js/parseInt (s/replace-first new-basis "px" ""))]
-    ((:send-message-fn @prog-state-ratom)
+    (swap! aps assoc-in [:preferences @preference-key] num-basis)
+    ((:send-message-fn @aps)
      (pr-str {:message {:command "hey-server/persist-numeric-preference-value"
                         :data    {:preference @preference-key
                                   :value      num-basis}}}))))
@@ -54,12 +54,12 @@
         (when-let [ele (du/get-element-by-id id)]
           (du/set-flex-basis ele @new-basis))))))
 
-(defn- stop-tracking [_]
+(defn- stop-tracking [_ aps]
   (when @dragging
     (reset! dragging false)
     (.removeEventListener js/window "mousemove" move)
     (when (not= @starting-basis @new-basis)
-      (persist-new-basis @new-basis))))
+      (persist-new-basis aps @new-basis))))
 
 (defn- start-tracking [evt]
   (debugf "start-tracking: evt: %s, @starting-mouse-x: %s, (.-pageX evt): %s"
@@ -68,7 +68,7 @@
 
 (defn ^{:export true} drag-click-handler [prog-state container-ids pref-key]
   (debug "drag-click-handler")
-  (reset! prog-state-ratom prog-state)
+  ;(reset! prog-state-ratom prog-state)
   (reset! preference-key pref-key)
   (reset! container-id-atoms container-ids)
   (reset! ele (du/get-element-by-id (first container-ids)))
@@ -79,4 +79,4 @@
   (reset! dragging true)
   (.addEventListener js/window "mousedown" start-tracking)
   (.addEventListener js/window "mousemove" move)
-  (.addEventListener js/window "mouseup" stop-tracking))
+  (.addEventListener js/window "mouseup" #(stop-tracking % prog-state)))
