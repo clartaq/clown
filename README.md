@@ -46,6 +46,10 @@ The note display is just a regular text area at the moment. You can add as much 
 
 To add a note, click the button with the plus sign above the note display area. To delete a note, click the `x` displayed next to the note title.
 
+#### User Preferences
+
+When a view of the program is active, pressing `Ctrl-Shft-P` will bring up a dialog letting you set some options concerning the way the program operates.
+
 #### Size of the Outliner and Notes Panes
 
 Both of these sections will always extend vertically to use all of the space available to them.
