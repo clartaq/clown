@@ -105,9 +105,6 @@
                      :title (str "The number of idle seconds to wait for before "
                                  "saving the document. A value of 0 means no "
                                  "automatic saves will be done.")} "?"]]
-           [:p {:class "prefs--help-text"
-                :style {:color "red"}}
-            "The \"Autosave\" function is not ready yet."]
 
            ;; Column width for outliner.
            [:div {:class "prefs--row"}
