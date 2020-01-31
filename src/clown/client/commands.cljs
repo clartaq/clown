@@ -11,9 +11,8 @@
 (defn save-outline-as-edn!
   "Tell the server to save this outline in EDN format after updating it with
   a new modification time."
-  [{:keys [aps evt]}]
+  [aps]
   (debug "save-outline-as-edn!")
-  (du/prevent-default evt)
   (swap! aps assoc-in [:current-outline :modified] (formatted-time-now))
   (mrk/mark-as-clean! aps)
   (debugf "    pr-str message: %s"
