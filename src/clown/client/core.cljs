@@ -484,7 +484,10 @@
 
                               ;; Save the current outline with Cmd-S.
                               (= km {:key "s" :modifiers (merge-def-mods {:cmd true})})
-                              (cmd/save-outline-as-edn! {:aps aps :evt evt})
+                              (do
+                                (du/prevent-default evt)
+                                (du/stop-propagation evt)
+                                (cmd/save-outline-as-edn! aps))
 
                               ;; Open the preferences with Ctrl-Shft-P.
                               (= km {:key "P" :modifiers (merge-def-mods {:ctrl true :shift true})})
@@ -531,6 +534,7 @@
         (debugf "prefs: %s" prefs)
         (swap! (state-ratom) assoc :preferences prefs)
         (close! got-prefs-channel)
+        (swap! (state-ratom) assoc :save-doc-fn cmd/save-outline-as-edn!)
 
         (if (:load-last-file prefs)
           (when-let [last-file (first (:mru prefs))]
