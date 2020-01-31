@@ -516,8 +516,9 @@
               :tabIndex 0
               :id       "save-button-id"
               :on-click #(when (mrk/dirty? aps)
-                           (cmd/save-outline-as-edn! {:aps aps
-                                                      :evt %}))
+                           (du/prevent-default %)
+                           (du/stop-propagation %)
+                           (cmd/save-outline-as-edn! aps))
               :disabled (not (mrk/dirty? aps))}
              [:i.banner-save--icon.floppy-icon {:id "floppy-icon"}]]]]]
 
