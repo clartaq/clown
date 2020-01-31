@@ -112,8 +112,9 @@
   [app-state-ratom]
   (let [button-id "save-button"
         save-fn (fn [evt]
-                  (cmd/save-outline-as-edn! {:aps app-state-ratom
-                                             :evt evt})
+                  (du/prevent-default evt)
+                  (du/stop-propagation evt)
+                  (cmd/save-outline-as-edn! app-state-ratom)
                   (mrk/mark-as-clean! app-state-ratom))]
     (fn [app-state-ratom]
       [:input.tree-demo--button
