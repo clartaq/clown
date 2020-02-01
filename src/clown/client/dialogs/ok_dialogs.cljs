@@ -23,10 +23,10 @@
 ;  [basis]
 ;  (str basis "-cancel-button-id"))
 
-(defn enumerate-message-paragraphs
-  "Return a div containing each element in the array of text as paragraphs."
-  [ta]
-  (into [:div] (mapv #(into [:p.dialog-message %]) ta)))
+;(defn enumerate-message-paragraphs
+;  "Return a div containing each element in the array of text as paragraphs."
+;  [ta]
+;  (into [:div] (mapv #(into [:p.dialog-message %]) ta)))
 
 ;(defn one-rem-spacer
 ;  []
@@ -55,7 +55,7 @@
               :value    "Close"
               :title    (:button-help settings)
               :on-click #((:toggle-fn settings))}]]]
-   [:section {:class "modal-guts"} (enumerate-message-paragraphs (:message-text settings))]
+   [:section {:class "modal-guts"} (dlgu/enumerate-message-paragraphs (:message-text settings))]
    [:div {:class "modal-footer"}
     [:section {:class "tree-demo--button-area"}
      [:input {:type     "button"
