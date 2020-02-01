@@ -4,10 +4,8 @@
             [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
             [clown.client.util.dom-utils :as du]
-            ;[clown.client.util.empty-outline :as eo]
             [clown.client.util.marker :as mrk]
             [clown.client.util.mru :refer [push-on-mru! persist-new-mru]]
-            ;[reagent.core :as r]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
                                                 trace debug info warn error]]))
 
