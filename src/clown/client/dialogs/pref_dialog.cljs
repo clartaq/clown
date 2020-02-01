@@ -145,7 +145,7 @@
                     :on-click close-dlg}]
            [:input {:type     "button"
                     :class    "tree-demo--button button-bar-item"
-                    :id       (dlgu/id-basis->cancel-id (:id-basis settings))
+                    :id       (dlgu/id-basis->confirm-id (:id-basis settings))
                     :value    (:confirm-button-text settings)
                     :title    (:confirm-button-popup-text settings)
                     :on-click #(do (save-confirmed-changes! aps original-values working-copy)
