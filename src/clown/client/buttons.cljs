@@ -4,10 +4,10 @@
             [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
             [clown.client.util.dom-utils :as du]
-            [clown.client.util.empty-outline :as eo]
+            ;[clown.client.util.empty-outline :as eo]
             [clown.client.util.marker :as mrk]
             [clown.client.util.mru :refer [push-on-mru! persist-new-mru]]
-            [reagent.core :as r]
+            ;[reagent.core :as r]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
                                                 trace debug info warn error]]))
 
@@ -16,25 +16,14 @@
   will delete the current contents of the control and replace it with a
   fresh, empty version."
   [app-state-ratom]
-  (let [button-id "new-button"
-        new-fn (fn [_]
-                 ;; BUG HERE!!! This doesn't really seem to work as expected.
-                 ;; It's like the new undo-manager never gets attached to the
-                 ;; ratom. The stuff from the old ratom is still there. You can
-                 ;; load files, make changes, etc, and then back up through all
-                 ;; the file changes (without resetting outline title and
-                 ;; file name) all the way back to when the app was loaded.
-                 (swap! app-state-ratom assoc :current-outline
-                        (eo/build-empty-outline app-state-ratom))
-                 (mrk/mark-as-clean! app-state-ratom)
-                 (push-on-mru! app-state-ratom (eo/empty-outline-file-name)))]
+  (let [button-id "new-button"]
     (fn [app-state-ratom]
       [:input.tree-demo--button
        {:type     "button"
         :id       button-id
         :title    "Erase the current outline and start with a new one."
         :value    "New"
-        :on-click #(new-fn %)}])))
+        :on-click #(cmd/new-outline app-state-ratom)}])))
 
 (defn file-ext
   "Return the file extension of the file name, lower-case, no dot."
