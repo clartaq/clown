@@ -2,6 +2,7 @@
   (:require [clown.client.buttons :as bn]
             [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
+            [clown.client.dialogs.not-saved-dialog :as ns-dlg]
             [clown.client.dialogs.pref-dialog :as pref-dlg]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
@@ -604,4 +605,5 @@
          [dlg/layout-about-to-update-mru-modal]
          [dlg/layout-file-does-not-exist-dlg]
          [pref-dlg/layout-prefs-dialog aps]
+         [ns-dlg/layout-not-saved-dialog aps]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))

@@ -500,6 +500,13 @@
                                   (swap! aps assoc :show-prefs-dialog true)
                                   (r/after-render #(du/focus-element (du/get-element-by-id "pref-dialog-cancel-button-id"))))
 
+                              ;; Open the not-saved for testing with Ctrl-Shft-A.
+                              (= km {:key "A" :modifiers (merge-def-mods {:ctrl true :shift true})})
+                              (do (du/prevent-default evt)
+                                  (du/stop-propagation evt)
+                                  (swap! aps assoc :show-not-saved-dialog true))
+
+
                               :default nil)))]
     (du/add-event-listener
       "keydown"

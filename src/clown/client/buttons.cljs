@@ -21,7 +21,14 @@
         :id       button-id
         :title    "Erase the current outline and start with a new one."
         :value    "New"
-        :on-click #(cmd/new-outline app-state-ratom)}])))
+        :on-click #(do
+                     (println "(mrk/dirty? app-state-ratom): "
+                              (mrk/dirty? app-state-ratom))
+                     (if (mrk/dirty? app-state-ratom)
+                       (do
+                         (swap! app-state-ratom assoc :overwriting-fn cmd/new-outline)
+                         (swap! app-state-ratom assoc :show-not-saved-dialog true))
+                       (cmd/new-outline app-state-ratom)))}])))
 
 (defn file-ext
   "Return the file extension of the file name, lower-case, no dot."
@@ -70,6 +77,15 @@
           #(dlg/toggle-file-read-error-modal))
     (.readAsText js-file-reader js-file)))
 
+(defn select-and-load
+  [aps]
+  (let [overwriting-fn (fn [_] (.click (du/get-element-by-id "file-open-id")))]
+    (if (mrk/dirty? aps)
+      (do
+        (swap! aps assoc :overwriting-fn overwriting-fn)
+        (swap! aps assoc :show-not-saved-dialog true))
+      (.click (du/get-element-by-id "file-open-id")))))
+
 (defn add-open-button
   "Return a function that will display a 'File Open' dialog. If a response
   is received, open that file and load any outline contained."
@@ -79,7 +95,8 @@
         sim-click-fn #(.click (du/get-element-by-id file-open-id))]
     (fn [app-state-ratom]
       [:div
-       [:input {:type      "file" :id file-open-id
+       [:input {:type      "file"
+                :id        file-open-id
                 :accept    ".edn, .opml"
                 :multiple  nil
                 :style     {:display "none"}
@@ -91,7 +108,8 @@
          :id       button-id
          :title    "Open a new outline"
          :value    "Open"
-         :on-click sim-click-fn}]])))
+         :on-click #(select-and-load app-state-ratom)       ; sim-click-fn
+         }]])))
 
 (defn add-save-button
   "Return a function that will produce a button that, when clicked,
