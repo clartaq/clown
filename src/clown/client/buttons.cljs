@@ -22,10 +22,10 @@
         :title    "Erase the current outline and start with a new one."
         :value    "New"
         :on-click #(if (mrk/dirty? app-state-ratom)
-                       (do
-                         (swap! app-state-ratom assoc :overwriting-fn cmd/new-outline)
-                         (swap! app-state-ratom assoc :show-not-saved-dialog true))
-                       (cmd/new-outline app-state-ratom))}])))
+                     (do
+                       (swap! app-state-ratom assoc :overwriting-fn cmd/new-outline)
+                       (swap! app-state-ratom assoc :show-not-saved-dialog true))
+                     (cmd/new-outline app-state-ratom))}])))
 
 (defn file-ext
   "Return the file extension of the file name, lower-case, no dot."
@@ -65,32 +65,32 @@
   and load it into the program."
   [aps evt]
   (debug "handle-file-open-selection")
-  (let [js-file (aget (.-files (.-target evt)) 0)
+  (let [js-file (aget (du/event->target-files evt) 0)
         js-file-reader (js/FileReader.)
         source-data-atom (atom nil)]
     (set! (.-onload js-file-reader)
-          #(do (reset! source-data-atom (-> % .-target .-result))
-               (vet-and-load-outline aps (.-name js-file) @source-data-atom)))
+          (fn [evt]
+            (reset! source-data-atom (du/event->target-result evt))
+            (vet-and-load-outline aps (.-name js-file) @source-data-atom)))
     (set! (.-onerror js-file-reader)
           #(dlg/toggle-file-read-error-modal))
-    (.readAsText js-file-reader js-file)))
+    (du/read-file-as-text js-file-reader js-file)))
 
 (defn select-and-load
   [aps]
-  (let [overwriting-fn (fn [_] (.click (du/get-element-by-id "file-open-id")))]
+  (let [click-fn (fn [_] (du/click-element-with-id "file-open-id"))]
     (if (mrk/dirty? aps)
       (do
-        (swap! aps assoc :overwriting-fn overwriting-fn)
+        (swap! aps assoc :overwriting-fn click-fn)
         (swap! aps assoc :show-not-saved-dialog true))
-      (.click (du/get-element-by-id "file-open-id")))))
+      (click-fn nil))))
 
 (defn add-open-button
   "Return a function that will display a 'File Open' dialog. If a response
   is received, open that file and load any outline contained."
   [app-state-ratom]
   (let [button-id "open-button"
-        file-open-id "file-open-id"
-        sim-click-fn #(.click (du/get-element-by-id file-open-id))]
+        file-open-id "file-open-id"]
     (fn [app-state-ratom]
       [:div
        [:input {:type      "file"

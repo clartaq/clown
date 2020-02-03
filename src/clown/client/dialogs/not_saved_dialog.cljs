@@ -8,8 +8,7 @@
 
 (ns clown.client.dialogs.not-saved-dialog
   (:require [clown.client.dialogs.util :as dlgu]
-            [clown.client.util.dom-utils :as du]
-            [reagent.core :as r]))
+            [clown.client.util.dom-utils :as du]))
 
 (defn de-activate-glass-pane
   "De-activate (make invisible) the glass pane."
