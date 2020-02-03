@@ -27,9 +27,22 @@
   [evt]
   (ele->value (event->target-element evt)))
 
+(defn event->target-files
+  [evt]
+  (.-files (event->target-element evt)))
+
+(defn event->target-result
+  [evt]
+  (.-result (event->target-element evt)))
+  ;(-> evt .-target .-result))
+
 (defn event->target-checked
   [evt]
   (.-checked (event->target-element evt)))
+
+(defn click-element-with-id
+  [id]
+  (.click (get-element-by-id id)))
 
 (defn active-element-id
   []
@@ -195,6 +208,10 @@
       (set! (.-overflow style) "hidden")
       (set! (.-height style) "5px")
       (set! (.-height style) (str (.-scrollHeight ele) "px")))))
+
+(defn read-file-as-text
+  [js-file-reader js-file]
+  (.readAsText js-file-reader js-file))
 
 (defn key-evt->map
   "Unpack the information in a keyboard event into a map that can be used
