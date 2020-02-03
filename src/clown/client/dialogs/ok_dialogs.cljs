@@ -15,31 +15,6 @@
       (du/toggle-classlist close-button "closed")
       (du/toggle-classlist overlay "closed"))))
 
-;(defn id-basis->id
-;  [basis]
-;  (str basis "-modal"))
-
-;(defn id-basis->cancel-id
-;  [basis]
-;  (str basis "-cancel-button-id"))
-
-(defn enumerate-message-paragraphs
-  "Return a div containing each element in the array of text as paragraphs."
-  [ta]
-  (into [:div] (mapv #(into [:p.dialog-message %]) ta)))
-
-;(defn one-rem-spacer
-;  []
-;  [:label {:class "prefs--one-rem-spacer"} " "])
-;
-;(defn half-rem-spacer
-;  []
-;  [:label {:class "prefs--half-rem-spacer"} " "])
-;
-;(defn quarter-rem-spacer
-;  []
-;  [:label {:class "prefs--quarter-rem-spacer"} " "])
-
 (defn one-button-dialog-template
   "Return a piece of hiccup for a one button dialog with the given features."
   [settings]
@@ -55,7 +30,7 @@
               :value    "Close"
               :title    (:button-help settings)
               :on-click #((:toggle-fn settings))}]]]
-   [:section {:class "modal-guts"} (enumerate-message-paragraphs (:message-text settings))]
+   [:section {:class "modal-guts"} (dlgu/enumerate-message-paragraphs (:message-text settings))]
    [:div {:class "modal-footer"}
     [:section {:class "tree-demo--button-area"}
      [:input {:type     "button"

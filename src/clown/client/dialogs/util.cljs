@@ -26,8 +26,19 @@
   [basis]
   (str basis "-modal"))
 
+(defn id-basis->confirm-id
+  [basis]
+  (str basis "-confirm-button-id"))
+
 (defn id-basis->cancel-id
   [basis]
   (str basis "-cancel-button-id"))
+
+(defn enumerate-message-paragraphs
+  "Return a div containing each element in the array of text as paragraphs."
+  [ta]
+  (into [:div] (mapv #(into [:p.dialog-message %]) ta)))
+
+
 
 

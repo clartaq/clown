@@ -4,10 +4,8 @@
             [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
             [clown.client.util.dom-utils :as du]
-            [clown.client.util.empty-outline :as eo]
             [clown.client.util.marker :as mrk]
             [clown.client.util.mru :refer [push-on-mru! persist-new-mru]]
-            [reagent.core :as r]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
                                                 trace debug info warn error]]))
 
@@ -16,25 +14,18 @@
   will delete the current contents of the control and replace it with a
   fresh, empty version."
   [app-state-ratom]
-  (let [button-id "new-button"
-        new-fn (fn [_]
-                 ;; BUG HERE!!! This doesn't really seem to work as expected.
-                 ;; It's like the new undo-manager never gets attached to the
-                 ;; ratom. The stuff from the old ratom is still there. You can
-                 ;; load files, make changes, etc, and then back up through all
-                 ;; the file changes (without resetting outline title and
-                 ;; file name) all the way back to when the app was loaded.
-                 (swap! app-state-ratom assoc :current-outline
-                        (eo/build-empty-outline app-state-ratom))
-                 (mrk/mark-as-clean! app-state-ratom)
-                 (push-on-mru! app-state-ratom (eo/empty-outline-file-name)))]
+  (let [button-id "new-button"]
     (fn [app-state-ratom]
       [:input.tree-demo--button
        {:type     "button"
         :id       button-id
         :title    "Erase the current outline and start with a new one."
         :value    "New"
-        :on-click #(new-fn %)}])))
+        :on-click #(if (mrk/dirty? app-state-ratom)
+                     (do
+                       (swap! app-state-ratom assoc :overwriting-fn cmd/new-outline)
+                       (swap! app-state-ratom assoc :show-not-saved-dialog true))
+                     (cmd/new-outline app-state-ratom))}])))
 
 (defn file-ext
   "Return the file extension of the file name, lower-case, no dot."
@@ -50,6 +41,7 @@
       (dlg/toggle-bad-outline-modal)
       (do
         (push-on-mru! aps file-name)
+        (mrk/mark-as-clean! aps)
         (swap! aps assoc :current-outline (:outline outline))))))
 
 (defn vet-and-load-outline
@@ -73,26 +65,36 @@
   and load it into the program."
   [aps evt]
   (debug "handle-file-open-selection")
-  (let [js-file (aget (.-files (.-target evt)) 0)
+  (let [js-file (aget (du/event->target-files evt) 0)
         js-file-reader (js/FileReader.)
         source-data-atom (atom nil)]
     (set! (.-onload js-file-reader)
-          #(do (reset! source-data-atom (-> % .-target .-result))
-               (vet-and-load-outline aps (.-name js-file) @source-data-atom)))
+          (fn [evt]
+            (reset! source-data-atom (du/event->target-result evt))
+            (vet-and-load-outline aps (.-name js-file) @source-data-atom)))
     (set! (.-onerror js-file-reader)
           #(dlg/toggle-file-read-error-modal))
-    (.readAsText js-file-reader js-file)))
+    (du/read-file-as-text js-file-reader js-file)))
+
+(defn select-and-load
+  [aps]
+  (let [click-fn (fn [_] (du/click-element-with-id "file-open-id"))]
+    (if (mrk/dirty? aps)
+      (do
+        (swap! aps assoc :overwriting-fn click-fn)
+        (swap! aps assoc :show-not-saved-dialog true))
+      (click-fn nil))))
 
 (defn add-open-button
   "Return a function that will display a 'File Open' dialog. If a response
   is received, open that file and load any outline contained."
   [app-state-ratom]
   (let [button-id "open-button"
-        file-open-id "file-open-id"
-        sim-click-fn #(.click (du/get-element-by-id file-open-id))]
+        file-open-id "file-open-id"]
     (fn [app-state-ratom]
       [:div
-       [:input {:type      "file" :id file-open-id
+       [:input {:type      "file"
+                :id        file-open-id
                 :accept    ".edn, .opml"
                 :multiple  nil
                 :style     {:display "none"}
@@ -104,7 +106,7 @@
          :id       button-id
          :title    "Open a new outline"
          :value    "Open"
-         :on-click sim-click-fn}]])))
+         :on-click #(select-and-load app-state-ratom)}]])))
 
 (defn add-save-button
   "Return a function that will produce a button that, when clicked,
