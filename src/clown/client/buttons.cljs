@@ -21,14 +21,11 @@
         :id       button-id
         :title    "Erase the current outline and start with a new one."
         :value    "New"
-        :on-click #(do
-                     (println "(mrk/dirty? app-state-ratom): "
-                              (mrk/dirty? app-state-ratom))
-                     (if (mrk/dirty? app-state-ratom)
+        :on-click #(if (mrk/dirty? app-state-ratom)
                        (do
                          (swap! app-state-ratom assoc :overwriting-fn cmd/new-outline)
                          (swap! app-state-ratom assoc :show-not-saved-dialog true))
-                       (cmd/new-outline app-state-ratom)))}])))
+                       (cmd/new-outline app-state-ratom))}])))
 
 (defn file-ext
   "Return the file extension of the file name, lower-case, no dot."
@@ -44,6 +41,7 @@
       (dlg/toggle-bad-outline-modal)
       (do
         (push-on-mru! aps file-name)
+        (mrk/mark-as-clean! aps)
         (swap! aps assoc :current-outline (:outline outline))))))
 
 (defn vet-and-load-outline
@@ -108,8 +106,7 @@
          :id       button-id
          :title    "Open a new outline"
          :value    "Open"
-         :on-click #(select-and-load app-state-ratom)       ; sim-click-fn
-         }]])))
+         :on-click #(select-and-load app-state-ratom)}]])))
 
 (defn add-save-button
   "Return a function that will produce a button that, when clicked,
