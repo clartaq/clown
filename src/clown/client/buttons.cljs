@@ -74,7 +74,10 @@
             (vet-and-load-outline aps (.-name js-file) @source-data-atom)))
     (set! (.-onerror js-file-reader)
           #(dlg/toggle-file-read-error-modal))
-    (du/read-file-as-text js-file-reader js-file)))
+    (du/read-file-as-text js-file-reader js-file)
+    ;; Solution provided by answer to question on StackOverflow:
+    ;; https://stackoverflow.com/questions/59592261/problem-opening-files-with-the-filereader-api/60057413#60057413
+    (set! (.-value (du/get-element-by-id "file-open-id")) "")))
 
 (defn select-and-load
   [aps]

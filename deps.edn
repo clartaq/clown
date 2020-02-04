@@ -14,7 +14,7 @@
            com.taoensso/timbre         {:mvn/version "4.10.0"}
            compojure                   {:mvn/version "1.6.1"}
            http-kit                    {:mvn/version "2.3.0"}
-           reagent                     {:mvn/version "0.8.1"}
+           reagent                     {:mvn/version "0.9.1"}
            ring/ring-core              {:mvn/version "1.8.0"}
            ring/ring-devel             {:mvn/version "1.8.0"}}
 
