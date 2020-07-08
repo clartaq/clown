@@ -1,34 +1,30 @@
 {:deps    {org.clojure/clojure         {:mvn/version "1.10.1"}
-           ;; ClojureScript 1.10.597 complains (correctly) about an undeclared
-           ;; variable in the figwheel-main source figwheel.repl.cljc
-           ;; (See https://github.com/bhauman/figwheel-repl/blob/master/src/figwheel/repl.cljc#L610
-           ;; and https://github.com/bhauman/figwheel-repl/issues/10.) Since
-           ;; the error does not affect my code and causes a panic attack
-           ;; every time I see it, I'm just staying at 1.19.520 until it is fixed.
-           org.clojure/clojurescript   {:mvn/version "1.10.520"}
-           org.clojure/core.async      {:mvn/version "0.7.559"}
-           org.clojure/java.classpath  {:mvn/version "0.3.0"}
+           org.clojure/clojurescript   {:mvn/version "1.10.773"}
+           org.clojure/core.async      {:mvn/version "1.2.603"}
+           org.clojure/java.classpath  {:mvn/version "1.0.0"}
            org.clojure/java.jdbc       {:mvn/version "0.7.11"}
            com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
            com.h2database/h2           {:mvn/version "1.4.200"}
-           com.taoensso/timbre         {:mvn/version "4.10.0"}
+           ;; This version of timbre is not out of alpha yet, but it stops so
+           ;; many other warnings that I'm trying it out here for now.
+           com.taoensso/timbre         {:mvn/version "4.11.0-alpha1"}
            compojure                   {:mvn/version "1.6.1"}
            http-kit                    {:mvn/version "2.3.0"}
-           reagent                     {:mvn/version "0.9.1"}
-           ring/ring-core              {:mvn/version "1.8.0"}
-           ring/ring-devel             {:mvn/version "1.8.0"}}
+           reagent                     {:mvn/version "0.10.0"}
+           ring/ring-core              {:mvn/version "1.8.1"}
+           ring/ring-devel             {:mvn/version "1.8.1"}}
 
  :paths   ["src" "resources"]
 
  ;; Aliases for common commands.
  :aliases {;; Get the figwheel  deps used in multiple commands.
            :fig       {:extra-deps  {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
-                                     com.bhauman/figwheel-main       {:mvn/version "0.2.3"}}
+                                     com.bhauman/figwheel-main       {:mvn/version "0.2.9"}}
                        :extra-paths ["target" "test"]}
 
            ;; Clojure unit testing.
            :test-clj  {:extra-paths ["test"]
-                       :extra-deps  {lambdaisland/kaocha {:mvn/version "0.0-565"}}
+                       :extra-deps  {lambdaisland/kaocha {:mvn/version "1.0.632"}}
                        :main-opts   ["-m" "kaocha.runner"]}
 
            ;; ClojureScript unit testing.
@@ -38,8 +34,8 @@
            :clean     {:main-opts ["scripts/clean.clj"]}
 
            ;; Find out of date dependencies.
-           :ancient   {:extra-deps {olical/depot {:mvn/version "1.8.4"}}
-                       :main-opts  ["-m" "depot.outdated.main" "-a" "ancient"]}
+           :ancient   {:extra-deps {olical/depot {:mvn/version "2.0.1"}}
+                       :main-opts  ["-m" "depot.outdated.main" "--every"]}
 
            ;; Start up a development environment.
            :dev       {:main-opts ["scripts/dev.clj"]}
@@ -48,5 +44,5 @@
            :repl      {:main-opts ["scripts/repl.clj"]}
 
            ;; Build an uberjar.
-           :prod      {:extra-deps {leiningen {:mvn/version "2.9.0"}}
+           :prod      {:extra-deps {leiningen {:mvn/version "2.9.3"}}
                        :main-opts  ["scripts/prod.clj"]}}}
