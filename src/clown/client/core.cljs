@@ -21,6 +21,7 @@
                                                     append-element-to-vector]]
             [clown.client.ws :refer [start-ws!]]
             [reagent.core :as r]
+            [reagent.dom :as rdom]
             [reagent.dom.server :refer [render-to-string render-to-static-markup]]
             [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
                                                 trace debug info warn error]])
@@ -548,7 +549,7 @@
             (mrk/mark-as-clean! (state-ratom))
             (push-on-mru! (state-ratom) (empty-outline-file-name))))
 
-        (r/render [ay/layout-app (state-ratom)]
+        (rdom/render [ay/layout-app (state-ratom)]
                   (du/get-element-by-id "app"))))))
 
 (defn ^:export main []
