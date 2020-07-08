@@ -6,7 +6,10 @@
   ;; uncomment to launch tests in a headless environment
   ;; you will have to figure out the path to chrome on your system
   ;; :launch-js ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" "--headless" "--disable-gpu" "--repl" :open-url]
-  :watch-dirs ["src" "test"]}
+  ;; This works for me (DDC) since I don't use Chrome
+  ;; :launch-js ["/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" "--headless" "--disable-gpu" "--repl" :open-url]
+
+ :watch-dirs ["src" "test"]}
 {:main       clown.test-runner
  :output-to  "resources/public/test-main.js"
  :output-dir "resources/public/test-main.out"}
