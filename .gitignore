@@ -1,12 +1,16 @@
 # Created by .ignore support plugin (hsz.mobi)
-!/.idea/
-!/.cpcache/
-!/resources/public/db/
-!/resources/public/main.out/
-!/resources/public/main.js
-!/resources/public/main-auto-testing.js
-!/test/data/db/
-!/.rebel_readline_history
-!/Short_Domination_Plan.edn
-!/Tiny Outline.edn
-!/World_Domination_Plan copy.edn
+/.idea/
+/.cpcache/
+/resources/public/db/
+/resources/public/main.out/
+/resources/public/main.js
+/resources/public/main-auto-testing.js
+/test/data/db/
+/.rebel_readline_history
+/Short_Domination_Plan.edn
+/Tiny Outline.edn
+/World_Domination_Plan copy.edn
+/Notes and Research/
+/projectFilesBackup/
+/target/
+/clown.iml
