@@ -24,7 +24,7 @@
 
            ;; Clojure unit testing.
            :test-clj  {:extra-paths ["test"]
-                       :extra-deps  {lambdaisland/kaocha {:mvn/version "1.0.632"}}
+                       :extra-deps  {lambdaisland/kaocha {:mvn/version "1.0.641"}}
                        :main-opts   ["-m" "kaocha.runner"]}
 
            ;; ClojureScript unit testing.
@@ -44,5 +44,5 @@
            :repl      {:main-opts ["scripts/repl.clj"]}
 
            ;; Build an uberjar.
-           :prod      {:extra-deps {leiningen {:mvn/version "2.9.3"}}
+           :prod      {:extra-deps {leiningen {:mvn/version "2.9.4"}}
                        :main-opts  ["scripts/prod.clj"]}}}
