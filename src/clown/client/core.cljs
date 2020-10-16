@@ -88,10 +88,10 @@
 
       (= message-command "hey-client/accept-this-outline")
       (do
-        (infof "Saw message-command \"hey-client/accept-this-outline\"")
-        (infof "(:outline message-data): %s" (:outline message-data))
+        (debugf "Saw message-command \"hey-client/accept-this-outline\"")
+        (debugf "(:outline message-data): %s" (:outline message-data))
         (swap! (state-ratom) assoc :current-outline (:outline message-data))
-        (infof "@(state-ratom): %s" @(state-ratom))))))
+        (debugf "@(state-ratom): %s" @(state-ratom))))))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Functions to handle keystroke events. Editing commands.
