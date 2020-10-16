@@ -78,11 +78,11 @@ I've been testing on Safari, Firefox, Opera, and Brave browsers.
 
 To get an interactive development environment run:
 
-    clj -A:fig:repl
+    clj -M:fig:repl
 
 This will compile a development build, open a tab in the default browser at [`localhost:1597`](http://localhost:1597), and start a ClojureScript REPL in the terminal. Changes made to the ClojureScript portion of the project will be compiled and reloaded in real time. Changes affecting the browser display (Reagent components) will show up in the browser as well.
 
-    clj -A:fig:dev
+    clj -M:fig:dev
 
 Similar to the above but does not open a REPL.
 
@@ -90,7 +90,7 @@ Similar to the above but does not open a REPL.
 
 To build an uberjar for production run:
 
-    clj -A:fig:prod
+    clj -M:fig:prod
 
 To run the uberjar, you need Java. Clojure is not required just to run the program.
 
@@ -112,7 +112,7 @@ After starting a development session, figwheel.main does automatic testing as we
 
 To do one-time ClojureScript testing, run:
 
-    clj -A:fig:test-cljs
+    clj -M:fig:test-cljs
 
 Test results will show up in the terminal. A testing web page will be opened, but you can just close it after the tests have completed.
 
@@ -120,7 +120,7 @@ Test results will show up in the terminal. A testing web page will be opened, bu
 
 To run Clojure unit tests just run:
 
-    clj -A:test-clj
+    clj -M:test-clj
 
 The results will appear in the terminal.
 
@@ -128,11 +128,11 @@ The results will appear in the terminal.
 
 To delete all compilation artifacts, use:
 
-    clj -A:clean
+    clj -M:clean
 
 To check for outdated dependencies, run:
 
-    clj -A:ancient
+    clj -M:ancient
 
 ## Bugs
 
