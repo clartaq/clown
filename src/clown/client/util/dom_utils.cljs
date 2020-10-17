@@ -48,6 +48,9 @@
   []
   (.-id (.-activeElement js/document)))
 
+(defn focused? [id]
+  (= id (active-element-id)))
+
 (defn set-class-name!
   [ele name]
   (set! (.-className ele) name))
