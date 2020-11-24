@@ -22,7 +22,7 @@
  ;; Aliases for common commands.
  :aliases {;; Get the figwheel  deps used in multiple commands.
            :fig       {:extra-deps  {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
-                                     com.bhauman/figwheel-main       {:mvn/version "0.2.11"}}
+                                     com.bhauman/figwheel-main       {:mvn/version "0.2.12"}}
                        :extra-paths ["target" "test"]}
 
            ;; Clojure unit testing.
