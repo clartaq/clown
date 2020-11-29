@@ -17,6 +17,7 @@
                                                     remove-last remove-last-two
                                                     insert-at replace-at
                                                     append-element-to-vector]]
+            [markdown.core :refer [md->html]]
             [reagent.core :as r]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
@@ -374,10 +375,43 @@
     (du/focus-element ed-ele)
     (du/set-selection-range ed-ele ofs ofs)))
 
+(defn prettify-topic [topic-md]
+  (md->html topic-md))
+
+;(defn- highlight-code
+;  "Highlights any <pre><code></code></pre> blocks in the html."
+;  [html-node]
+;  (trace "highlight-code")
+;  (let [nodes (.querySelectorAll html-node "pre code")]
+;    (loop [i (.-length nodes)]
+;      (when-not (neg? i)
+;        (when-let [item (.item nodes i)]
+;          (.highlightBlock js/hljs item))
+;        (recur (dec i))))))
+;
+;(defn- typeset-latex
+;  "Typeset any mathematics in the text."
+;  [latex-node]
+;  (js/MathJax.typeset #js [latex-node]))
+;
+;(defn- markdown-component
+;  "Set the content in the containing node, optionally highlighting it."
+;  [content]
+;  [(with-meta
+;     (fn []
+;       [:div {:dangerouslySetInnerHTML
+;              {:__html (-> content str js/marked)}}])
+;     {:component-did-mount
+;      (fn [this]
+;        (let [node (rdom/dom-node this)]
+;          (typeset-latex node)
+;          (highlight-code node)))})])
+
 (defn topic-info-div
   "Build the textual/interactive part of a topic/headline."
   [aps root-ratom sub-tree-ratom ids-for-row]
   (let [topic-ratom (r/cursor sub-tree-ratom [:topic])
+        pretty-topic-atom (atom (prettify-topic @topic-ratom))
         label-id (:label-id ids-for-row)
         editor-id (:editor-id ids-for-row)
         topic-id (:topic-id ids-for-row)
@@ -386,12 +420,12 @@
     [:div.tree-control--topic-info-div
      [:label.tree-control--topic-label
       {:id      label-id
+       :dangerouslySetInnerHTML {:__html @pretty-topic-atom}
        :style   {:display :initial}
        :for     editor-id
        ; debugging
        ;:onMouseOver #(println "topic-id: " topic-id ", label-id: " label-id ", editor-id: " editor-id)
-       :onClick #(handle-info-div-click root-ratom editor-id label-id)}
-      @topic-ratom]
+       :onClick #(handle-info-div-click root-ratom editor-id label-id)}]
 
      [:textarea.tree-control--topic-editor
       {:id           editor-id
@@ -403,7 +437,8 @@
                        ; Override default number of rows (2).
                        (du/resize-textarea editor-id)
                        (reset! focused-headline-ratom editor-id))
-       :onBlur       #(when (= editor-id (du/active-element-id))
+       :onBlur       (fn on-blur [_]
+                        (reset! pretty-topic-atom (prettify-topic @topic-ratom))
                         (du/swap-display-properties label-id editor-id))
        :on-change    #(do
                         (mrk/mark-as-dirty! aps)
