@@ -13,6 +13,7 @@
            com.taoensso/timbre         {:mvn/version "5.1.0"}
            compojure/compojure         {:mvn/version "1.6.2"}
            http-kit/http-kit           {:mvn/version "2.5.0"}
+           markdown-clj/markdown-clj   {:mvn/version "1.10.5"}
            reagent/reagent             {:mvn/version "0.10.0"}
            ring/ring-core              {:mvn/version "1.8.2"}
            ring/ring-devel             {:mvn/version "1.8.2"}}
@@ -27,7 +28,7 @@
 
            ;; Clojure unit testing.
            :test-clj  {:extra-paths ["test"]
-                       :extra-deps  {lambdaisland/kaocha {:mvn/version "1.0.700"}}
+                       :extra-deps  {lambdaisland/kaocha {:mvn/version "1.0.732"}}
                        :main-opts   ["-m" "kaocha.runner"]}
 
            ;; ClojureScript unit testing.
