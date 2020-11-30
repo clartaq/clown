@@ -36,6 +36,14 @@ You can move headlines up or down by pressing `Alt-Cmd-`&#8593; or `Alt-Cmd-`&#8
 
 There are more keyboard commands. If you are interested, check the source. They are likely to change in the future though.
 
+#### Using Markdown
+
+When you click on a headline in the outline view to edit it, you can enter raw Markdown. When you click anywhere else, the Markdown will be converted to HTML and the formatting you used will be shown. This switching back and forth between editing and display is kind of like the way the [Roam](https://roamresearch.com) editor works.
+
+It is still early days for this feature and it can get a little flaky at times. It is intended that this flakiness will be removed and syntax highlighting and math formatting will be added. It is also intended to expand this feature to the Notes pane as well.
+
+We'll see how this feature works in practice before finalizing it.
+
 #### Notes
 
 Any heading can have an arbitrary number of notes associated with it. (There is a practical limit at the moment. Only one note is displayed at a time. I have not yet devised a clever way to selecte among a very large number of notes to select the one to display.) Each note must have a unique (to the outline heading) title.
@@ -164,6 +172,7 @@ Probably plenty at this point. If you find one that you need to have fixed, file
 - Version control?
 - Version comparison?
 - Expandable stats under title and file name
+- Include zettel IDs?
 
 ## How to Contribute
 
