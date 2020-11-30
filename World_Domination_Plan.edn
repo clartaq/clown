@@ -3,7 +3,7 @@
   :author "David D. Clark",
   :title "My Plan for Global Domination",
   :created "26 Dec 2019, 5:40:17pm",
-  :modified "4 Feb 2020, 2:18:08pm",
+  :modified "28 Nov 2020, 5:42:28pm",
   :tree
   [{:topic "Build Secret Base",
     :expanded false,
@@ -12,13 +12,13 @@
      {:topic "Orbiting Space Station"}
      {:topic "Underground Lair"}
      {:topic "Moon Base",
-      :expanded true,
+      :expanded false,
       :children
       [{:topic "Under the regolith"}
        {:topic
         "In a deep cavern of some sort, preferably in the ruins of some ancient and lost civilization."}]}
      {:topic "Under Martian Polar Cap",
-      :expanded true,
+      :expanded false,
       :children
       [{:topic "Pros",
         :expanded true,
@@ -31,7 +31,7 @@
         [{:topic "Most Expensive Option"}
          {:topic "Long Commute"}
          {:topic "Very Little Air"}
-         {:topic "Mars is Freaking Cold"}]}]}],
+         {:topic "Mars is **Freaking Cold!**"}]}]}],
     :last-note-viewed 0,
     :notes
     [{:note-title "Why It's Important",
@@ -80,7 +80,7 @@
       "Terrorize my own developers by insisting that it must support Unicode. They will be too busy looking for bugs to support a coup against me."}],
     :expanded true}
    {:topic "Select an Editor",
-    :last-note-viewed 1,
+    :last-note-viewed 0,
     :notes
     [{:note-title "Why Another Editor",
       :note

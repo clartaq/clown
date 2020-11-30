@@ -15,3 +15,8 @@
 /target/
 /clown.iml
 /projectFilesBackup1/
+/resources/public/test-main.out/
+/resources/public/test-main.js
+/deps.edn.orig
+/#deps.edn#
+/old-master-note-layout-code.cjs
