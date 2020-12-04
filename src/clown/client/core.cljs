@@ -490,6 +490,12 @@
                                 (du/stop-propagation evt)
                                 (cmd/save-outline-as-edn! aps))
 
+                              ;; Open the "About" dialog with Ctrl-Shft-A.
+                              (= km {:key "A" :modifiers (merge-def-mods {:ctrl true :shift true})})
+                              (do (du/prevent-default evt)
+                                  (du/stop-propagation evt)
+                                  (dlg/toggle-about-modal))
+
                               ;; Open the preferences with Ctrl-Shft-P.
                               (= km {:key "P" :modifiers (merge-def-mods {:ctrl true :shift true})})
                               (do (du/prevent-default evt)

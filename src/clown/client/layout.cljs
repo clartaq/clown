@@ -639,6 +639,7 @@
          [dlg/layout-bad-outline-modal]
          [dlg/layout-about-to-update-mru-modal]
          [dlg/layout-file-does-not-exist-dlg]
+         [dlg/layout-about-dlg]
          [pref-dlg/layout-prefs-dialog aps]
          [ns-dlg/layout-not-saved-dialog aps]
          [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))

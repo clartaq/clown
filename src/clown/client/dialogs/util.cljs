@@ -26,6 +26,10 @@
   [basis]
   (str basis "-modal"))
 
+(defn id-basis->close-id
+  [basis]
+  (str basis "-close-button-id"))
+
 (defn id-basis->confirm-id
   [basis]
   (str basis "-confirm-button-id"))
