@@ -1124,3 +1124,18 @@ pre code {
     width: 1rem;
     max-width: 1rem;
 }
+
+.fancy--heading {
+    color: var(--body-text-color);
+    display: block;
+    flex-basis: 15ch;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    text-align: right;
+}
+
+.fancy--info {
+
+}
