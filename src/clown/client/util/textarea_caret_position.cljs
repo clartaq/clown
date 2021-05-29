@@ -298,7 +298,9 @@
         ;; Transfer the element's properties to the mirror div.
         _ (doseq [prop style-props]
             (if (and input? (= prop "lineHeight"))
+              (println "(= prop \"lineHeight\")")
               ;else
+              (println "prop was something else")
               )
             )
 
