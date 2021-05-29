@@ -5,13 +5,11 @@
            org.clojure/java.jdbc       {:mvn/version "0.7.12"}
            com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
            com.h2database/h2           {:mvn/version "1.4.200"}
-           ;; This version of timbre is not out of alpha yet, but it stops so
-           ;; many other warnings that I'm trying it out here for now.
            com.taoensso/timbre         {:mvn/version "5.1.2"}
            compojure/compojure         {:mvn/version "1.6.2"}
            http-kit/http-kit           {:mvn/version "2.5.3"}
            markdown-clj/markdown-clj   {:mvn/version "1.10.5"}
-           reagent/reagent             {:mvn/version "0.10.0"}
+           reagent/reagent             {:mvn/version "1.0.0"}
            ring/ring-core              {:mvn/version "1.9.3"}
            ring/ring-devel             {:mvn/version "1.9.3"}}
 
