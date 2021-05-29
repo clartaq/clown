@@ -14,8 +14,6 @@
   '[leiningen.core.project :as p :refer [defproject]]
   '[leiningen.uberjar :refer [uberjar]])
 
-(import '[java.io File])
-
 (defn read-project-clj []
   (p/ensure-dynamic-classloader)
   (-> "project.clj" load-file var-get))
