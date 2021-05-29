@@ -5,6 +5,7 @@
             [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
             [clown.client.layout :as ay]
+            [clown.client.util.textarea-caret-position]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
             [clown.client.util.dom-utils :as du]
@@ -194,7 +195,7 @@
         (tm/move-branch! root-ratom span-id new-id)
         (fu/focus-and-scroll-editor-for-id new-editor-id caret-position)))))
 
-(defn move-focus-up-one-line
+(defn move-focus-up-one-headline
   "Move the editor and focus to the next higher up visible headline."
   [{:keys [root-ratom evt span-id]}]
   (du/prevent-default evt)
@@ -204,7 +205,7 @@
           previous-visible-topic (tm/previous-visible-node root-ratom span-id)]
       (fu/focus-and-scroll-editor-for-id previous-visible-topic saved-caret-position))))
 
-(defn move-focus-down-one-line
+(defn move-focus-down-one-headline
   "Move the editor and focus to the next lower down visible headline."
   [{:keys [root-ratom evt span-id]}]
   (du/prevent-default evt)
@@ -213,6 +214,105 @@
           saved-caret-position (du/selection-start editor-id)
           next-visible-topic (tm/next-visible-node root-ratom span-id)]
       (fu/focus-and-scroll-editor-for-id next-visible-topic saved-caret-position))))
+
+;; There is a working solution to find the current line number of a caret
+;; in a wrapped textarea here:
+;;https://stackoverflow.com/questions/9185630/find-out-the-line-row-number-of-the-cursor-in-a-textarea
+
+;jQuery.fn.trackRows = function() {
+;    return this.each(function() {
+;
+;        var ininitalHeight, currentRow, iteration = 0;
+;
+;        var createMirror = function(textarea) {
+;            jQuery(textarea).after('<div class="autogrow-textarea-mirror"></div>');
+;            return jQuery(textarea).next('.autogrow-textarea-mirror')[0];
+;        }
+;
+;        var sendContentToMirror = function (textarea) {
+;            mirror.innerHTML = String(textarea.value.substring(0,textarea.selectionStart)).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br />') + '.<br/>.';
+;
+;           calculateRowNumber();
+;       }
+;
+;       var growTextarea = function () {
+;           sendContentToMirror(this);
+;       }
+;
+;       var calculateRowNumber = function () {
+;           if(iteration===0){
+;               ininitalHeight = $(mirror).height();
+;               currentHeight = ininitalHeight;
+;               iteration++;
+;           }
+;           else{
+;               currentHeight = $(mirror).height();
+;           }
+;
+;           currentRow = currentHeight/(ininitalHeight/2) - 1;
+;
+;           //remove tracker in production
+;           $('.tracker').html('Current row: ' + currentRow);
+;      }
+;
+;                // Create a mirror
+;      var mirror = createMirror(this);
+;
+;                // Style the mirror
+;                mirror.style.display = 'none';
+;                mirror.style.wordWrap = 'break-word';
+;                mirror.style.whiteSpace = 'normal';
+;                mirror.style.padding = jQuery(this).css('padding');
+;                mirror.style.width = jQuery(this).css('width');
+;                mirror.style.fontFamily = jQuery(this).css('font-family');
+;                mirror.style.fontSize = jQuery(this).css('font-size');
+;                mirror.style.lineHeight = jQuery(this).css('line-height');
+;
+;                // Style the textarea
+;                this.style.overflow = "hidden";
+;                this.style.minHeight = this.rows+"em";
+;
+;                var ininitalHeight = $(mirror).height();
+;
+;                // Bind the textarea's event
+;                this.onkeyup = growTextarea;
+;
+;                // Fire the event for text already present
+;                // sendContentToMirror(this);
+;
+;        });
+;};
+;
+;$(function(){
+;    $('textarea').trackRows();
+;});
+
+(defn move-caret-up-one-line
+  [{:keys [root-ratom evt span-id] :as args}]
+  (let [target-id (du/event->target-id evt)
+        _ (println "target-id: " target-id)
+        cp (du/get-caret-position target-id)
+        _ (println "cp: " cp)
+        tv (du/event->target-value evt)
+        _ (println "tv: " tv)
+        fnl (s/index-of "\n" (du/event->target-value evt))
+        _ (println "fnl: " fnl)
+        ;lines (s/split-lines tv)
+        ;_ (println "lines: " lines)
+        line-num (du/get-caret-line (du/get-element-by-id target-id))
+        _ (println "line-num: " line-num)
+        ]
+
+    (when (< cp fnl)
+      (do
+        (println "cursor is on first line, moving to previous headline")
+        (move-focus-up-one-headline args))))
+  ;; Otherwise, we just let the control handle moving the caret up one line
+  ;; in the textarea.
+  )
+
+(defn move-caret-down-one-line
+  [{:keys [root-ratom evt span-id]}])
 
 (defn insert-new-headline-below!
   "Insert a new headline in the tree above the currently focused one and leave
@@ -406,10 +506,13 @@
       (move-headline-down! args)
 
       (= km {:key "ArrowUp" :modifiers (def-mods)})
-      (move-focus-up-one-line args)
+      (move-caret-up-one-line args)
+
+      (= km {:key "ArrowUp" :modifiers (merge-def-mods {:alt true})})
+      (move-focus-up-one-headline args)
 
       (= km {:key "ArrowDown" :modifiers (def-mods)})
-      (move-focus-down-one-line args)
+      (move-focus-down-one-headline args)
 
       (= km {:key "0" :modifiers (merge-def-mods {:cmd true})})
       (expand-headline! args)

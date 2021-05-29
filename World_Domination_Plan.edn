@@ -3,22 +3,22 @@
   :author "David D. Clark",
   :title "My Plan for Global Domination",
   :created "26 Dec 2019, 5:40:17pm",
-  :modified "28 Nov 2020, 5:42:28pm",
+  :modified "13 May 2021, 10:42:35am",
   :tree
-  [{:topic "Build Secret Base",
+  [{:topic "Build **Secret** Base",
     :expanded false,
     :children
     [{:topic "Secret Island"}
      {:topic "Orbiting Space Station"}
      {:topic "Underground Lair"}
      {:topic "Moon Base",
-      :expanded false,
+      :expanded true,
       :children
       [{:topic "Under the regolith"}
        {:topic
         "In a deep cavern of some sort, preferably in the ruins of some ancient and lost civilization."}]}
      {:topic "Under Martian Polar Cap",
-      :expanded false,
+      :expanded true,
       :children
       [{:topic "Pros",
         :expanded true,
@@ -31,7 +31,7 @@
         [{:topic "Most Expensive Option"}
          {:topic "Long Commute"}
          {:topic "Very Little Air"}
-         {:topic "Mars is **Freaking Cold!**"}]}]}],
+         {:topic "Mars is Freaking Cold"}]}]}],
     :last-note-viewed 0,
     :notes
     [{:note-title "Why It's Important",
@@ -42,7 +42,7 @@
       "- Bon-bons, of course.\n\n- Well, a hot tub is a requirement.\n\n- Solid gold flatware and toilets.\n\n- A big fur rug made from some nearly extinct animal.\n\n- Slimming leather pants.\n\n- Oh, and I must have a throne! Mini thrones for company? Let them think they're special before I toss them in the dungeon. Remember to provide air."}]}
    {:topic
     "Practice Evil by Stealing Extremely Dark Chocolate Candy from Small Children",
-    :expanded false,
+    :expanded true,
     :children
     [{:topic
       "Only Steal Chocolate with a Cacao Percentage of 70% or Higher"}
@@ -58,7 +58,7 @@
       :note
       "The traditional choice would be something along the lines of a long drawn-out \"M-m-m Bwahaha\".\n\nBut since I am not a traditional guy, I plan to concentrate on a high-pitched titter."}]}
    {:topic "Hire Henchmen",
-    :expanded false,
+    :expanded true,
     :children
     [{:topic "I Like Minions",
       :last-note-viewed 0,
@@ -80,7 +80,7 @@
       "Terrorize my own developers by insisting that it must support Unicode. They will be too busy looking for bugs to support a coup against me."}],
     :expanded true}
    {:topic "Select an Editor",
-    :last-note-viewed 0,
+    :last-note-viewed 1,
     :notes
     [{:note-title "Why Another Editor",
       :note
