@@ -255,7 +255,7 @@
         _ (set! (.-whiteSpace style) "pre-wrap")
         _ (when-not input?
             ;; Only for textarea-s.
-            (set! (.wordWrap style) "break-word"))
+            (set! (.-wordWrap style) "break-word"))
 
   ;// Position off-screen
   ;style.position = 'absolute';  // required to return coordinates properly
@@ -267,7 +267,7 @@
         _ (set! (.-position style) "absolute")
         _ (when-not debug
             ;; Not "display: none;" because we want rendering.
-            (set! (.visibility style) "hidden"))
+            (set! (.-visibility style) "hidden"))
 
   ;// Transfer the element's properties to the div
   ;properties.forEach(function (prop) {
