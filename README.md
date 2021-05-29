@@ -83,7 +83,7 @@ As you hover over the rule, it will "fatten" up, giving you a bigger target. Jus
 
 ## Building
 
-For building development and "production" versions of clown, you will need Java and Clojure. I have been doing my work with Java 11 and Clojure 1.10.1.
+For building development and "production" versions of clown, you will need Java and Clojure. I have been doing my work with Java 11 and Clojure 1.10.3.
 
 I've been testing on Safari, Firefox, Opera, and Brave browsers.
 
@@ -187,6 +187,6 @@ I'm not accepting Pull Requests yet.
 
 ## License
 
-Copyright © 2020 David D. Clark
+Copyright © 2020 - 2021 David D. Clark
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
