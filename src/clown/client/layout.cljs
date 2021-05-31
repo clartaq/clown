@@ -376,7 +376,9 @@
     (du/set-selection-range ed-ele ofs ofs)))
 
 (defn prettify-topic [topic-md]
-  (md->html topic-md))
+  (if topic-md
+    (md->html topic-md)
+    "Error: No Markdown sent to prettify-topic"))
 
 ;(defn- highlight-code
 ;  "Highlights any <pre><code></code></pre> blocks in the html."
@@ -419,13 +421,13 @@
         key-down-handler (:outline-key-down-handler @aps)]
     [:div.tree-control--topic-info-div
      [:label.tree-control--topic-label
-      {:id      label-id
+      {:id                      label-id
        :dangerouslySetInnerHTML {:__html @pretty-topic-atom}
-       :style   {:display :initial}
-       :for     editor-id
+       :style                   {:display :initial}
+       :for                     editor-id
        ; debugging
        ;:onMouseOver #(println "topic-id: " topic-id ", label-id: " label-id ", editor-id: " editor-id)
-       :onClick #(handle-info-div-click root-ratom editor-id label-id)}]
+       :onClick                 #(handle-info-div-click root-ratom editor-id label-id)}]
 
      [:textarea.tree-control--topic-editor
       {:id           editor-id
@@ -438,8 +440,8 @@
                        (du/resize-textarea editor-id)
                        (reset! focused-headline-ratom editor-id))
        :onBlur       (fn on-blur [_]
-                        (reset! pretty-topic-atom (prettify-topic @topic-ratom))
-                        (du/swap-display-properties label-id editor-id))
+                       (reset! pretty-topic-atom (prettify-topic @topic-ratom))
+                       (du/swap-display-properties label-id editor-id))
        :on-change    #(do
                         (mrk/mark-as-dirty! aps)
                         (reset! topic-ratom (du/event->target-value %)))
