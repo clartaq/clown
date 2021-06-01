@@ -1,4 +1,6 @@
 {:deps    {org.clojure/clojure         {:mvn/version "1.10.3"}
+           ;; ClojureScript 1.10.866 has a regression error that causes
+           ;; spurious "...cannot find namespace..." type error messages.
            org.clojure/clojurescript   {:mvn/version "1.10.844"}
            org.clojure/core.async      {:mvn/version "1.3.618"}
            org.clojure/java.classpath  {:mvn/version "1.0.0"}
