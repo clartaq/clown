@@ -157,7 +157,7 @@
                                  :url   "https://www.eclipse.org/legal/epl-v10.html"
                                  :local "See LICENSE.txt."}
                    :url         "https://github.com/clartaq/clown"
-                   :copyright   "© 2019-2020, David D. Clark"})
+                   :copyright   "© 2019-2021, David D. Clark"})
 
 (def about-basis "about")
 
