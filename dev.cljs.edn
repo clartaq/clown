@@ -1,6 +1,6 @@
 ^{:watch-dirs   ["test" "src"]
   :css-dirs     ["resources/public/css"]
-  ;;:open-url false
+  :open-url     false
   :auto-testing true}
 {:main          clown.client.core
  :optimizations :none
