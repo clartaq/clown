@@ -414,15 +414,19 @@
   [aps root-ratom sub-tree-ratom ids-for-row]
   (let [topic-ratom (r/cursor sub-tree-ratom [:topic])
         pretty-topic-atom (atom (prettify-topic @topic-ratom))
+        _ (debugf "pretty-topic-atom: %s" pretty-topic-atom)
+        _ (debugf "@pretty-topic-atom: %s" @pretty-topic-atom)
         label-id (:label-id ids-for-row)
         editor-id (:editor-id ids-for-row)
         topic-id (:topic-id ids-for-row)
         focused-headline-ratom (r/cursor aps [:focused-headline])
         key-down-handler (:outline-key-down-handler @aps)]
+    (debugf "@topic-ratom: %s" @topic-ratom)
     [:div.tree-control--topic-info-div
      [:label.tree-control--topic-label
       {:id                      label-id
        :dangerouslySetInnerHTML {:__html @pretty-topic-atom}
+       ;;:dangerouslySetInnerHTML {:__html @topic-ratom}
        :style                   {:display :initial}
        :for                     editor-id
        ; debugging
@@ -440,7 +444,8 @@
                        (du/resize-textarea editor-id)
                        (reset! focused-headline-ratom editor-id))
        :onBlur       (fn on-blur [_]
-                       (reset! pretty-topic-atom (prettify-topic @topic-ratom))
+                       ;; Can't find the use case where this is required.
+                       ;;(reset! pretty-topic-atom (prettify-topic @topic-ratom))
                        (du/swap-display-properties label-id editor-id))
        :on-change    #(do
                         (mrk/mark-as-dirty! aps)
