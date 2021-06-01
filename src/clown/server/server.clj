@@ -3,7 +3,6 @@
   (:require [clown.server.util.config :refer [config]]
             [clown.server.handler :refer [all-routes]]
             [org.httpkit.server :as http-kit]
-           ; [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.timbre :refer [trace debug info warn error
                                      tracef debugf infof warnf errorf]]))
 
@@ -23,12 +22,9 @@
   (let [http-port (or (and args
                            (first args)
                            (integer? (first args))
-                           (Integer. (first args)))
+                           (first args))
                       (:http-port config)
                       3000)
-       ; wrapped-routes (if (= (:task-type config) "development")
-       ;                  (wrap-reload #'all-routes)
-       ;                  all-routes)
         [port-used stop-fn] (let [stop-fn (http-kit/run-server
                                            ;wrapped-routes
                                             all-routes
