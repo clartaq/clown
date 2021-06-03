@@ -420,6 +420,7 @@
         editor-id (:editor-id ids-for-row)
         topic-id (:topic-id ids-for-row)
         focused-headline-ratom (r/cursor aps [:focused-headline])
+        key-up-handler (:outline-key-up-handler @aps)
         key-down-handler (:outline-key-down-handler @aps)]
     (debugf "@topic-ratom: %s" @topic-ratom)
     [:div.tree-control--topic-info-div
@@ -438,7 +439,10 @@
        :style        {:display :none :resize :none}
        :autoComplete "off"
        :onKeyDown    #(key-down-handler aps root-ratom % topic-ratom topic-id)
-       :onKeyUp      #(du/resize-textarea editor-id)
+       :onKeyUp      (fn [evt]
+                       ;;(println "textarea key-up handler")
+                       (du/resize-textarea editor-id)
+                       (key-up-handler aps root-ratom evt topic-ratom topic-id))
        :onFocus      (fn on-focus [_]
                        ; Override default number of rows (2).
                        (du/resize-textarea editor-id)

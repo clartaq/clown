@@ -327,30 +327,68 @@
 ;    $('textarea').trackRows();
 ;});
 
-(defn get-caret-line
-  [ele]
-  (println "Enter get-caret-line: ele: " ele)
-  (println "    width of ele: " (.-width ele))
-  (println "    cols of ele: " (.-cols ele))
-  (let [mirror (.cloneNode ele "true")
-        ;_ (println "    mirror: " mirror)
-        ;_ (println "    mirror id: " (.-id mirror))
-        ;; In case it ever gets attached to the global document. Don't
-        ;; want duplicate ids.
-        new-id (str (.-id mirror) "-mirror")
-        ;_ (println "    new-id: " new-id)
-        _ (set! (.-id mirror) new-id)
-        ;_ (println "    newly set id of mirror: " (.-id mirror))
-        _ (println "    class name: " (.-className mirror))
-        _ (set-ele-style-property-value mirror "overflow" "hidden")
-        _ (resize-textarea-ele mirror)
-        rows (.-rows mirror)
-        _ (println "    rows: " rows)
-        mh (str rows "rem")
-        _ (println "    mh: " mh)
-        _ (set-ele-style-property-value mirror "minHeight" mh)
-        _ (println "    minHeight: " (.-minHeight mirror))
-        initial-height (.-height mirror)
-        _ (println "    initial-height: " initial-height)
-        ]))
+;(defn get-caret-line
+;  [ele]
+;  (println "Enter get-caret-line: ele: " ele)
+;  (println "    width of ele: " (.-width ele))
+;  (println "    cols of ele: " (.-cols ele))
+;  (let [mirror (.cloneNode ele "true")
+;        _ (println "    mirror: " mirror)
+;        _ (println "    mirror id: " (.-id mirror))
+;        ;; In case it ever gets attached to the global document. Don't
+;        ;; want duplicate ids.
+;        new-id (str (.-id mirror) "-mirror")
+;        _ (println "    new-id: " new-id)
+;        _ (set! (.-id mirror) new-id)
+;        _ (println "    newly set id of mirror: " (.-id mirror))
+;        _ (println "    class name: " (.-className mirror))
+;        _ (set-ele-style-property-value mirror "overflow" "hidden")
+;        _ (resize-textarea-ele mirror)
+;        rows (.-rows mirror)
+;        _ (println "    rows: " rows)
+;        mh (str rows "rem")
+;        _ (println "    mh: " mh)
+;        _ (set-ele-style-property-value mirror "minHeight" mh)
+;        _ (println "    minHeight: " (.-minHeight mirror))
+;        initial-height (.-height mirror)
+;        _ (println "    initial-height: " initial-height)
+;        ]))
 
+;(defn get-text-before-caret [ele]
+;  (let [text (.-value ele)
+;        text-before (subs text 0 (.-selectionEnd ele))]
+;    (println "get-text-before-caret: " text-before)
+;    text-before))
+;
+;; IMPORTANT: Should actually check that the caret is at the beginning of the
+;; textarea value. If so, should move to previous headline.
+;;
+;; "Normal" behavior is moving the caret up is to move as far as the top line,
+;; then if another "move caret up" command is received, it moves to the
+;; beginning of the text in the control. Then should move the caret to previous
+;; headline.
+
+;; Need to get the caret position before and after it moves
+;(defn caret-on-first-line? [ele]
+;  (println "Enter caret-on-first-line?")
+;  (let [text-before-caret (get-text-before-caret ele)
+;        mirror (.cloneNode ele "true")
+;        new-id (str (.-id mirror) "-mirror")
+;        _ (println "   mirror: " mirror ", new-id: " new-id)
+;        _ (set! (.-id mirror) new-id)
+;        ;; Clear the text in the mirror
+;        _ (set! (.-value mirror) "")
+;        _ (set! (.-value mirror) text-before-caret)
+;        _ (println "    mirror content: " (.-value mirror))
+;
+;       ;; _ (set-ele-style-property-value mirror "overflow" "hidden")
+;        _ (set-ele-style-property-value mirror "zIndex" "-5")
+;        _ (resize-textarea-ele mirror)
+;        rows (.-rows mirror)
+;        mh (str rows "rem")
+;        _ (set-ele-style-property-value mirror "minHeight" mh)
+;        _ (resize-textarea-ele mirror)
+;        initial-height (.-height mirror)]
+;    (println "    ele: " ele)
+;    (println "    new-id: " new-id ", rows: " rows ", mh: " mh)
+;    (println "    initial-height: " initial-height)))

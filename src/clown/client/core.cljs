@@ -287,32 +287,40 @@
 ;    $('textarea').trackRows();
 ;});
 
+;; In normal handling of the caret, repeated up arrow keys will move the
+;; caret to the top line of the text area. If the up arrow is pressed
+;; again, it moves the caret to position 0. If the up arrow is pressed
+;; when the caret is at position 0, the caret is moved to the previous
+;; headline.
 (defn move-caret-up-one-line
+  "Move the caret up one line, checking if it should move up one headline."
   [{:keys [root-ratom evt span-id] :as args}]
   (let [target-id (du/event->target-id evt)
         _ (println "target-id: " target-id)
         cp (du/get-caret-position target-id)
         _ (println "cp: " cp)
-        tv (du/event->target-value evt)
-        _ (println "tv: " tv)
-        fnl (s/index-of "\n" (du/event->target-value evt))
-        _ (println "fnl: " fnl)
-        ;lines (s/split-lines tv)
-        ;_ (println "lines: " lines)
-        line-num (du/get-caret-line (du/get-element-by-id target-id))
-        _ (println "line-num: " line-num)
         ]
-
-    (when (< cp fnl)
-      (do
-        (println "cursor is on first line, moving to previous headline")
-        (move-focus-up-one-headline args))))
+    (when (<= cp 0)
+      (println "cursor is at position 0. Moving to previous headline.")
+      (move-focus-up-one-headline args)))
   ;; Otherwise, we just let the control handle moving the caret up one line
   ;; in the textarea.
   )
 
 (defn move-caret-down-one-line
-  [{:keys [root-ratom evt span-id]}])
+  "Move the caret down one line, checking if it should move down one _head_line."
+  [{:keys [root-ratom evt span-id] :as args}]
+  (info "move-caret-down-one-line")
+  (println "move-caret-down-on-line")
+  (let [target-id (du/event->target-id evt)
+        cp (du/get-caret-position target-id)
+        _ (println "cp: %s" cp)
+        text-len (.-length (du/event->target-value evt)) ;;(.-value target-ele))
+        _ (println "text-len: %s" text-len)
+        ]
+    (when (>= cp text-len)
+      (println "condition met")
+      (move-focus-down-one-headline args))))
 
 (defn insert-new-headline-below!
   "Insert a new headline in the tree above the currently focused one and leave
@@ -460,6 +468,24 @@
   [m]
   (merge (def-mods) m))
 
+(defn handle-key-up-for-outline
+  "Handle key-up events and dispatch them to the appropriate handlers. This
+  is used for events that we want to complete before running our event handler."
+  [aps root-ratom evt topic-ratom span-id]
+  (let [km (du/key-evt->map evt)
+        args {:aps         aps
+              :root-ratom  root-ratom
+              :evt         evt
+              :topic-ratom topic-ratom
+              :span-id     span-id}]
+    (debugf "handle-key-up-for-outline: km: %s" km)
+    ;(cond
+    ;  (= km {:key "ArrowUp" :modifiers (def-mods)})
+    ;  (move-caret-up-one-line args)
+    ;
+    ;  )
+    ))
+
 (defn handle-key-down-for-outline
   "Handle key-down events and dispatch them to the appropriate handlers."
   [aps root-ratom evt topic-ratom span-id]
@@ -469,7 +495,9 @@
               :evt         evt
               :topic-ratom topic-ratom
               :span-id     span-id}]
-    (debugf "km: %s" km)
+    (println "handle-key-down-for-outline")
+    (println "km: " km)
+    ;;(infof "km: %s" km)
     (cond
 
       (= km {:key "Enter" :modifiers (merge-def-mods {:shift true})})
@@ -512,7 +540,8 @@
       (move-focus-up-one-headline args)
 
       (= km {:key "ArrowDown" :modifiers (def-mods)})
-      (move-focus-down-one-headline args)
+      (move-caret-down-one-line args)
+      ;;(move-focus-down-one-headline args)
 
       (= km {:key "0" :modifiers (merge-def-mods {:cmd true})})
       (expand-headline! args)
@@ -629,6 +658,7 @@
   (info "reload")
   (capture-global-shortcuts (state-ratom))
   (swap! (state-ratom) assoc :outline-key-down-handler handle-key-down-for-outline)
+  (swap! (state-ratom) assoc :outline-key-up-handler handle-key-up-for-outline)
   (swap! (state-ratom) assoc :outline-container-key-down-handler handle-keydown-for-tree-container)
   (let [ws-functions (start-ws! {:on-open-fn    on-ws-open
                                  :on-error-fn   nil
@@ -659,7 +689,7 @@
             (push-on-mru! (state-ratom) (empty-outline-file-name))))
 
         (rdom/render [ay/layout-app (state-ratom)]
-                  (du/get-element-by-id "app"))))))
+                     (du/get-element-by-id "app"))))))
 
 (defn ^:export main []
   (info "clown.core.main")
