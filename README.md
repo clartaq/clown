@@ -2,11 +2,6 @@
 
 Clown is an outliner with notes. It is written in Clojure and ClojureScript.
 
-### Currently Kinda Broken
-
-This repository is in a somewhat broken state. Up and Down Arrows don't work correctly in the outline.
-
-This is due to experimentation with moving the cursor up and down by line in long headlines rather than jumping to the adjacent headline.
 ## Overview
 
 This is pre-alpha software -- very early in development. Most features not implemented.
