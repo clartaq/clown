@@ -195,97 +195,28 @@
         (tm/move-branch! root-ratom span-id new-id)
         (fu/focus-and-scroll-editor-for-id new-editor-id caret-position)))))
 
+;; This version no longer attempts to move to a saved caret position.
 (defn move-focus-up-one-headline
   "Move the editor and focus to the next higher up visible headline."
   [{:keys [root-ratom evt span-id]}]
   (du/prevent-default evt)
   (when-not (tm/top-visible-tree-id? root-ratom span-id)
     (let [editor-id (ti/change-tree-id-type span-id "editor")
-          saved-caret-position (du/selection-start editor-id)
+          ;;saved-caret-position (du/selection-start editor-id)
           previous-visible-topic (tm/previous-visible-node root-ratom span-id)]
-      (fu/focus-and-scroll-editor-for-id previous-visible-topic saved-caret-position))))
+      (fu/focus-and-scroll-editor-for-id previous-visible-topic 0)))) ;;saved-caret-position))))
 
+;; This revision no longer attempts to move to a saved caret position.
 (defn move-focus-down-one-headline
-  "Move the editor and focus to the next lower down visible headline."
+  "Move the editor and focus to the next lower down visible headline. Put
+  the caret at position 0."
   [{:keys [root-ratom evt span-id]}]
   (du/prevent-default evt)
   (when-not (tm/bottom-visible-tree-id? root-ratom span-id)
     (let [editor-id (ti/change-tree-id-type span-id "editor")
-          saved-caret-position (du/selection-start editor-id)
+          ;;saved-caret-position (du/selection-start editor-id)
           next-visible-topic (tm/next-visible-node root-ratom span-id)]
-      (fu/focus-and-scroll-editor-for-id next-visible-topic saved-caret-position))))
-
-;; There is a working solution to find the current line number of a caret
-;; in a wrapped textarea here:
-;;https://stackoverflow.com/questions/9185630/find-out-the-line-row-number-of-the-cursor-in-a-textarea
-
-;jQuery.fn.trackRows = function() {
-;    return this.each(function() {
-;
-;        var ininitalHeight, currentRow, iteration = 0;
-;
-;        var createMirror = function(textarea) {
-;            jQuery(textarea).after('<div class="autogrow-textarea-mirror"></div>');
-;            return jQuery(textarea).next('.autogrow-textarea-mirror')[0];
-;        }
-;
-;        var sendContentToMirror = function (textarea) {
-;            mirror.innerHTML = String(textarea.value.substring(0,textarea.selectionStart)).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br />') + '.<br/>.';
-;
-;           calculateRowNumber();
-;       }
-;
-;       var growTextarea = function () {
-;           sendContentToMirror(this);
-;       }
-;
-;       var calculateRowNumber = function () {
-;           if(iteration===0){
-;               ininitalHeight = $(mirror).height();
-;               currentHeight = ininitalHeight;
-;               iteration++;
-;           }
-;           else{
-;               currentHeight = $(mirror).height();
-;           }
-;
-;           currentRow = currentHeight/(ininitalHeight/2) - 1;
-;
-;           //remove tracker in production
-;           $('.tracker').html('Current row: ' + currentRow);
-;      }
-;
-;                // Create a mirror
-;      var mirror = createMirror(this);
-;
-;                // Style the mirror
-;                mirror.style.display = 'none';
-;                mirror.style.wordWrap = 'break-word';
-;                mirror.style.whiteSpace = 'normal';
-;                mirror.style.padding = jQuery(this).css('padding');
-;                mirror.style.width = jQuery(this).css('width');
-;                mirror.style.fontFamily = jQuery(this).css('font-family');
-;                mirror.style.fontSize = jQuery(this).css('font-size');
-;                mirror.style.lineHeight = jQuery(this).css('line-height');
-;
-;                // Style the textarea
-;                this.style.overflow = "hidden";
-;                this.style.minHeight = this.rows+"em";
-;
-;                var ininitalHeight = $(mirror).height();
-;
-;                // Bind the textarea's event
-;                this.onkeyup = growTextarea;
-;
-;                // Fire the event for text already present
-;                // sendContentToMirror(this);
-;
-;        });
-;};
-;
-;$(function(){
-;    $('textarea').trackRows();
-;});
+      (fu/focus-and-scroll-editor-for-id next-visible-topic 0)))) ;;saved-caret-position))))
 
 ;; In normal handling of the caret, repeated up arrow keys will move the
 ;; caret to the top line of the text area. If the up arrow is pressed
@@ -296,30 +227,22 @@
   "Move the caret up one line, checking if it should move up one headline."
   [{:keys [root-ratom evt span-id] :as args}]
   (let [target-id (du/event->target-id evt)
-        _ (println "target-id: " target-id)
-        cp (du/get-caret-position target-id)
-        _ (println "cp: " cp)
-        ]
+        cp (du/get-caret-position target-id)]
     (when (<= cp 0)
-      (println "cursor is at position 0. Moving to previous headline.")
-      (move-focus-up-one-headline args)))
-  ;; Otherwise, we just let the control handle moving the caret up one line
-  ;; in the textarea.
-  )
+      (move-focus-up-one-headline args))))
 
+;; This behaves a little differently than moving the caret up. It moves the
+;; caret down one line at a time until it reaches the last line, then moves
+;; the caret to the end of that line. The next call moves the caret to the
+;; beginning of the next lower headline.
 (defn move-caret-down-one-line
   "Move the caret down one line, checking if it should move down one _head_line."
   [{:keys [root-ratom evt span-id] :as args}]
   (info "move-caret-down-one-line")
-  (println "move-caret-down-on-line")
   (let [target-id (du/event->target-id evt)
         cp (du/get-caret-position target-id)
-        _ (println "cp: %s" cp)
-        text-len (.-length (du/event->target-value evt)) ;;(.-value target-ele))
-        _ (println "text-len: %s" text-len)
-        ]
+        text-len (.-length (du/event->target-value evt))]
     (when (>= cp text-len)
-      (println "condition met")
       (move-focus-down-one-headline args))))
 
 (defn insert-new-headline-below!
@@ -468,6 +391,7 @@
   [m]
   (merge (def-mods) m))
 
+;; TODO: Don't really seem to need this for anything.
 (defn handle-key-up-for-outline
   "Handle key-up events and dispatch them to the appropriate handlers. This
   is used for events that we want to complete before running our event handler."
@@ -495,8 +419,6 @@
               :evt         evt
               :topic-ratom topic-ratom
               :span-id     span-id}]
-    (println "handle-key-down-for-outline")
-    (println "km: " km)
     ;;(infof "km: %s" km)
     (cond
 
@@ -541,7 +463,9 @@
 
       (= km {:key "ArrowDown" :modifiers (def-mods)})
       (move-caret-down-one-line args)
-      ;;(move-focus-down-one-headline args)
+
+      (= km {:key "ArrowDown" :modifiers (merge-def-mods {:alt true})})
+      (move-focus-down-one-headline args)
 
       (= km {:key "0" :modifiers (merge-def-mods {:cmd true})})
       (expand-headline! args)

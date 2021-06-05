@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed ###
 
 - Improved CSS for `<code>` and `<pre>` styling in the outliner.
+- Updated dependencies.
 
 ### Deprecated ###
 
@@ -26,6 +27,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Removed an unneeded dependency that was used to compensate for a bug in the [kaocha](https://github.com/lambdaisland/kaocha) testing library.
 
 ### Fixed ###
+
+- Fixed [issue #3](https://github.com/clartaq/clown/issues/3). "Up and Down Arrow Keys do not Move Cursor Correctly." Now when moving up and down in a long headline, the caret is moved one line at a time until it reaches the top/bottom line. Then it moves the the previous/next headline.
+
+    This behavior is still different than the way the caret moves between paragraphs in a "vanilla" `textarea`.
 
 - Fixed some directory exclusion problems with the IntelliJ project information.
 

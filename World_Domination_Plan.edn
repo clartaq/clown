@@ -3,10 +3,10 @@
   :author "David D. Clark",
   :title "My Plan for Global Domination",
   :created "26 Dec 2019, 5:40:17pm",
-  :modified "13 May 2021, 10:42:35am",
+  :modified "5 Jun 2021, 10:39:13am",
   :tree
   [{:topic "Build **Secret** Base",
-    :expanded false,
+    :expanded true,
     :children
     [{:topic "Secret Island"}
      {:topic "Orbiting Space Station"}
@@ -21,12 +21,12 @@
       :expanded true,
       :children
       [{:topic "Pros",
-        :expanded true,
+        :expanded false,
         :children
         [{:topic "Existing Anti-Evil Missiles Cannot Reach"}
          {:topic "Very Prestigious"}]}
        {:topic "Cons",
-        :expanded true,
+        :expanded false,
         :children
         [{:topic "Most Expensive Option"}
          {:topic "Long Commute"}
@@ -42,7 +42,7 @@
       "- Bon-bons, of course.\n\n- Well, a hot tub is a requirement.\n\n- Solid gold flatware and toilets.\n\n- A big fur rug made from some nearly extinct animal.\n\n- Slimming leather pants.\n\n- Oh, and I must have a throne! Mini thrones for company? Let them think they're special before I toss them in the dungeon. Remember to provide air."}]}
    {:topic
     "Practice Evil by Stealing Extremely Dark Chocolate Candy from Small Children",
-    :expanded true,
+    :expanded false,
     :children
     [{:topic
       "Only Steal Chocolate with a Cacao Percentage of 70% or Higher"}
@@ -58,7 +58,7 @@
       :note
       "The traditional choice would be something along the lines of a long drawn-out \"M-m-m Bwahaha\".\n\nBut since I am not a traditional guy, I plan to concentrate on a high-pitched titter."}]}
    {:topic "Hire Henchmen",
-    :expanded true,
+    :expanded false,
     :children
     [{:topic "I Like Minions",
       :last-note-viewed 0,
