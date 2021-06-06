@@ -409,6 +409,9 @@
 ;          (typeset-latex node)
 ;          (highlight-code node)))})])
 
+;; See also this question and answer from the Slack archive:
+;; https://clojurians-log.clojureverse.org/reagent/2020-06-26
+
 (defn topic-info-div
   "Build the textual/interactive part of a topic/headline."
   [aps root-ratom sub-tree-ratom ids-for-row]
