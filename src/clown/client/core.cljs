@@ -275,6 +275,11 @@
     (tm/graft-topic! root-ratom span-id new-headline)
     (r/after-render #(fu/highlight-and-scroll-editor-for-id span-id 0 num-chars))))
 
+(defn insert-line-break!
+  "Insert a new, empty line in the current headline. Does not create a new headline."
+  [{:keys [aps root-ratom evt span-id]}]
+  (println "insert-line-break!"))
+
 (defn delete-branch!
   "Delete the branch specified, including all of its children."
   [{:keys [aps root-ratom evt span-id]}]
@@ -433,6 +438,12 @@
 
       (= km {:key "Enter" :modifiers (merge-def-mods {:ctrl true :shift true})})
       (join-headlines! args)
+
+      (= km {:key "Enter" :modifiers (merge-def-mods {:alt true})})
+      ;; A break in Markdown is two consective line breaks.
+      (do
+        (insert-line-break! args)
+        (insert-line-break! args))
 
       (= km {:key "k" :modifiers (merge-def-mods {:cmd true})})
       (delete-branch! args)
