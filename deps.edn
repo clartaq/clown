@@ -11,7 +11,9 @@
            compojure/compojure         {:mvn/version "1.6.2"}
            http-kit/http-kit           {:mvn/version "2.5.3"}
            markdown-clj/markdown-clj   {:mvn/version "1.10.5"}
-           reagent/reagent             {:mvn/version "1.0.0"}
+           reagent/reagent             {:mvn/version "1.1.0"}
+           cljsjs/react                {:mvn/version "17.0.2-0"}
+           cljsjs/react-dom            {:mvn/version "17.0.2-0"}
            ring/ring-core              {:mvn/version "1.9.3"}
            ring/ring-devel             {:mvn/version "1.9.3"}}
 
