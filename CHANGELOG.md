@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed ###
 
+- Fixed [issue #7](https://github.com/clartaq/clown/issues/7). "Editing the File Name of the Outline can cause Multiple Saves to Different Files." Now the file is not saved with a new name until after the cursor leaves the edit control for the file name.
+
 - Fixed [issue #3](https://github.com/clartaq/clown/issues/3). "Up and Down Arrow Keys do not Move Cursor Correctly." Now when moving up and down in a long headline, the caret is moved one line at a time until it reaches the top/bottom line. Then it moves the the previous/next headline.
 
     This behavior is still different than the way the caret moves between paragraphs in a "vanilla" `textarea`.

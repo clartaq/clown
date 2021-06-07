@@ -555,11 +555,10 @@
                       :value     (if file-name
                                    file-name
                                    "")
-                      :on-change #(do
-                                    (mrk/mark-as-dirty! aps)
-                                    (mru/replace-first-item!
+                      :on-blur #(mrk/mark-as-dirty! aps)
+                      :on-change #(mru/replace-first-item!
                                       aps
-                                      (du/event->target-value %)))}]]
+                                      (du/event->target-value %))}]]
 
             [:button.banner-save--button
              {:title    "Save revised content"
