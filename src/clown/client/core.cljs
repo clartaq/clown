@@ -278,7 +278,10 @@
 (defn insert-line-break!
   "Insert a new, empty line in the current headline. Does not create a new headline."
   [{:keys [aps root-ratom evt span-id]}]
-  (println "insert-line-break!"))
+  ;; Just lets the control run it's default action.
+  ;; TODO: Insert a <br /> instead.
+  ;;(println "insert-line-break!")
+  )
 
 (defn delete-branch!
   "Delete the branch specified, including all of its children."
