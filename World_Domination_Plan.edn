@@ -3,7 +3,7 @@
   :author "David D. Clark",
   :title "My Plan for Global Domination",
   :created "26 Dec 2019, 5:40:17pm",
-  :modified "6 Jun 2021, 3:59:50pm",
+  :modified "7 Jun 2021, 5:37:01pm",
   :tree
   [{:topic "Build **Secret** Base",
     :expanded true,
@@ -104,9 +104,9 @@
         [{:topic
           "I hate explaining the reasons for my evil actions and a picture is worth 1,000 words."}
          {:topic
-          "![clown](/Users/David/projects/clown/2020_01_05_Clown_Screenshot.jpg \"A Snip of a Screenshot of clown\")"}
+          "![scary spider](2021_06_07_scary_spider.jpg)\n\nDear Old Mum. The best teacher."}
          {:topic
-          "![Mad Scientist](../resources/2021_06_06_Evil_Scientist.gif)"}]}
+          "![Mad Scientist](2021_06_06_Evil_Scientist.gif \"A Self Portrait\")\n\nA self-portrait from back in my uni days."}]}
        {:topic "LaTeX?",
         :expanded false,
         :children
