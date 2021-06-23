@@ -347,7 +347,7 @@
   a result based on whether the tree has children, and if so, whether they
   are expanded or not."
   [aps root-ratom subtree-ratom chevron-id]
-  (let [want-bullets true
+  (let [want-bullets true ;; TODO: Why not make this a user preference setting?
         bullet-opacity (if want-bullets "0.7" "0.0")
         base-attrs {:class "tree-control--chevron-div"
                     :id    chevron-id}
