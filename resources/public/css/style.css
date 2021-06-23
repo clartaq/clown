@@ -471,6 +471,7 @@ pre code {
 .banner-save--icon:disabled, .banner-save--icon:hover:disabled {
     color: var(--disabled-button-bar-icon-text-color);
 }
+
 .banner-save--button:disabled, .banner-save--button:hover:disabled {
     color: var(--disabled-button-bar-icon-text-color);
     cursor: inherit;
@@ -663,6 +664,10 @@ pre code {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     line-height: 1.3rem;
+}
+
+.tree-control--topic-label p:not(:first-child) {
+    margin-top: 1.25rem;
 }
 
 .tree-control--topic-editor {
