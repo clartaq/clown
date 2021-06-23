@@ -1,9 +1,9 @@
 (ns clown.client.commands
   (:require
+    [clown.client.util.clown-time :as ct]
     [clown.client.util.dom-utils :as du]
     [clown.client.util.empty-outline :refer [build-empty-outline
-                                             empty-outline-file-name
-                                             formatted-time-now]]
+                                             empty-outline-file-name]]
     [clown.client.util.marker :as mrk]
     [clown.client.util.mru :refer [push-on-mru!]]
     [taoensso.timbre :as timbre :refer [tracef debugf infof warnf errorf
@@ -29,7 +29,7 @@
   a new modification time."
   [aps]
   (debug "save-outline-as-edn!")
-  (swap! aps assoc-in [:current-outline :modified] (formatted-time-now))
+  (swap! aps assoc-in [:current-outline :modified] (ct/formatted-time-now))
   (mrk/mark-as-clean! aps)
   (debugf "    pr-str message: %s"
           (pr-str {:message {:command "hey-server/save-this-outline-as-edn"

@@ -1,22 +1,14 @@
 (ns clown.client.util.empty-outline
-  (:require [cljs-time.core :as dtc]
-            [cljs-time.format :as dtf]
-            [clown.client.tree-ids :as ti]))
+  (:require [clown.client.tree-ids :as ti]
+            [clown.client.util.clown-time :as ct]))
 
 (defn empty-outline-file-name
   []
   "Unsaved_Outline_File.edn")
 
-(def clown-formatter (dtf/formatter "d MMM yyyy, h:mm:ssa"))
-
-(defn formatted-time-now
-  "Return the current local time formatted as \"26 Dec 2019, 3:21:45pm\"."
-  []
-  (dtf/unparse clown-formatter (dtc/time-now)))
-
 (defn build-empty-outline
   [aps]
-  (let [formatted-now (formatted-time-now)
+  (let [formatted-now (ct/formatted-time-now)
         author (get-in @aps [:preferences :user])]
     {:version          "0.0.1"
      :author           author

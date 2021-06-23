@@ -1,20 +1,20 @@
 (ns clown.client.core
   (:require [cljs.core.async :refer [chan close! <! >!]]
+            [cljs.pprint :as pp]
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
             [clown.client.commands :as cmd]
             [clown.client.dialogs.ok-dialogs :as dlg]
             [clown.client.layout :as ay]
-            [clown.client.util.textarea-caret-position]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.empty-outline :refer [build-empty-outline
-                                                     empty-outline-file-name
-                                                     formatted-time-now]]
+                                                     empty-outline-file-name]]
             [clown.client.util.focus-utils :as fu]
             [clown.client.util.marker :as mrk]
             [clown.client.util.mru :refer [push-on-mru!]]
+            [clown.client.util.textarea-caret-position]
             [clown.client.util.undo-redo :as ur]
             [clown.client.util.vector-utils :refer [delete-at remove-first
                                                     remove-last remove-last-two
@@ -164,7 +164,7 @@
         caret-position (du/get-caret-position editor-id)]
     (when-let [promoted-id (tm/outdent-branch! root-ratom span-id)]
       (mrk/mark-as-dirty! aps)
-      (println "outdent! dirty?: " (mrk/dirty? aps))
+      ;;(println "outdent! dirty?: " (mrk/dirty? aps))
       (r/after-render #(fu/focus-and-scroll-editor-for-id promoted-id caret-position)))))
 
 (defn move-headline-up!
@@ -275,12 +275,72 @@
     (tm/graft-topic! root-ratom span-id new-headline)
     (r/after-render #(fu/highlight-and-scroll-editor-for-id span-id 0 num-chars))))
 
+(defn insert-break!
+  "Insert a break into the current text. Does not create a new headline,
+  just breaks the current headline."
+  [{:keys [aps root-ratom evt span-id]}]
+  (du/prevent-default evt)
+  (println "insert-break!")
+  (when-let [sel-end (du/selection-end (ti/change-tree-id-type span-id "editor"))]
+    (let [existing-topic (tm/get-topic root-ratom span-id)
+          topic-text (:topic existing-topic)
+          text-before (s/trimr (s/join (take sel-end topic-text)))
+          cnt (count text-before)
+          text-after (s/triml (s/join (drop sel-end topic-text)))
+          text-with-break (str text-before "\\n\\n" text-after)
+          ;headline-above {:topic text-before}
+          ;branch-below (assoc existing-topic :topic text-after)
+          ]
+      (assoc existing-topic :topic text-with-break)
+      (mrk/mark-as-dirty! aps)
+      ;(tm/prune-topic! root-ratom span-id)
+      ;;(tm/graft-topic! root-ratom span-id branch-below)
+      ;;(tm/graft-topic! root-ratom span-id headline-above)
+      (r/after-render
+        #(fu/focus-and-scroll-editor-for-id span-id cnt))))
+  ;(mrk/mark-as-dirty! aps)
+  )
+
+;; Flat
+(defn obj->clj
+  [obj]
+  (-> (fn [result key]
+        (let [v (goog.object/get obj key)]
+          (if (= "function" (goog/typeOf v))
+            result
+            (assoc result key v))))
+      (reduce {} (.getKeys goog/object obj))))
+
+;; recursive
+;(defn obj->clj
+;  [obj]
+;  (if (goog.isObject obj)
+;    (-> (fn [result key]
+;          (let [v (goog.object/get obj key)]
+;            (if (= "function" (goog/typeOf v))
+;              result
+;              (assoc result key (obj->clj v)))))
+;        (reduce {} (.getKeys goog/object obj)))
+;    obj))
+
 (defn insert-line-break!
   "Insert a new, empty line in the current headline. Does not create a new headline."
   [{:keys [aps root-ratom evt span-id]}]
+  (println "Enter insert-line-break!")
+  (du/prevent-default evt)
+  (let [clj-obj (obj->clj evt)
+        pp-obj (pp/pprint clj-obj)
+        target-ele (du/event->target-element evt)]
+    (println "pp-obj:")
+    (pp/pprint clj-obj)
+    (println "target-ele: " target-ele)
+
   ;; Just lets the control run it's default action.
   ;; TODO: Insert a <br /> instead.
-  ;;(println "insert-line-break!")
+  (.dispatchEvent target-ele (js/KeyboardEvent. "keydown" {:key "Enter"})) ;evt)
+  ;(.dispatchEvent target-ele evt)
+  (mrk/mark-as-dirty! aps))
+  (println "Exit insert-line-break!")
   )
 
 (defn delete-branch!
@@ -388,6 +448,19 @@
   (mrk/mark-as-dirty! aps)
   (du/prevent-default evt))
 
+;(defn insert-time-stamp
+;  "Insert a timestamp into the input component."
+;  [ele editor-state]
+;  (let [formatted-now (get-formatted-now)
+;        input-atom (ele->input-atom ele editor-state)]
+;    (when (and ele formatted-now input-atom)
+;      (insert-text-cmd ele
+;                       formatted-now
+;                       input-atom
+;                       editor-state))))
+;
+
+
 (defn- def-mods
   "Return a map containing the default values for keyboard modifiers."
   []
@@ -443,10 +516,12 @@
       (join-headlines! args)
 
       (= km {:key "Enter" :modifiers (merge-def-mods {:alt true})})
-      ;; A break in Markdown is two consective line breaks.
-      (do
-        (insert-line-break! args)
-        (insert-line-break! args))
+      ;; A break in Markdown is two consecutive line breaks.
+      (do ;nothing
+        ;(insert-break! args)
+        ;(insert-line-break! args)
+        ;(insert-line-break! args)
+        )
 
       (= km {:key "k" :modifiers (merge-def-mods {:cmd true})})
       (delete-branch! args)
@@ -511,7 +586,7 @@
         (du/prevent-default evt)
         (when (ur/can-undo? um)
           (let [active-ele-id (du/active-element-id)]
-            (ur/undo! um)
+            ;(ur/undo! um)
             (mrk/mark-as-dirty! aps)
             (when-not (or (ti/summit-id? active-ele-id)
                           (tm/expanded? root-ratom (ti/tree-id->parent-id active-ele-id)))
@@ -522,7 +597,7 @@
         (du/prevent-default evt)
         (when (ur/can-redo? um)
           (let [active-ele-id (du/active-element-id)]
-            (ur/redo! um)
+            ;(ur/redo! um)
             (mrk/mark-as-dirty! aps)
             (when-not (or (ti/summit-id? active-ele-id)
                           (tm/expanded? root-ratom (ti/tree-id->parent-id active-ele-id)))
