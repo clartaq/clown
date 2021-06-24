@@ -51,6 +51,10 @@
 (defn focused? [id]
   (= id (active-element-id)))
 
+(defn js-substring
+  [string start end]
+  (.substring string start end))
+
 (defn set-class-name!
   [ele name]
   (set! (.-className ele) name))
@@ -104,6 +108,14 @@
 (defn selection-end
   [ele-id]
   (.-selectionEnd (get-element-by-id ele-id)))
+
+(defn ele-selection-start
+[ele]
+(.-selectionStart ele))
+
+(defn ele-selection-end
+  [ele]
+  (.-selectionEnd ele))
 
 (defn set-selection-range
   [element start-pos end-pos]
