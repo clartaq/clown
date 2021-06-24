@@ -1,6 +1,6 @@
 (ns clown.client.core
   (:require [cljs.core.async :refer [chan close! <! >!]]
-            [cljs.pprint :as pp]
+            ;; [cljs.pprint :as pp]
             [cljs.tools.reader.edn :as edn]
             [clojure.string :as s]
             [clown.client.commands :as cmd]
@@ -8,6 +8,7 @@
             [clown.client.layout :as ay]
             [clown.client.tree-ids :as ti]
             [clown.client.tree-manip :as tm]
+            [clown.client.util.clown-time :as ct]
             [clown.client.util.dom-utils :as du]
             [clown.client.util.empty-outline :refer [build-empty-outline
                                                      empty-outline-file-name]]
@@ -154,7 +155,8 @@
         caret-position (du/get-caret-position editor-id)]
     (when-let [demoted-id (tm/indent-branch! root-ratom span-id)]
       (mrk/mark-as-dirty! aps)
-      (r/after-render #(fu/focus-and-scroll-editor-for-id demoted-id caret-position)))))
+      (r/after-render
+        #(fu/focus-and-scroll-editor-for-id demoted-id caret-position)))))
 
 (defn outdent!
   "Outdent the current headline one level."
@@ -164,8 +166,8 @@
         caret-position (du/get-caret-position editor-id)]
     (when-let [promoted-id (tm/outdent-branch! root-ratom span-id)]
       (mrk/mark-as-dirty! aps)
-      ;;(println "outdent! dirty?: " (mrk/dirty? aps))
-      (r/after-render #(fu/focus-and-scroll-editor-for-id promoted-id caret-position)))))
+      (r/after-render
+        #(fu/focus-and-scroll-editor-for-id promoted-id caret-position)))))
 
 (defn move-headline-up!
   "Move the current headline up one position in its group of siblings."
@@ -190,7 +192,8 @@
       (let [editor-id (ti/change-tree-id-type span-id "editor")
             caret-position (du/get-caret-position editor-id)
             new-id (ti/increment-leaf-index-by span-id 2)
-            new-editor-id (ti/change-tree-id-type (ti/increment-leaf-index span-id) "editor")]
+            new-editor-id (ti/change-tree-id-type
+                            (ti/increment-leaf-index span-id) "editor")]
         (mrk/mark-as-dirty! aps)
         (tm/move-branch! root-ratom span-id new-id)
         (fu/focus-and-scroll-editor-for-id new-editor-id caret-position)))))
@@ -201,10 +204,11 @@
   [{:keys [root-ratom evt span-id]}]
   (du/prevent-default evt)
   (when-not (tm/top-visible-tree-id? root-ratom span-id)
-    (let [editor-id (ti/change-tree-id-type span-id "editor")
+    (let [;;editor-id (ti/change-tree-id-type span-id "editor")
           ;;saved-caret-position (du/selection-start editor-id)
           previous-visible-topic (tm/previous-visible-node root-ratom span-id)]
-      (fu/focus-and-scroll-editor-for-id previous-visible-topic 0)))) ;;saved-caret-position))))
+      (fu/focus-and-scroll-editor-for-id previous-visible-topic 0))))
+      ;;saved-caret-position))))
 
 ;; This revision no longer attempts to move to a saved caret position.
 (defn move-focus-down-one-headline
@@ -213,10 +217,11 @@
   [{:keys [root-ratom evt span-id]}]
   (du/prevent-default evt)
   (when-not (tm/bottom-visible-tree-id? root-ratom span-id)
-    (let [editor-id (ti/change-tree-id-type span-id "editor")
+    (let [;;editor-id (ti/change-tree-id-type span-id "editor")
           ;;saved-caret-position (du/selection-start editor-id)
           next-visible-topic (tm/next-visible-node root-ratom span-id)]
-      (fu/focus-and-scroll-editor-for-id next-visible-topic 0)))) ;;saved-caret-position))))
+      (fu/focus-and-scroll-editor-for-id next-visible-topic 0))))
+      ;;saved-caret-position))))
 
 ;; In normal handling of the caret, repeated up arrow keys will move the
 ;; caret to the top line of the text area. If the up arrow is pressed
@@ -225,7 +230,7 @@
 ;; headline.
 (defn move-caret-up-one-line
   "Move the caret up one line, checking if it should move up one headline."
-  [{:keys [root-ratom evt span-id] :as args}]
+  [{:keys [evt] :as args}]
   (let [target-id (du/event->target-id evt)
         cp (du/get-caret-position target-id)]
     (when (<= cp 0)
@@ -237,11 +242,11 @@
 ;; beginning of the next lower headline.
 (defn move-caret-down-one-line
   "Move the caret down one line, checking if it should move down one _head_line."
-  [{:keys [root-ratom evt span-id] :as args}]
+  [{:keys [evt] :as args}]
   (info "move-caret-down-one-line")
   (let [target-id (du/event->target-id evt)
         cp (du/get-caret-position target-id)
-        text-len (.-length (du/event->target-value evt))]
+        text-len (du/value-length (du/event->target-element evt))]
     (when (>= cp text-len)
       (move-focus-down-one-headline args))))
 
@@ -260,7 +265,8 @@
         num-chars (count (:topic new-headline))]
     (mrk/mark-as-dirty! aps)
     (tm/graft-topic! root-ratom id-of-new-child new-headline)
-    (r/after-render #(fu/highlight-and-scroll-editor-for-id id-of-new-child 0 num-chars))))
+    (r/after-render
+      #(fu/highlight-and-scroll-editor-for-id id-of-new-child 0 num-chars))))
 
 (defn insert-new-headline-above!
   "Insert a new headline above the current headline, pushing the current
@@ -274,74 +280,6 @@
     (mrk/mark-as-dirty! aps)
     (tm/graft-topic! root-ratom span-id new-headline)
     (r/after-render #(fu/highlight-and-scroll-editor-for-id span-id 0 num-chars))))
-
-(defn insert-break!
-  "Insert a break into the current text. Does not create a new headline,
-  just breaks the current headline."
-  [{:keys [aps root-ratom evt span-id]}]
-  (du/prevent-default evt)
-  (println "insert-break!")
-  (when-let [sel-end (du/selection-end (ti/change-tree-id-type span-id "editor"))]
-    (let [existing-topic (tm/get-topic root-ratom span-id)
-          topic-text (:topic existing-topic)
-          text-before (s/trimr (s/join (take sel-end topic-text)))
-          cnt (count text-before)
-          text-after (s/triml (s/join (drop sel-end topic-text)))
-          text-with-break (str text-before "\\n\\n" text-after)
-          ;headline-above {:topic text-before}
-          ;branch-below (assoc existing-topic :topic text-after)
-          ]
-      (assoc existing-topic :topic text-with-break)
-      (mrk/mark-as-dirty! aps)
-      ;(tm/prune-topic! root-ratom span-id)
-      ;;(tm/graft-topic! root-ratom span-id branch-below)
-      ;;(tm/graft-topic! root-ratom span-id headline-above)
-      (r/after-render
-        #(fu/focus-and-scroll-editor-for-id span-id cnt))))
-  ;(mrk/mark-as-dirty! aps)
-  )
-
-;; Flat
-(defn obj->clj
-  [obj]
-  (-> (fn [result key]
-        (let [v (goog.object/get obj key)]
-          (if (= "function" (goog/typeOf v))
-            result
-            (assoc result key v))))
-      (reduce {} (.getKeys goog/object obj))))
-
-;; recursive
-;(defn obj->clj
-;  [obj]
-;  (if (goog.isObject obj)
-;    (-> (fn [result key]
-;          (let [v (goog.object/get obj key)]
-;            (if (= "function" (goog/typeOf v))
-;              result
-;              (assoc result key (obj->clj v)))))
-;        (reduce {} (.getKeys goog/object obj)))
-;    obj))
-
-(defn insert-line-break!
-  "Insert a new, empty line in the current headline. Does not create a new headline."
-  [{:keys [aps root-ratom evt span-id]}]
-  (println "Enter insert-line-break!")
-  (du/prevent-default evt)
-  (let [clj-obj (obj->clj evt)
-        pp-obj (pp/pprint clj-obj)
-        target-ele (du/event->target-element evt)]
-    (println "pp-obj:")
-    (pp/pprint clj-obj)
-    (println "target-ele: " target-ele)
-
-  ;; Just lets the control run it's default action.
-  ;; TODO: Insert a <br /> instead.
-  (.dispatchEvent target-ele (js/KeyboardEvent. "keydown" {:key "Enter"})) ;evt)
-  ;(.dispatchEvent target-ele evt)
-  (mrk/mark-as-dirty! aps))
-  (println "Exit insert-line-break!")
-  )
 
 (defn delete-branch!
   "Delete the branch specified, including all of its children."
@@ -448,18 +386,29 @@
   (mrk/mark-as-dirty! aps)
   (du/prevent-default evt))
 
-;(defn insert-time-stamp
-;  "Insert a timestamp into the input component."
-;  [ele editor-state]
-;  (let [formatted-now (get-formatted-now)
-;        input-atom (ele->input-atom ele editor-state)]
-;    (when (and ele formatted-now input-atom)
-;      (insert-text-cmd ele
-;                       formatted-now
-;                       input-atom
-;                       editor-state))))
-;
+;; Using `(.execCommand js/document "insertText" false the-text)` also seems
+;; to work everywhere I've tested, but `execCommand` has been deprecated.
+;; The following seems to work too, just not as easily.
+(defn insert-text-cmd
+  "Inserts the text into the element wherever the cursor happens to be."
+  [the-text {:keys [aps evt topic-ratom]}]
+  (when the-text
+    (let [ele (du/event->target-element evt)]
+      (.focus ele)
+      (let [start (du/ele-selection-start ele)
+            end (du/ele-selection-end ele)
+            val (du/ele->value ele)
+            before (du/js-substring val 0 start)
+            after (du/js-substring val end (du/value-length ele))]
+        (reset! topic-ratom (str before the-text after))
+        (mrk/mark-as-dirty! aps)
+        (du/prevent-default evt)))))
 
+(defn insert-timestamp
+  "Insert a timestamp into the outline."
+  [args]
+  (let [formatted-time-str (ct/formatted-time-now)]
+    (insert-text-cmd formatted-time-str args)))
 
 (defn- def-mods
   "Return a map containing the default values for keyboard modifiers."
@@ -517,10 +466,8 @@
 
       (= km {:key "Enter" :modifiers (merge-def-mods {:alt true})})
       ;; A break in Markdown is two consecutive line breaks.
-      (do ;nothing
-        ;(insert-break! args)
-        ;(insert-line-break! args)
-        ;(insert-line-break! args)
+      (do
+        ;nothing
         )
 
       (= km {:key "k" :modifiers (merge-def-mods {:cmd true})})
@@ -574,6 +521,10 @@
       (= km {:key "<" :modifiers (merge-def-mods {:ctrl true :shift true :alt true})})
       (collapse-all-branches! args)
 
+      ;; Option-Command-k, despite what the :key looks like
+      (= km {:key "˚" :modifiers (merge-def-mods {:cmd true :alt true})})
+      (insert-timestamp args)
+
       :default nil)))
 
 (defn handle-keydown-for-tree-container
@@ -586,7 +537,7 @@
         (du/prevent-default evt)
         (when (ur/can-undo? um)
           (let [active-ele-id (du/active-element-id)]
-            ;(ur/undo! um)
+            (ur/undo! um)
             (mrk/mark-as-dirty! aps)
             (when-not (or (ti/summit-id? active-ele-id)
                           (tm/expanded? root-ratom (ti/tree-id->parent-id active-ele-id)))
@@ -597,7 +548,7 @@
         (du/prevent-default evt)
         (when (ur/can-redo? um)
           (let [active-ele-id (du/active-element-id)]
-            ;(ur/redo! um)
+            (ur/redo! um)
             (mrk/mark-as-dirty! aps)
             (when-not (or (ti/summit-id? active-ele-id)
                           (tm/expanded? root-ratom (ti/tree-id->parent-id active-ele-id)))

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added an initial version of Markdown editing to the outliner.
 - Added information to the `README.md` file about Markdown editing in the outliner.
 - Added more `.gitignore` settings for emacs backup files and to make `magit` status display more readable.
+- Added a keyboard shortcut to insert a timestamp into the outline.
 
 ### Changed ###
 
